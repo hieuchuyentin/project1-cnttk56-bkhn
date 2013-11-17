@@ -8,6 +8,7 @@
  * @author dodan_000
  */
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,8 +38,7 @@ public class User extends InfoUser{
     public ResultSet getPrivilege(){
         ResultSet rs = null;
         try {
-            Statement stm = Database.createStatement();
-            rs = stm.executeQuery("select * from privilege where userName = "+ userName);
+            rs = Database.stm.executeQuery("select * from privilege where userName = "+ userName);
             
         } catch (SQLException ex) {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
@@ -46,53 +46,18 @@ public class User extends InfoUser{
         return rs;
     }
     
-    public void setId(int id){
-        this.id = id;
-    }
-    public int getId(){
-        return this.id;
-    }
-    
-    public void setUserName(String userName){
-        this.userName = userName;
-    }
-    public String getUserName(){
-        return userName;
-    }
-    
-    public void setPassWord(String passWord){
-        this.passWord = passWord;
-    }
-    public String getPassWord(){
-        return passWord;
-    }
-    
-    public void setGender(boolean gender){
-        this.gender = gender;
-    }
-    public boolean getGender(){
-        return gender;
-    }
-    
-    public void setName(String name){
-        this.name = name;
-    }
-    public String getName(){
-        return name;
-    }
-    
-    public void setBirthDay(String birthDay){
-        this.birthDay = birthDay;
-    }
-    public String getBirthDay(){
-        return birthDay;
-    }
-    
-    public void setAge(int age){
-        this.age = age;
-    }
-    public int getAge(){
-        return age;
-    }
+   public  ArrayList getUserList(){
+       ArrayList<String> list = new ArrayList<String>(  );         
+           try {
+               ResultSet rs=Database.stm.executeQuery("select name from user");
+               while(rs.next()){
+                   list.add(rs.getString(1));
+               }
+         
+           } catch (SQLException ex) {
+               Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+           }          
+    return list;
+   }   
     
 }
