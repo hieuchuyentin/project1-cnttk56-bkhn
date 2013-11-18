@@ -366,7 +366,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_cboxIEItemStateChanged
     
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if(tbImportExport.isColumnSelected(0)){   
+      
             int i = cboxIE.getSelectedIndex();
             boolean isImport;
             if(i==1){
@@ -383,7 +383,6 @@ public class Main extends javax.swing.JFrame {
                 if(importExport.insert(infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Add thanh cong");
                 else JOptionPane.showMessageDialog(jpImportExport, "Add that bai");
             }
-        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
