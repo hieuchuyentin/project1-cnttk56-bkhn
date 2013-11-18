@@ -15,7 +15,7 @@ public class ImportExport {
     public ImportExport(){
         
     }
-    private boolean insert_import(infoImportExport infoIE) {
+    private boolean insert_import(InfoImportExport infoIE) {
         ResultSet kq=null;
         int sohang=0;
         String lenh="insert into importing(id,date,value,note,import_type_id,user_id)values";
@@ -37,7 +37,7 @@ public class ImportExport {
         }
         return true;
     }
-    private boolean insert_export(infoImportExport infoIE){
+    private boolean insert_export(InfoImportExport infoIE){
         ResultSet kq=null;
         int sohang=0;
         String lenh="insert into exporting(id,date,value,note,export_type_id,user_id)values";
@@ -61,22 +61,22 @@ public class ImportExport {
         return true;
     }        
     
-    public boolean insert(infoImportExport infoIE) {
+    public boolean insert(InfoImportExport infoIE) {
         if (infoIE.isImport)
             return insert_import(infoIE);
         else
             return insert_export(infoIE);
     }
     //chen import hoac export tuy thuoc vao gia tri isImport
-    private boolean update_import(int id, infoImportExport infoIE){
+    private boolean update_import(int id, InfoImportExport infoIE){
         try
-        {
-           
+        {         
             String lenh="update importing set ";
             lenh+="value="+infoIE.value+",";
             lenh+="date="+"'"+infoIE.date+"'"+",";
             lenh+="import_type_id="+infoIE.type_id+",";
-            lenh+="user_id="+infoIE.user_id;
+            lenh+="note="+infoIE.note;
+            //lenh+="user_id="+infoIE.user_id;
             lenh+=" where id="+id;
             lenh+=";";
             Database.stm.executeUpdate(lenh);
@@ -90,7 +90,7 @@ public class ImportExport {
         
         return true;
     }
-    private boolean update_export(int id, infoImportExport infoIE){
+    private boolean update_export(int id, InfoImportExport infoIE){
         try
         {
            
@@ -98,7 +98,8 @@ public class ImportExport {
             lenh+="value="+infoIE.value+",";
             lenh+="date="+"'"+infoIE.date+"'"+",";
             lenh+="export_type_id="+infoIE.type_id+",";
-            lenh+="user_id="+infoIE.user_id;
+            lenh+="note="+infoIE.note;
+            //lenh+="user_id="+infoIE.user_id;
             lenh+=" where id="+id;
             lenh+=";";
             Database.stm.executeUpdate(lenh);
@@ -114,7 +115,7 @@ public class ImportExport {
     }
     
     
-    public boolean update(int id,infoImportExport infoIE){
+    public boolean update(int id,InfoImportExport infoIE){
         if (infoIE.isImport)
             return update_import(id, infoIE);
         else
@@ -194,5 +195,53 @@ public class ImportExport {
        }   
     return list;
    } 
-    
+   Privilege privilege = new Privilege();
+   public ResultSet getData(int fromUserId, int toUserId,int type_id,boolean isImport){
+       String s1="",s2="",s3="",s4="",s5="";
+       ResultSet rs = null;   
+       Privilege p = new Privilege();
+       ArrayList<Integer> list; 
+       
+       if(isImport){
+           s1="import";
+           s2="importing";
+           list = p.getPrivilege(fromUserId, toUserId,1); 
+       }
+       else{
+           s1="export";
+           s2="exporting";
+           list = p.getPrivilege(fromUserId, toUserId,2); 
+       }
+       
+       if(fromUserId==toUserId){
+           s3="";
+       }
+       else{   
+           if(list.size()>0){
+               for(int i=0;i<list.size()-1;i++)
+                   s4+= list.get(i)+",";
+               s4+=list.get(list.size()-1);
+           s3 = " and "+s1+"_type_id in("+ s4 +")";    
+           }
+       }
+       
+       if(type_id==0){
+           s5="";
+       }
+       else{
+           s5=" and "+ s1 + "_type_id = " + type_id;
+       }
+       
+       String sql = "select x.id,user.userName as UserName,x.date as Date,"+s1+"_type.type,x.value as Value,x.note as Note" 
+               +" from (select * from "+s2+" where user_id="+toUserId + s3 + s5 + ")as x,user,"+s1+"_type"
+               +" where x.user_id=user.id  and x."+s1+"_type_id = "+s1+"_type.id";
+       System.out.println(sql);
+       try {
+            rs = Database.stm.executeQuery(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(ImportExport.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return rs;
+   }
+                       
 }

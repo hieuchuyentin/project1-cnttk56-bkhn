@@ -49,7 +49,7 @@ public class User extends InfoUser{
    public  ArrayList getUserList(){
        ArrayList<String> list = new ArrayList<String>(  );         
            try {
-               ResultSet rs=Database.stm.executeQuery("select name from user");
+               ResultSet rs=Database.stm.executeQuery("select userName from user");
                while(rs.next()){
                    list.add(rs.getString(1));
                }

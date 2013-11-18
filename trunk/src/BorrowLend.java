@@ -16,7 +16,7 @@ public class BorrowLend{
     public BorrowLend(){
     }
     
-    public boolean insert_Borrowing(infoBorrowLend infoBL){
+    public boolean insert_Borrowing(InfoBorrowLend infoBL){
         try {
             String sql = "insert into borrowing (id,value,interestRate,dateBorrow,expiryDate,infoLender,borrow_lend_type_id,user_id) values ";
             sql += "(null,"+infoBL.value+","+infoBL.interestRate+",'"+infoBL.date+"','"+infoBL.expiryDate+"','"+infoBL.infoPartner+"',"+infoBL.borrow_lend_id+","+infoBL.user_id+")";
@@ -31,7 +31,7 @@ public class BorrowLend{
      
     }
     
-    public boolean insert_Lending(infoBorrowLend infoBL){
+    public boolean insert_Lending(InfoBorrowLend infoBL){
         try {
             String sql = "insert into lending (id,value,interestRate,dateLend,infoBorrower,expiryDate,borrow_lend_type_id,user_id) values ";
             sql += "(null,"+infoBL.value+","+infoBL.interestRate+",'"+infoBL.date+"','"+infoBL.infoPartner+"','"+infoBL.expiryDate+"',"+infoBL.borrow_lend_id+","+infoBL.user_id+")";
@@ -45,7 +45,7 @@ public class BorrowLend{
         
     }
     
-    public boolean insert(infoBorrowLend infoBL){
+    public boolean insert(InfoBorrowLend infoBL){
         if(infoBL.isBorrow){
             return this.insert_Borrowing(infoBL);
         }
@@ -54,7 +54,7 @@ public class BorrowLend{
         }
     }
     
-    public boolean update_Borrow(int id, infoBorrowLend infoBL) {
+    public boolean update_Borrow(int id, InfoBorrowLend infoBL) {
         try {
             String sql = "update borrowing set value = "+infoBL.value+",interestRate ="+infoBL.interestRate+",dateBorrow = "+infoBL.date+",";
             sql += "expiryDate = "+infoBL.expiryDate+",infoLender = "+infoBL.infoPartner+",borrow_lend_type_id = "+infoBL.borrow_lend_id+",user_id = "+infoBL.user_id+" ;";
@@ -65,7 +65,7 @@ public class BorrowLend{
         }
     }
     
-    public boolean update_Lend(int id, infoBorrowLend infoBL) {
+    public boolean update_Lend(int id, InfoBorrowLend infoBL) {
         try {
             String sql = "update borrowing set value = "+infoBL.value+",interestRate ="+infoBL.interestRate+",dateLend = "+infoBL.date+",";
             sql += "infoBorrower = "+infoBL.infoPartner+",expiryDate = "+infoBL.expiryDate+",borrow_lend_type_id = "+infoBL.borrow_lend_id+",user_id = "+infoBL.user_id+" ;";
@@ -76,7 +76,7 @@ public class BorrowLend{
         }
     }
     
-    public boolean update(int id, infoBorrowLend infoBL){
+    public boolean update(int id, InfoBorrowLend infoBL){
         if(infoBL.isBorrow)
             return this.update_Borrow(id, infoBL);
         else
@@ -119,7 +119,7 @@ public class BorrowLend{
     }
     public static void main(String [] args){
         Database.setState();
-        infoBorrowLend ib = new infoBorrowLend(1,5,"2007-2-3","2010-02-12","bb",2,1,true);
+        InfoBorrowLend ib = new InfoBorrowLend(1,5,"2007-2-3","2010-02-12","bb",2,1,true);
         BorrowLend bl = new BorrowLend();
         bl.insert(ib);
     }

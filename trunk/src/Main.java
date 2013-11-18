@@ -1,7 +1,12 @@
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /*
@@ -23,35 +28,14 @@ public class Main extends javax.swing.JFrame {
     BorrowLend borrowLend = new BorrowLend();
     ArrayList<String> importTypeList = new ArrayList<String>();
     ArrayList<String> exportTypeList = new ArrayList<String>();
+    ArrayList<String> userList = new ArrayList<String>();
+    
     public Main() {
         Database.setState();// test
         initComponents();
         setImportTypeList(importExport.getImportTypeList());
         setExportTypeList(importExport.getExportTypeList());
-        
-        cboxIE.addItemListener(new ItemListener(){
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                String type = (String) cboxIE.getSelectedItem();
-                if(type.equals("Import")){   
-                    cboxType.removeAllItems();
-                    for(String s : importTypeList){
-                        cboxType.addItem(s);
-                    }
-                }
-                else if(type.equals("Export")){
-                    cboxType.removeAllItems();
-                    for(String s : exportTypeList){
-                        cboxType.addItem(s);
-                    }
-                }
-            }
-        });
-
-        
-        
-        
-        
+        setUserList(user.getUserList());         
     }
     
     private void setImportTypeList(ArrayList<String> importTypeList){
@@ -60,10 +44,16 @@ public class Main extends javax.swing.JFrame {
     private void setExportTypeList(ArrayList<String> exportTypeList){
         this.exportTypeList = exportTypeList;
     }
+    private void setUserList(ArrayList<String> userList){
+        for(String s: userList){
+            cboxUser.addItem(s);
+        }
+    }
     public void setUser(String userName){
         user.userName = userName;
         user.id = user.getUserId(userName);
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,6 +81,8 @@ public class Main extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtNote = new javax.swing.JTextField();
+        btnView = new javax.swing.JButton();
+        cboxUser = new javax.swing.JComboBox();
         jpBorrowLend = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -182,6 +174,11 @@ public class Main extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        tbImportExport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbImportExportMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbImportExport);
 
         cboxIE.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Import", "Export" }));
@@ -197,6 +194,15 @@ public class Main extends javax.swing.JFrame {
 
         jLabel3.setText("Note");
 
+        btnView.setText("View");
+        btnView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewActionPerformed(evt);
+            }
+        });
+
+        cboxUser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No User" }));
+
         javax.swing.GroupLayout jpImportExportLayout = new javax.swing.GroupLayout(jpImportExport);
         jpImportExport.setLayout(jpImportExportLayout);
         jpImportExportLayout.setHorizontalGroup(
@@ -207,31 +213,38 @@ public class Main extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpImportExportLayout.createSequentialGroup()
-                        .addGap(160, 160, 160)
+                        .addGap(186, 186, 186)
                         .addComponent(btnAdd)
-                        .addGap(36, 36, 36)
+                        .addGap(31, 31, 31)
                         .addComponent(btnUpdate)
-                        .addGap(39, 39, 39)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpImportExportLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(cboxIE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpImportExportLayout.createSequentialGroup()
                         .addGap(307, 307, 307)
                         .addComponent(jLabel1)
                         .addGap(100, 100, 100)
                         .addComponent(jLabel2)
                         .addGap(167, 167, 167)
-                        .addComponent(jLabel3)))
-                .addContainerGap(892, Short.MAX_VALUE))
+                        .addComponent(jLabel3))
+                    .addGroup(jpImportExportLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cboxUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cboxIE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpImportExportLayout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)
+                                .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jpImportExportLayout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(btnView)))))
+                .addContainerGap(167, Short.MAX_VALUE))
         );
         jpImportExportLayout.setVerticalGroup(
             jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,7 +275,11 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete)
                     .addComponent(btnAdd))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnView)
+                    .addComponent(cboxUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(62, 62, 62))
         );
@@ -287,7 +304,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jpMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(137, 137, 137)
                 .addComponent(jpImportExport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(348, 348, 348)
+                .addGap(1073, 1073, 1073)
                 .addComponent(jpBorrowLend, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -313,38 +330,116 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void cboxIEItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxIEItemStateChanged
-        
+          
+                String type = (String) cboxIE.getSelectedItem();
+                if(type.equals("Import")){   
+                    cboxType.removeAllItems();
+                    cboxType.addItem("All");
+                    for(String s : importTypeList){
+                        cboxType.addItem(s);
+                    }
+                    
+                }
+                else if(type.equals("Export")){
+                    cboxType.removeAllItems();
+                    cboxType.addItem("All");
+                    for(String s : exportTypeList){
+                        cboxType.addItem(s);
+                    }
+                }
     }//GEN-LAST:event_cboxIEItemStateChanged
     
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        int i = cboxIE.getSelectedIndex();
-        if(i==1){
-            JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Add cho Import");
-        }
-        else if(i==2){
-            JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Add cho Export");
+        if(tbImportExport.isColumnSelected(0)){   
+            int i = cboxIE.getSelectedIndex();
+            boolean isImport;
+            if(i==1){
+                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Add cho Import");
+                isImport=true;           
+                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxType.getSelectedIndex(),isImport);
+                if(importExport.insert(infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Add thanh cong");
+                else JOptionPane.showMessageDialog(jpImportExport, "Add that bai");
+            }
+            else if(i==2){
+                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Add cho Export");
+                isImport=false;
+                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxType.getSelectedIndex(),isImport);           
+                if(importExport.insert(infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Add thanh cong");
+                else JOptionPane.showMessageDialog(jpImportExport, "Add that bai");
+            }
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-                int i = cboxIE.getSelectedIndex();
-        if(i==1){
-            JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Update cho Import");
-        }
-        else if(i==2){
-            JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Update cho Export");
+        if(tbImportExport.isColumnSelected(0)){
+            int i = cboxIE.getSelectedIndex();
+            boolean isImport;
+            int row = tbImportExport.getSelectedRow();
+            if(i==1){
+                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Update cho Import");
+                isImport=true;
+                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()), txtNote.getText(),user.getUserId(tbImportExport.getValueAt(row, 1).toString()), cboxType.getSelectedIndex(),isImport);           
+                if(importExport.update((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
+                else JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
+            }
+            else if(i==2){
+                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Update cho Export");
+                isImport=false;
+                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxType.getSelectedIndex(),isImport);           
+                if(importExport.update((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
+                else JOptionPane.showMessageDialog(jpImportExport, "Update that bai");     
+            }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-                int i = cboxIE.getSelectedIndex();
-        if(i==1){
-            JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Delete cho Import");
+        if(tbImportExport.isColumnSelected(0)){
+            int i = cboxIE.getSelectedIndex();
+            boolean isImport;
+            if(i==1){
+                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Delete cho Import");
+                isImport=true;
+                if(importExport.delete((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), isImport)) JOptionPane.showMessageDialog(jpImportExport, "Delete Thanh cong");
+                else JOptionPane.showMessageDialog(jpImportExport, "Delete That bai");
+
+            }
+            else if(i==2){
+                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Delete cho Export");
+                isImport=false;
+                if(importExport.delete((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), isImport)) JOptionPane.showMessageDialog(jpImportExport, "Delete Thanh cong");
+                else JOptionPane.showMessageDialog(jpImportExport, "Delete That bai");          
+            }
         }
-        else if(i==2){
-            JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Delete cho Export");
-        }
+
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
+        int i = cboxIE.getSelectedIndex();
+        boolean isImport;
+        if(i==1){
+                ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxUser.getSelectedItem()),cboxType.getSelectedIndex(), true);
+                tbImportExport.setModel(new rsTableModel(rs));
+          
+        }          
+        else if(i==2){
+            ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxUser.getSelectedItem()),cboxType.getSelectedIndex(), false);
+            tbImportExport.setModel(new rsTableModel(rs));
+        }
+    }//GEN-LAST:event_btnViewActionPerformed
+
+    private void tbImportExportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbImportExportMouseClicked
+       if(evt.getButton()==MouseEvent.BUTTON1){
+           int row = tbImportExport.getSelectedRow();
+           txtValue.setText(tbImportExport.getValueAt(row, 4).toString());
+           txtDate.setText(tbImportExport.getValueAt(row, 2).toString());
+           try{
+               txtNote.setText(tbImportExport.getValueAt(row, 5).toString());
+           }catch(Exception ex){
+               txtNote.setText("");
+           }
+       }
+       
+    }//GEN-LAST:event_tbImportExportMouseClicked
 
     /**
      * @param args the command line arguments
@@ -385,8 +480,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnAddImportExport;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnView;
     private javax.swing.JComboBox cboxIE;
     private javax.swing.JComboBox cboxType;
+    private javax.swing.JComboBox cboxUser;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
