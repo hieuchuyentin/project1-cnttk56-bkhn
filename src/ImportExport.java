@@ -75,11 +75,13 @@ public class ImportExport {
             lenh+="value="+infoIE.value+",";
             lenh+="date="+"'"+infoIE.date+"'"+",";
             lenh+="import_type_id="+infoIE.type_id+",";
-            lenh+="note="+infoIE.note;
+            lenh+="note="+"'"+infoIE.note+"'";
             //lenh+="user_id="+infoIE.user_id;
             lenh+=" where id="+id;
             lenh+=";";
-            Database.stm.executeUpdate(lenh);
+            System.out.println(lenh);            
+            if(Database.stm.executeUpdate(lenh)>0) return true;
+            else return false;
             
         }
         catch(Exception e)
@@ -88,7 +90,7 @@ public class ImportExport {
             return false;
         }
         
-        return true;
+        
     }
     private boolean update_export(int id, InfoImportExport infoIE){
         try
@@ -98,20 +100,20 @@ public class ImportExport {
             lenh+="value="+infoIE.value+",";
             lenh+="date="+"'"+infoIE.date+"'"+",";
             lenh+="export_type_id="+infoIE.type_id+",";
-            lenh+="note="+infoIE.note;
+            lenh+="note="+"'"+infoIE.note+"'";
             //lenh+="user_id="+infoIE.user_id;
             lenh+=" where id="+id;
             lenh+=";";
-            Database.stm.executeUpdate(lenh);
-            
+            System.out.println(lenh);
+            if(Database.stm.executeUpdate(lenh)>0) return true;
+            else return false;
+
         }
         catch(Exception e)
         {
             System.err.println("Khong cap nhat duoc thong tin export");
             return false;
         }
-        
-        return true;
     }
     
     
@@ -243,5 +245,6 @@ public class ImportExport {
         }
        return rs;
    }
+   
                        
 }
