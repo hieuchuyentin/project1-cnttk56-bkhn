@@ -4,6 +4,8 @@
  */
 import java.sql.*;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.*;
 
 /**
@@ -14,9 +16,11 @@ public class rsTableModel extends AbstractTableModel {
       private  Vector colHeaders;        
       private  Vector tbData;    
       
-      public rsTableModel(ResultSet rsData) throws SQLException {
-        ResultSetMetaData rsMeta = rsData.getMetaData();     //-- Đọc MetaData của ResultSet
-        int count = rsMeta.getColumnCount();                         //-- Xác định số Field trong ResultSet
+      public rsTableModel(ResultSet rsData)  {
+        ResultSetMetaData rsMeta;     
+          try {
+              rsMeta = rsData.getMetaData(); //-- Đọc MetaData của ResultSet
+               int count = rsMeta.getColumnCount();                         //-- Xác định số Field trong ResultSet
 
         tbData = new Vector();
         colHeaders = new Vector(count);
@@ -34,6 +38,10 @@ public class rsTableModel extends AbstractTableModel {
             }
             tbData.addElement(dataRow);
         }
+          } catch (SQLException ex) {
+              Logger.getLogger(rsTableModel.class.getName()).log(Level.SEVERE, null, ex);
+          }
+       
     }
     public int getColumnCount() {
           return colHeaders.size();

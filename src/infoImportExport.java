@@ -7,7 +7,7 @@
  *
  * @author dodan_000
  */
-public class infoImportExport {
+public class InfoImportExport {
     String date;
     int value;
     String note;
@@ -16,11 +16,11 @@ public class infoImportExport {
     int id_chung;
     boolean isImport;
     
-    public infoImportExport(){
+    public InfoImportExport(){
         
     }
     
-    public infoImportExport(String date, int value, String note, int user_id, int type_id, boolean isImport){
+    public InfoImportExport(String date, int value, String note, int user_id, int type_id, boolean isImport){
         this.date = date;
         this.value = value;
         this.note = note;

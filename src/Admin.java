@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * @author dodan_000
  */
 public class Admin extends User{
-    public void setPrivilege(Privilege pv){
+    public void setPrivilege(InfoPrivilege pv){
         try {            
             ResultSet rs = Database.stm.executeQuery("select * from privilege where from_id="+pv.from_id+" and to_id="+pv.to_id+" and type_id="+pv.type_id+" and subType_id="+pv.subType_id);            
             if(pv.isAdd==true){              

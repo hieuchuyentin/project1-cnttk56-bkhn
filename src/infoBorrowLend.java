@@ -7,7 +7,7 @@
  *
  * @author dodan_000
  */
-class infoBorrowLend {
+class InfoBorrowLend {
     int value;
     int interestRate;
     String date;
@@ -17,11 +17,11 @@ class infoBorrowLend {
     int user_id;
     boolean isBorrow;
     
-    public infoBorrowLend(){
+    public InfoBorrowLend(){
         
     }
     
-    public infoBorrowLend(int value,int interestRate,String date,String expiryDate,String infoPartner,int borrow_lend_id,int user_id, boolean isBorrow){
+    public InfoBorrowLend(int value,int interestRate,String date,String expiryDate,String infoPartner,int borrow_lend_id,int user_id, boolean isBorrow){
         this.value = value;
         this.interestRate = interestRate;
         this.date = date;
