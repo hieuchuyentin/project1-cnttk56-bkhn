@@ -372,9 +372,6 @@
                 </Container>
                 <Component class="javax.swing.JRadioButton" name="rbtThuNhap">
                   <Properties>
-                    <Property name="model" type="javax.swing.ButtonModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                      <ComponentRef name="default"/>
-                    </Property>
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="buttonGroup1"/>
                     </Property>
@@ -387,9 +384,6 @@
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="rbtChiTieu">
                   <Properties>
-                    <Property name="model" type="javax.swing.ButtonModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                      <ComponentRef name="default"/>
-                    </Property>
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="buttonGroup1"/>
                     </Property>
@@ -479,7 +473,7 @@
                                       <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="399" max="32767" attributes="0"/>
+                                  <EmptySpace pref="408" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -541,7 +535,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="503" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="512" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -553,7 +547,6 @@
                     </Container>
                     <Container class="javax.swing.JPanel" name="jpSetPrivilege">
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CodeGeneration" type="java.lang.Integer" value="1"/>
                         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="Main_jpSetPrivilege"/>
                       </AuxValues>
                       <Constraints>
@@ -581,7 +574,7 @@
                                       </Group>
                                       <Component id="jTabbedPane1" alignment="0" min="-2" pref="389" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="73" max="32767" attributes="0"/>
+                                  <EmptySpace pref="82" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>

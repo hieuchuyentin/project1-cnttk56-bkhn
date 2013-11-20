@@ -150,13 +150,7 @@ public class Main extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jpAddDelete = new javax.swing.JPanel();
-        try {
-            jpSetPrivilege =(javax.swing.JPanel)java.beans.Beans.instantiate(getClass().getClassLoader(), "Main_jpSetPrivilege");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
+        jpSetPrivilege = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -448,7 +442,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addComponent(jLabel12)
                     .addComponent(jLabel13))
-                .addContainerGap(399, Short.MAX_VALUE))
+                .addContainerGap(408, Short.MAX_VALUE))
         );
         jpEditLayout.setVerticalGroup(
             jpEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -472,7 +466,7 @@ public class Main extends javax.swing.JFrame {
         jpAddDelete.setLayout(jpAddDeleteLayout);
         jpAddDeleteLayout.setHorizontalGroup(
             jpAddDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 503, Short.MAX_VALUE)
+            .addGap(0, 512, Short.MAX_VALUE)
         );
         jpAddDeleteLayout.setVerticalGroup(
             jpAddDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -607,7 +601,7 @@ public class Main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         jpSetPrivilegeLayout.setVerticalGroup(
             jpSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
