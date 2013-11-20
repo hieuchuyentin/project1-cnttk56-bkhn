@@ -566,15 +566,15 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel15" min="-2" pref="42" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="jComboBox1" min="-2" pref="78" max="-2" attributes="0"/>
+                                          <Component id="cboxPrivilegeFrom" min="-2" pref="78" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                                           <Component id="jLabel16" min="-2" pref="26" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="jComboBox2" min="-2" pref="82" max="-2" attributes="0"/>
+                                          <Component id="cboxPrivilegeTo" min="-2" pref="82" max="-2" attributes="0"/>
                                       </Group>
                                       <Component id="jTabbedPane1" alignment="0" min="-2" pref="389" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="82" max="32767" attributes="0"/>
+                                  <EmptySpace pref="73" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -585,12 +585,12 @@
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cboxPrivilegeFrom" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cboxPrivilegeTo" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                                   <Component id="jTabbedPane1" min="-2" pref="303" max="-2" attributes="0"/>
-                                  <EmptySpace pref="226" max="32767" attributes="0"/>
+                                  <EmptySpace pref="133" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -827,27 +827,17 @@
                             </Container>
                           </SubComponents>
                         </Container>
-                        <Component class="javax.swing.JComboBox" name="jComboBox1">
+                        <Component class="javax.swing.JComboBox" name="cboxPrivilegeFrom">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                              </StringArray>
+                              <StringArray count="0"/>
                             </Property>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JComboBox" name="jComboBox2">
+                        <Component class="javax.swing.JComboBox" name="cboxPrivilegeTo">
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="4">
-                                <StringItem index="0" value="Item 1"/>
-                                <StringItem index="1" value="Item 2"/>
-                                <StringItem index="2" value="Item 3"/>
-                                <StringItem index="3" value="Item 4"/>
-                              </StringArray>
+                              <StringArray count="0"/>
                             </Property>
                           </Properties>
                         </Component>
@@ -902,7 +892,7 @@
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Component id="cboxType" min="-2" pref="150" max="-2" attributes="0"/>
+                                                  <Component id="cboxIEType" min="-2" pref="150" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="txtValue" min="-2" pref="105" max="-2" attributes="0"/>
                                                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -922,7 +912,7 @@
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
-                                          <Component id="cboxUser" min="-2" max="-2" attributes="0"/>
+                                          <Component id="cboxIEUser" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                                           <Component id="btnView" min="-2" max="-2" attributes="0"/>
                                       </Group>
@@ -948,7 +938,7 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="cboxType" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboxIEType" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtValue" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="cboxIE" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtNote" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -963,7 +953,7 @@
                           <EmptySpace pref="165" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btnView" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cboxUser" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboxIEUser" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane2" min="-2" pref="299" max="-2" attributes="0"/>
@@ -981,7 +971,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cboxType">
+                <Component class="javax.swing.JComboBox" name="cboxIEType">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="1">
@@ -1085,7 +1075,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cboxUser">
+                <Component class="javax.swing.JComboBox" name="cboxIEUser">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="1">
