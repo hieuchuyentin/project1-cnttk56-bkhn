@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -72,23 +73,11 @@ public class Main extends javax.swing.JFrame {
         layerAccountSettings.setVisible(false);
         layerThongKe.setVisible(false);
         layerMenu.setVisible(true);
-        initLayerAccout();
+        initLayerAccountSettings();
+        initLayerStatistics();
         
     }
     
-    private void initLayerAccout(){
-                //System.out.println(importTypeList.toString());        
-        DefaultListModel<String> model = new DefaultListModel<>();
-        for(String s:importTypeList){           
-            model.addElement(s);
-        }
-        listPrivilegeImport.setModel(model);
-        
-        for(String s:exportTypeList){           
-            model.addElement(s);
-        }     
-        listPrivilegeExport.setModel(model);
-    }
     
     private void setImportTypeList(ArrayList<String> importTypeList){
         this.importTypeList = importTypeList;
@@ -97,9 +86,7 @@ public class Main extends javax.swing.JFrame {
         this.exportTypeList = exportTypeList;
     }
     private void setUserList(ArrayList<String> userList){
-        for(String s: userList){
-            cboxUser.addItem(s);
-        }
+        this.userList = userList;
     }
     public void setUser(String userName){
         user.userName = userName;
@@ -166,13 +153,13 @@ public class Main extends javax.swing.JFrame {
         jpPrivilegeLend = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
         listPrivilegeLend = new javax.swing.JList();
-        jComboBox1 = new javax.swing.JComboBox();
-        jComboBox2 = new javax.swing.JComboBox();
+        cboxPrivilegeFrom = new javax.swing.JComboBox();
+        cboxPrivilegeTo = new javax.swing.JComboBox();
         layerImportExport = new javax.swing.JLayeredPane();
         jDesktopPane2 = new javax.swing.JDesktopPane();
         jpImportExport = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
-        cboxType = new javax.swing.JComboBox();
+        cboxIEType = new javax.swing.JComboBox();
         txtValue = new javax.swing.JTextField();
         txtDate = new javax.swing.JTextField();
         btnUpdate = new javax.swing.JButton();
@@ -185,7 +172,7 @@ public class Main extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtNote = new javax.swing.JTextField();
         btnView = new javax.swing.JButton();
-        cboxUser = new javax.swing.JComboBox();
+        cboxIEUser = new javax.swing.JComboBox();
         layerBorrowLend = new javax.swing.JLayeredPane();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jpBorrowLend = new javax.swing.JPanel();
@@ -581,10 +568,6 @@ public class Main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Lend", jpPrivilegeLend);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         javax.swing.GroupLayout jpSetPrivilegeLayout = new javax.swing.GroupLayout(jpSetPrivilege);
         jpSetPrivilege.setLayout(jpSetPrivilegeLayout);
         jpSetPrivilegeLayout.setHorizontalGroup(
@@ -595,13 +578,13 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jpSetPrivilegeLayout.createSequentialGroup()
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cboxPrivilegeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
                         .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cboxPrivilegeTo, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         jpSetPrivilegeLayout.setVerticalGroup(
             jpSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -610,11 +593,11 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jpSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(jLabel16)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboxPrivilegeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboxPrivilegeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         jtpAccount.addTab("Set privilege", jpSetPrivilege);
@@ -649,11 +632,11 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        cboxType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Type" }));
-        cboxType.setMaximumSize(new java.awt.Dimension(1000, 20));
-        cboxType.setMinimumSize(new java.awt.Dimension(200, 40));
-        cboxType.setName(""); // NOI18N
-        cboxType.setPreferredSize(new java.awt.Dimension(500, 20));
+        cboxIEType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Type" }));
+        cboxIEType.setMaximumSize(new java.awt.Dimension(1000, 20));
+        cboxIEType.setMinimumSize(new java.awt.Dimension(200, 40));
+        cboxIEType.setName(""); // NOI18N
+        cboxIEType.setPreferredSize(new java.awt.Dimension(500, 20));
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -715,7 +698,7 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        cboxUser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No User" }));
+        cboxIEUser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No User" }));
 
         javax.swing.GroupLayout jpImportExportLayout = new javax.swing.GroupLayout(jpImportExport);
         jpImportExport.setLayout(jpImportExportLayout);
@@ -738,7 +721,7 @@ public class Main extends javax.swing.JFrame {
                                 .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jpImportExportLayout.createSequentialGroup()
                                         .addGap(18, 18, 18)
-                                        .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cboxIEType, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -754,7 +737,7 @@ public class Main extends javax.swing.JFrame {
                                 .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jpImportExportLayout.createSequentialGroup()
                                 .addGap(71, 71, 71)
-                                .addComponent(cboxUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboxIEUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(49, 49, 49)
                                 .addComponent(btnView))))
                     .addGroup(jpImportExportLayout.createSequentialGroup()
@@ -772,7 +755,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboxIEType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboxIE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -785,7 +768,7 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
                 .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnView)
-                    .addComponent(cboxUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboxIEUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(95, 95, 95))
@@ -1152,18 +1135,18 @@ public class Main extends javax.swing.JFrame {
           
                 String type = (String) cboxIE.getSelectedItem();
                 if(type.equals("Import")){   
-                    cboxType.removeAllItems();
-                    cboxType.addItem("All");
+                    cboxIEType.removeAllItems();
+                    cboxIEType.addItem("All");
                     for(String s : importTypeList){
-                        cboxType.addItem(s);
+                        cboxIEType.addItem(s);
                     }
                     
                 }
                 else if(type.equals("Export")){
-                    cboxType.removeAllItems();
-                    cboxType.addItem("All");
+                    cboxIEType.removeAllItems();
+                    cboxIEType.addItem("All");
                     for(String s : exportTypeList){
-                        cboxType.addItem(s);
+                        cboxIEType.addItem(s);
                     }
                 }
     }//GEN-LAST:event_cboxIEItemStateChanged
@@ -1175,14 +1158,14 @@ public class Main extends javax.swing.JFrame {
             if(i==1){
                 JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Add cho Import");
                 isImport=true;           
-                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxType.getSelectedIndex(),isImport);
+                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxIEType.getSelectedIndex(),isImport);
                 if(importExport.insert(infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Add thanh cong");
                 else JOptionPane.showMessageDialog(jpImportExport, "Add that bai");
             }
             else if(i==2){
                 JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Add cho Export");
                 isImport=false;
-                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxType.getSelectedIndex(),isImport);           
+                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxIEType.getSelectedIndex(),isImport);           
                 if(importExport.insert(infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Add thanh cong");
                 else JOptionPane.showMessageDialog(jpImportExport, "Add that bai");
             }
@@ -1196,14 +1179,14 @@ public class Main extends javax.swing.JFrame {
             if(i==1){
                 JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Update cho Import");
                 isImport=true;
-                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()), txtNote.getText(),user.getUserId(tbImportExport.getValueAt(row, 1).toString()), cboxType.getSelectedIndex(),isImport);           
+                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()), txtNote.getText(),user.getUserId(tbImportExport.getValueAt(row, 1).toString()), cboxIEType.getSelectedIndex(),isImport);           
                 if(importExport.update((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
                 else JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
             }
             else if(i==2){
                 JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Update cho Export");
                 isImport=false;
-                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxType.getSelectedIndex(),isImport);           
+                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxIEType.getSelectedIndex(),isImport);           
                 if(importExport.update((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
                 else JOptionPane.showMessageDialog(jpImportExport, "Update that bai");     
             }
@@ -1235,12 +1218,12 @@ public class Main extends javax.swing.JFrame {
         int i = cboxIE.getSelectedIndex();
         boolean isImport;
         if(i==1){
-                ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxUser.getSelectedItem()),cboxType.getSelectedIndex(), true);
+                ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxIEUser.getSelectedItem()),cboxIEType.getSelectedIndex(), true);
                 tbImportExport.setModel(new rsTableModel(rs));
           
         }          
         else if(i==2){
-            ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxUser.getSelectedItem()),cboxType.getSelectedIndex(), false);
+            ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxIEUser.getSelectedItem()),cboxIEType.getSelectedIndex(), false);
             tbImportExport.setModel(new rsTableModel(rs));
         }
     }//GEN-LAST:event_btnViewActionPerformed
@@ -1250,7 +1233,7 @@ public class Main extends javax.swing.JFrame {
            int row = tbImportExport.getSelectedRow();
            txtValue.setText(tbImportExport.getValueAt(row, 4).toString());
            txtDate.setText(tbImportExport.getValueAt(row, 2).toString());
-           cboxType.setSelectedItem(tbImportExport.getValueAt(row, 3).toString());
+           cboxIEType.setSelectedItem(tbImportExport.getValueAt(row, 3).toString());
            try{
                txtNote.setText(tbImportExport.getValueAt(row, 5).toString());
            }catch(Exception ex){
@@ -1275,7 +1258,7 @@ public class Main extends javax.swing.JFrame {
 
     private void cboxBLItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxBLItemStateChanged
         // TODO add your handling code here:
-        cboxType.removeAll();
+        cboxIEType.removeAll();
         InfoBorrowLend infoBL=new InfoBorrowLend();
 
         ResultSet kq=null;
@@ -1284,7 +1267,7 @@ public class Main extends javax.swing.JFrame {
             kq=Database.stm.executeQuery("selec * from borrow_lend_type;");
             while (kq.next())
             {
-                cboxType.addItem("Cycle "+kq.getInt(2)+" Type "+kq.getInt(3));
+                cboxIEType.addItem("Cycle "+kq.getInt(2)+" Type "+kq.getInt(3));
             }
         }
         catch(Exception e)
@@ -1332,7 +1315,7 @@ public class Main extends javax.swing.JFrame {
 
         //InfoBorrowLend infoBL=new InfoBorrowLend(Integer.parseInt(txtValue.getText()),Integer.parseInt(txtRate.getText()),
             // txtDate.getText(),txtExpire.getText(),txtPartner.getText(),0,user.id,cboxType.getSelectedIndex()==1);
-        borrowLend.delete((int)tbBorrowLend.getValueAt(tbBorrowLend.getSelectedRow(),0),cboxType.getSelectedIndex()==1);
+        borrowLend.delete((int)tbBorrowLend.getValueAt(tbBorrowLend.getSelectedRow(),0),cboxIEType.getSelectedIndex()==1);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void tfPhanNhomKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPhanNhomKeyPressed
@@ -1373,15 +1356,17 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btThucHienActionPerformed
 
     private void rbtThuNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtThuNhapActionPerformed
-        cbThanhVien.removeAllItems();
         cbPhanNhom.removeAllItems();
-        initCombobox1();
+        for(String s:importTypeList){
+            cbPhanNhom.addItem(s);
+        }        
     }//GEN-LAST:event_rbtThuNhapActionPerformed
 
     private void rbtChiTieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtChiTieuActionPerformed
-        cbThanhVien.removeAllItems();
         cbPhanNhom.removeAllItems();
-        initCombobox2();
+        for(String s:exportTypeList){
+            cbPhanNhom.addItem(s);
+        }
     }//GEN-LAST:event_rbtChiTieuActionPerformed
 
     private void btnAddImportExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddImportExportActionPerformed
@@ -1413,60 +1398,46 @@ public class Main extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    private void initLayerAccountSettings(){
+        DefaultListModel<String> modelImport = new DefaultListModel<>();
+        for(String s:importTypeList){
+            modelImport.addElement(s);
+        }
+        listPrivilegeImport.setModel(modelImport);
+        
+        DefaultListModel<String> modelExport = new DefaultListModel<>();
+        for(String s:exportTypeList){
+            modelExport.addElement(s);
+        }
+        listPrivilegeExport.setModel(modelExport);     
+       
+        DefaultListModel<String> modelUser = new DefaultListModel<>();
+        for(String s : userList){
+            cboxPrivilegeFrom.addItem(s);
+            cboxPrivilegeTo.addItem(s);
+        }
+                      
+    }
+    
+    private void initLayerImportExport(){
+        for(String s:userList){
+            cboxIEUser.addItem(s);
+        }
+    }
     Statement st = null;
     ResultSet rs = null;
     String nhom = null,sql1=null,sql2= null,thanhvien=null;
     public String time ="";
-       public void initCombobox1(){
-       
-        try {
+    
 
-            String sql = "select *from user";
-            rs = Database.stm.executeQuery(sql);
-            
-            while(rs.next()){
-                String s = rs.getString("name");
-                cbThanhVien.addItem(s);
-            }
-            
-            sql = "select *from import_type";
-            rs = Database.stm.executeQuery(sql);
-            
-            while(rs.next()){
-                String s = rs.getString("type");
-                cbPhanNhom.addItem(s);
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void initLayerStatistics(){
+        
+        for(String s:userList){
+            cbThanhVien.addItem(s);
+        }        
+        hienThoiGian();
     }
-   
-   public void initCombobox2(){
-       cbThanhVien.removeAllItems();
-        cbThanhVien.removeAllItems();
-        try {
-          
-            String sql = "select *from user";
-            rs = Database.stm.executeQuery(sql);
-            
-            while(rs.next()){
-                String s = rs.getString("name");
-                cbThanhVien.addItem(s);
-            }
-            
-            sql = "select *from export_type";
-            rs = Database.stm.executeQuery(sql);
-           
-            while(rs.next()){
-                String s = rs.getString("type");
-                cbPhanNhom.addItem(s);
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
     
     public void hienThoiGian(){
         Date thoiGian = new Date();
@@ -1751,6 +1722,7 @@ public class Main extends javax.swing.JFrame {
             }
         }
     }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1797,9 +1769,11 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JComboBox cbThanhVien;
     private javax.swing.JComboBox cboxBL;
     private javax.swing.JComboBox cboxIE;
-    private javax.swing.JComboBox cboxType;
+    private javax.swing.JComboBox cboxIEType;
+    private javax.swing.JComboBox cboxIEUser;
+    private javax.swing.JComboBox cboxPrivilegeFrom;
+    private javax.swing.JComboBox cboxPrivilegeTo;
     private javax.swing.JComboBox cboxType1;
-    private javax.swing.JComboBox cboxUser;
     private javax.swing.JDesktopPane dpAccountSettings;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1807,8 +1781,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JDesktopPane jDesktopPane2;
     private javax.swing.JDesktopPane jDesktopPane3;
