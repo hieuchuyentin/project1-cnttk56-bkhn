@@ -117,14 +117,7 @@ public class BorrowLend{
         else
             return this.delete_Lend(id);
     }
-    public static void main(String [] args){
-        Database.setState();
-        InfoBorrowLend ib = new InfoBorrowLend(1,5,"2007-2-3","2010-02-12","bb",2,1,true);
-        BorrowLend bl = new BorrowLend();
-        bl.insert(ib);
-    }
-    
-    
+        
 }
 
 
