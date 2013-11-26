@@ -1427,9 +1427,9 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btCharThuActionPerformed
 
     private void btChartChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btChartChiActionPerformed
-        try {
-            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-            String sql = "select sum(value) sum from importing where (year(date)) = 2013 group by(month(date))";
+    try {
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset();            
+            String sql = "select sum(value) sum from exporting where (year(date)) = 2013 group by(month(date))";
             rs = Database.stm.executeQuery(sql);
             int i = 0;
             do {
