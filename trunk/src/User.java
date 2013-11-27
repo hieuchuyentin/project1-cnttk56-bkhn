@@ -59,5 +59,20 @@ public class User extends InfoUser{
            }          
     return list;
    }   
+   
+   public ArrayList getUserListWithPrivilege(int fromUserId, int type_id, int subType_id){
+       ArrayList<String> list = new ArrayList<>();
+       String s1="";
+       if(subType_id!=0) s1 = " and privilege.subType_id="+subType_id;
+       
+       ResultSet rs = null;
+        try {
+            rs = Database.stm.executeQuery("select user.userName from user, privilege where privilege.from_id="+fromUserId+" and privilege.type_id="+type_id+ s1+" and privilege.to_id=user.id group by user.userName");
+            while(rs.next()) list.add(rs.getString(1));
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+   }
     
 }

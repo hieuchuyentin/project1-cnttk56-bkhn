@@ -16,30 +16,7 @@ import java.util.logging.Logger;
  * @author dodan_000
  */
 public class Admin extends User{
-    public void setPrivilege(InfoPrivilege pv){
-        try {            
-            ResultSet rs = Database.stm.executeQuery("select * from privilege where from_id="+pv.from_id+" and to_id="+pv.to_id+" and type_id="+pv.type_id+" and subType_id="+pv.subType_id);            
-            if(pv.isAdd==true){              
-                rs.moveToInsertRow();
-                rs.updateInt(2, pv.from_id);
-                rs.updateInt(3, pv.to_id);
-                rs.updateInt(4, pv.type_id);
-                rs.updateInt(5, pv.subType_id);
-                rs.insertRow();
-                //Database.stm.executeUpdate("insert into privilege (from_id, to_id, type_id, subType_id)  values("+pv.from_id+","+pv.to_id+","+pv.type_id+","+pv.subType_id+")");          
-            }
-            else{              
-                if (rs.next()){
-                    rs.deleteRow();                  
-                }               
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
-        
-    }
-    
     public boolean addUser(InfoUser infoUser){
         ResultSet rs = null;
         try {

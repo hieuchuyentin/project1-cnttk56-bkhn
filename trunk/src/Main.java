@@ -45,6 +45,7 @@ public class Main extends javax.swing.JFrame {
     User user = new User();
     ImportExport importExport = new ImportExport();
     BorrowLend borrowLend = new BorrowLend();
+    Privilege privilege = new Privilege();
     ArrayList<String> importTypeList = new ArrayList<String>();
     ArrayList<String> exportTypeList = new ArrayList<String>();
     ArrayList<String> userList = new ArrayList<String>();
@@ -69,21 +70,22 @@ public class Main extends javax.swing.JFrame {
         return super.add(comp); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public Main() {
+    public Main(String userName) {
         Database.setState();// test
         initComponents();
         setImportTypeList(importExport.getImportTypeList());
         setExportTypeList(importExport.getExportTypeList());
-        setUserList(user.getUserList());    
+        setUserList(user.getUserList());   
+        this.setUser(userName);
+        
         layerBorrowLend.setVisible(false);
         layerImportExport.setVisible(false);
         layerAccountSettings.setVisible(false);
-        layerThongKe.setVisible(false);
+        layerStatistics.setVisible(false);
         layerMenu.setVisible(true);
         initLayerAccountSettings();
         initLayerStatistics();
         initLayerImportExport();
-        initCombobox1();
     }
     
     
@@ -110,20 +112,17 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup = new javax.swing.ButtonGroup();
         jMenu3 = new javax.swing.JMenu();
-        layerThongKe = new javax.swing.JLayeredPane();
+        layerStatistics = new javax.swing.JLayeredPane();
         jDesktopPane4 = new javax.swing.JDesktopPane();
         jpThongKe = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
-        tfPhanNhom = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
-        tfThanhVien = new javax.swing.JTextField();
-        btHuyBo = new javax.swing.JButton();
-        cbPhanNhom = new javax.swing.JComboBox();
-        cbThanhVien = new javax.swing.JComboBox();
+        cboxStatisticsType = new javax.swing.JComboBox();
+        cboxStatisticsUser = new javax.swing.JComboBox();
         btThucHien = new javax.swing.JButton();
         jScrollPane9 = new javax.swing.JScrollPane();
         tbBangThongKe = new javax.swing.JTable();
@@ -138,39 +137,43 @@ public class Main extends javax.swing.JFrame {
         dpAccountSettings = new javax.swing.JDesktopPane();
         jpAccount = new javax.swing.JPanel();
         jtpAccount = new javax.swing.JTabbedPane();
-        jpEdit = new javax.swing.JPanel();
+        jpASEdit = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jpAddDelete = new javax.swing.JPanel();
-        jpSetPrivilege = new javax.swing.JPanel();
+        jpASAddDelete = new javax.swing.JPanel();
+        jpASViewPrivilege = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listVPImportType = new javax.swing.JList();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        listVPExportType = new javax.swing.JList();
+        jCheckBoxVPBorrow = new javax.swing.JCheckBox();
+        jCheckBoxVPLend = new javax.swing.JCheckBox();
+        cboxViewPrivilegeUser = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        jpASSetPrivilege = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jpPrivilegeImport = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         listPrivilegeImport = new javax.swing.JList();
-        btnPrivilegeSet = new javax.swing.JButton();
         jpPrivilegeExport = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         listPrivilegeExport = new javax.swing.JList();
-        jpPrivilegeBorrow = new javax.swing.JPanel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        listPrivilegeBorrow = new javax.swing.JList();
-        jpPrivilegeLend = new javax.swing.JPanel();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        listPrivilegeLend = new javax.swing.JList();
         cboxPrivilegeFrom = new javax.swing.JComboBox();
         cboxPrivilegeTo = new javax.swing.JComboBox();
+        btnPrivilegeSet = new javax.swing.JButton();
+        jCheckBoxSPBorrow = new javax.swing.JCheckBox();
+        jCheckBoxSPLend = new javax.swing.JCheckBox();
         layerImportExport = new javax.swing.JLayeredPane();
         jDesktopPane2 = new javax.swing.JDesktopPane();
         jpImportExport = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
         cboxIEType = new javax.swing.JComboBox();
         txtValue = new javax.swing.JTextField();
-        txtDate = new javax.swing.JTextField();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -182,6 +185,9 @@ public class Main extends javax.swing.JFrame {
         txtNote = new javax.swing.JTextField();
         btnView = new javax.swing.JButton();
         cboxIEUser = new javax.swing.JComboBox();
+        jCheckBoxAddAsUserSelected = new javax.swing.JCheckBox();
+        txtIEStatus = new javax.swing.JTextField();
+        jdcIEDate = new com.toedter.calendar.JDateChooser();
         layerBorrowLend = new javax.swing.JLayeredPane();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jpBorrowLend = new javax.swing.JPanel();
@@ -221,7 +227,7 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        layerThongKe.setMinimumSize(new java.awt.Dimension(900, 700));
+        layerStatistics.setMinimumSize(new java.awt.Dimension(900, 700));
 
         jDesktopPane4.setMinimumSize(new java.awt.Dimension(900, 700));
         jDesktopPane4.setName(""); // NOI18N
@@ -232,53 +238,39 @@ public class Main extends javax.swing.JFrame {
 
         jLabel29.setText("Phân Nhóm");
 
-        tfPhanNhom.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfPhanNhomKeyPressed(evt);
-            }
-        });
-
         jLabel30.setText("Thành Viên");
 
-        tfThanhVien.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfThanhVienActionPerformed(evt);
-            }
-        });
-        tfThanhVien.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfThanhVienKeyPressed(evt);
-            }
-        });
-
-        btHuyBo.setText("Hủy Bỏ");
-        btHuyBo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btHuyBoActionPerformed(evt);
-            }
-        });
-
-        cbPhanNhom.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        cboxStatisticsType.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                cbPhanNhomPopupMenuWillBecomeInvisible(evt);
+                cboxStatisticsTypePopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
+        cboxStatisticsType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxStatisticsTypeItemStateChanged(evt);
+            }
+        });
 
-        cbThanhVien.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        cboxStatisticsUser.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                cbThanhVienPopupMenuWillBecomeInvisible(evt);
+                cboxStatisticsUserPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
+        cboxStatisticsUser.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxStatisticsUserItemStateChanged(evt);
+            }
+        });
 
-        btThucHien.setText("Thực hiện");
+        btThucHien.setText("View");
         btThucHien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btThucHienActionPerformed(evt);
@@ -345,27 +337,21 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpThongKeLayout.createSequentialGroup()
                         .addGap(49, 49, 49)
-                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel29)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpThongKeLayout.createSequentialGroup()
+                                .addComponent(jLabel30)
+                                .addGap(62, 62, 62))
+                            .addComponent(rbtThuNhap)
+                            .addComponent(rbtChiTieu))
+                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpThongKeLayout.createSequentialGroup()
-                                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel29)
-                                    .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(85, 85, 85)
                                 .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jpThongKeLayout.createSequentialGroup()
-                                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(tfPhanNhom, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                                            .addComponent(tfThanhVien))
-                                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jpThongKeLayout.createSequentialGroup()
-                                                .addGap(86, 86, 86)
-                                                .addComponent(btChartChi))
-                                            .addGroup(jpThongKeLayout.createSequentialGroup()
-                                                .addGap(70, 70, 70)
-                                                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(cbThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(cbPhanNhom, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addGap(412, 412, 412)
+                                        .addComponent(btChartChi))
                                     .addGroup(jpThongKeLayout.createSequentialGroup()
                                         .addComponent(jdcStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(75, 75, 75)
@@ -373,20 +359,19 @@ public class Main extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(jdcEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jpThongKeLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
+                                .addGap(95, 95, 95)
                                 .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rbtThuNhap)
-                                    .addComponent(rbtChiTieu))
-                                .addGap(33, 33, 33)
-                                .addComponent(btThucHien)
-                                .addGap(59, 59, 59)
-                                .addComponent(btHuyBo, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)
+                                    .addComponent(cboxStatisticsUser, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cboxStatisticsType, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jpThongKeLayout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(btThucHien, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(117, 117, 117)
                                 .addComponent(btCharThu))))
                     .addGroup(jpThongKeLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(228, Short.MAX_VALUE))
+                .addContainerGap(194, Short.MAX_VALUE))
         );
         jpThongKeLayout.setVerticalGroup(
             jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -408,33 +393,29 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jdcEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tfPhanNhom, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbPhanNhom, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpThongKeLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel30)
-                            .addComponent(tfThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jpThongKeLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(cbThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpThongKeLayout.createSequentialGroup()
+                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cboxStatisticsType, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpThongKeLayout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(jLabel30))
+                            .addGroup(jpThongKeLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cboxStatisticsUser, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(49, 49, 49)
                         .addComponent(rbtThuNhap)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rbtChiTieu))
+                        .addComponent(rbtChiTieu)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE))
                     .addGroup(jpThongKeLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btHuyBo)
                             .addComponent(btThucHien)
                             .addComponent(btCharThu)
-                            .addComponent(btChartChi))))
-                .addGap(40, 40, 40)
+                            .addComponent(btChartChi))
+                        .addGap(40, 40, 40)))
                 .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(92, 92, 92)
                 .addComponent(lbTong))
@@ -443,8 +424,8 @@ public class Main extends javax.swing.JFrame {
         jpThongKe.setBounds(0, 0, 960, 670);
         jDesktopPane4.add(jpThongKe, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jDesktopPane4.setBounds(0, 0, 980, 690);
-        layerThongKe.add(jDesktopPane4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane4.setBounds(0, 0, 970, 420);
+        layerStatistics.add(jDesktopPane4, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jtpAccount.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
@@ -458,13 +439,13 @@ public class Main extends javax.swing.JFrame {
 
         jLabel14.setText("jLabel14");
 
-        javax.swing.GroupLayout jpEditLayout = new javax.swing.GroupLayout(jpEdit);
-        jpEdit.setLayout(jpEditLayout);
-        jpEditLayout.setHorizontalGroup(
-            jpEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpEditLayout.createSequentialGroup()
+        javax.swing.GroupLayout jpASEditLayout = new javax.swing.GroupLayout(jpASEdit);
+        jpASEdit.setLayout(jpASEditLayout);
+        jpASEditLayout.setHorizontalGroup(
+            jpASEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpASEditLayout.createSequentialGroup()
                 .addGap(52, 52, 52)
-                .addGroup(jpEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpASEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel14)
                     .addComponent(jLabel11)
                     .addComponent(jLabel10)
@@ -472,9 +453,9 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel13))
                 .addContainerGap(399, Short.MAX_VALUE))
         );
-        jpEditLayout.setVerticalGroup(
-            jpEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpEditLayout.createSequentialGroup()
+        jpASEditLayout.setVerticalGroup(
+            jpASEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpASEditLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel10)
                 .addGap(20, 20, 20)
@@ -488,20 +469,101 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(431, Short.MAX_VALUE))
         );
 
-        jtpAccount.addTab("Edit your account", jpEdit);
+        jtpAccount.addTab("Edit your account", jpASEdit);
 
-        javax.swing.GroupLayout jpAddDeleteLayout = new javax.swing.GroupLayout(jpAddDelete);
-        jpAddDelete.setLayout(jpAddDeleteLayout);
-        jpAddDeleteLayout.setHorizontalGroup(
-            jpAddDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jpASAddDeleteLayout = new javax.swing.GroupLayout(jpASAddDelete);
+        jpASAddDelete.setLayout(jpASAddDeleteLayout);
+        jpASAddDeleteLayout.setHorizontalGroup(
+            jpASAddDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 503, Short.MAX_VALUE)
         );
-        jpAddDeleteLayout.setVerticalGroup(
-            jpAddDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jpASAddDeleteLayout.setVerticalGroup(
+            jpASAddDeleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 603, Short.MAX_VALUE)
         );
 
-        jtpAccount.addTab("Add/Delete account", jpAddDelete);
+        jtpAccount.addTab("Add/Delete account", jpASAddDelete);
+
+        listVPImportType.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(listVPImportType);
+
+        listVPExportType.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane3.setViewportView(listVPExportType);
+
+        jCheckBoxVPBorrow.setText("Borrow");
+        jCheckBoxVPBorrow.setEnabled(false);
+        jCheckBoxVPBorrow.setFocusable(false);
+        jCheckBoxVPBorrow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxVPBorrowActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxVPLend.setText("Lend");
+        jCheckBoxVPLend.setEnabled(false);
+
+        cboxViewPrivilegeUser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None" }));
+        cboxViewPrivilegeUser.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxViewPrivilegeUserItemStateChanged(evt);
+            }
+        });
+
+        jLabel4.setText("On");
+
+        javax.swing.GroupLayout jpASViewPrivilegeLayout = new javax.swing.GroupLayout(jpASViewPrivilege);
+        jpASViewPrivilege.setLayout(jpASViewPrivilegeLayout);
+        jpASViewPrivilegeLayout.setHorizontalGroup(
+            jpASViewPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpASViewPrivilegeLayout.createSequentialGroup()
+                .addGroup(jpASViewPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpASViewPrivilegeLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jpASViewPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBoxVPLend, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBoxVPBorrow)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpASViewPrivilegeLayout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(29, 29, 29)
+                .addGroup(jpASViewPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpASViewPrivilegeLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboxViewPrivilegeUser, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(144, Short.MAX_VALUE))
+        );
+        jpASViewPrivilegeLayout.setVerticalGroup(
+            jpASViewPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpASViewPrivilegeLayout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addGroup(jpASViewPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cboxViewPrivilegeUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jpASViewPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpASViewPrivilegeLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jCheckBoxVPBorrow)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jCheckBoxVPLend))
+                    .addGroup(jpASViewPrivilegeLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jpASViewPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(368, Short.MAX_VALUE))
+        );
+
+        jtpAccount.addTab("View Privilege", jpASViewPrivilege);
 
         jLabel15.setText("From");
 
@@ -516,31 +578,20 @@ public class Main extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(listPrivilegeImport);
 
-        btnPrivilegeSet.setText("Set");
-        btnPrivilegeSet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrivilegeSetActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jpPrivilegeImportLayout = new javax.swing.GroupLayout(jpPrivilegeImport);
         jpPrivilegeImport.setLayout(jpPrivilegeImportLayout);
         jpPrivilegeImportLayout.setHorizontalGroup(
             jpPrivilegeImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrivilegeImportLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(jpPrivilegeImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPrivilegeSet, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(174, Short.MAX_VALUE))
+                .addGap(65, 65, 65)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(140, Short.MAX_VALUE))
         );
         jpPrivilegeImportLayout.setVerticalGroup(
             jpPrivilegeImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrivilegeImportLayout.createSequentialGroup()
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnPrivilegeSet)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Import", jpPrivilegeImport);
@@ -557,9 +608,9 @@ public class Main extends javax.swing.JFrame {
         jpPrivilegeExportLayout.setHorizontalGroup(
             jpPrivilegeExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrivilegeExportLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(73, 73, 73)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
         jpPrivilegeExportLayout.setVerticalGroup(
             jpPrivilegeExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -570,105 +621,83 @@ public class Main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Export", jpPrivilegeExport);
 
-        listPrivilegeBorrow.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        btnPrivilegeSet.setText("Set");
+        btnPrivilegeSet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrivilegeSetActionPerformed(evt);
+            }
         });
-        jScrollPane7.setViewportView(listPrivilegeBorrow);
 
-        javax.swing.GroupLayout jpPrivilegeBorrowLayout = new javax.swing.GroupLayout(jpPrivilegeBorrow);
-        jpPrivilegeBorrow.setLayout(jpPrivilegeBorrowLayout);
-        jpPrivilegeBorrowLayout.setHorizontalGroup(
-            jpPrivilegeBorrowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpPrivilegeBorrowLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(150, Short.MAX_VALUE))
-        );
-        jpPrivilegeBorrowLayout.setVerticalGroup(
-            jpPrivilegeBorrowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpPrivilegeBorrowLayout.createSequentialGroup()
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jCheckBoxSPBorrow.setText("Borrow");
 
-        jTabbedPane1.addTab("Borrow", jpPrivilegeBorrow);
+        jCheckBoxSPLend.setText("Lend");
 
-        listPrivilegeLend.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane8.setViewportView(listPrivilegeLend);
-
-        javax.swing.GroupLayout jpPrivilegeLendLayout = new javax.swing.GroupLayout(jpPrivilegeLend);
-        jpPrivilegeLend.setLayout(jpPrivilegeLendLayout);
-        jpPrivilegeLendLayout.setHorizontalGroup(
-            jpPrivilegeLendLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpPrivilegeLendLayout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(139, Short.MAX_VALUE))
-        );
-        jpPrivilegeLendLayout.setVerticalGroup(
-            jpPrivilegeLendLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpPrivilegeLendLayout.createSequentialGroup()
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Lend", jpPrivilegeLend);
-
-        javax.swing.GroupLayout jpSetPrivilegeLayout = new javax.swing.GroupLayout(jpSetPrivilege);
-        jpSetPrivilege.setLayout(jpSetPrivilegeLayout);
-        jpSetPrivilegeLayout.setHorizontalGroup(
-            jpSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpSetPrivilegeLayout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(jpSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpSetPrivilegeLayout.createSequentialGroup()
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboxPrivilegeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboxPrivilegeTo, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
+        javax.swing.GroupLayout jpASSetPrivilegeLayout = new javax.swing.GroupLayout(jpASSetPrivilege);
+        jpASSetPrivilege.setLayout(jpASSetPrivilegeLayout);
+        jpASSetPrivilegeLayout.setHorizontalGroup(
+            jpASSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpASSetPrivilegeLayout.createSequentialGroup()
+                .addGroup(jpASSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpASSetPrivilegeLayout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addGroup(jpASSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jpASSetPrivilegeLayout.createSequentialGroup()
+                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jpASSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jpASSetPrivilegeLayout.createSequentialGroup()
+                                        .addComponent(jCheckBoxSPBorrow)
+                                        .addGap(68, 68, 68)
+                                        .addComponent(jCheckBoxSPLend))
+                                    .addGroup(jpASSetPrivilegeLayout.createSequentialGroup()
+                                        .addComponent(cboxPrivilegeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(48, 48, 48)
+                                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cboxPrivilegeTo, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(jpASSetPrivilegeLayout.createSequentialGroup()
+                        .addGap(148, 148, 148)
+                        .addComponent(btnPrivilegeSet, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(73, Short.MAX_VALUE))
         );
-        jpSetPrivilegeLayout.setVerticalGroup(
-            jpSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpSetPrivilegeLayout.createSequentialGroup()
+        jpASSetPrivilegeLayout.setVerticalGroup(
+            jpASSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpASSetPrivilegeLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(jpSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jpASSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(jLabel16)
                     .addComponent(cboxPrivilegeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboxPrivilegeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addGap(35, 35, 35)
+                .addGroup(jpASSetPrivilegeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxSPBorrow)
+                    .addComponent(jCheckBoxSPLend))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(btnPrivilegeSet)
+                .addContainerGap(134, Short.MAX_VALUE))
         );
 
-        jtpAccount.addTab("Set privilege", jpSetPrivilege);
+        jtpAccount.addTab("Set privilege", jpASSetPrivilege);
 
         javax.swing.GroupLayout jpAccountLayout = new javax.swing.GroupLayout(jpAccount);
         jpAccount.setLayout(jpAccountLayout);
         jpAccountLayout.setHorizontalGroup(
             jpAccountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpAccountLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(40, 40, 40)
                 .addComponent(jtpAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(283, Short.MAX_VALUE))
+                .addContainerGap(271, Short.MAX_VALUE))
         );
         jpAccountLayout.setVerticalGroup(
             jpAccountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpAccountLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(26, 26, 26)
                 .addComponent(jtpAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jpAccount.setBounds(20, 10, 930, 670);
@@ -752,6 +781,10 @@ public class Main extends javax.swing.JFrame {
 
         cboxIEUser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No User" }));
 
+        jCheckBoxAddAsUserSelected.setText("Add as User Selected");
+
+        jdcIEDate.setDateFormatString("yyyy/MM/dd");
+
         javax.swing.GroupLayout jpImportExportLayout = new javax.swing.GroupLayout(jpImportExport);
         jpImportExport.setLayout(jpImportExportLayout);
         jpImportExportLayout.setHorizontalGroup(
@@ -765,36 +798,44 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(122, 122, 122)
                         .addComponent(jLabel3))
-                    .addGroup(jpImportExportLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(cboxIE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpImportExportLayout.createSequentialGroup()
-                                .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jpImportExportLayout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(cboxIEType, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jpImportExportLayout.createSequentialGroup()
-                                        .addGap(113, 113, 113)
-                                        .addComponent(btnAdd)
-                                        .addGap(31, 31, 31)
-                                        .addComponent(btnUpdate)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jpImportExportLayout.createSequentialGroup()
-                                .addGap(71, 71, 71)
-                                .addComponent(cboxIEUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)
-                                .addComponent(btnView))))
-                    .addGroup(jpImportExportLayout.createSequentialGroup()
-                        .addGap(108, 108, 108)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpImportExportLayout.createSequentialGroup()
+                            .addGap(16, 16, 16)
+                            .addComponent(cboxIE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jpImportExportLayout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jpImportExportLayout.createSequentialGroup()
+                                            .addComponent(cboxIEType, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jpImportExportLayout.createSequentialGroup()
+                                            .addGap(130, 130, 130)
+                                            .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jCheckBoxAddAsUserSelected)
+                                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jpImportExportLayout.createSequentialGroup()
+                                            .addComponent(jdcIEDate, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jpImportExportLayout.createSequentialGroup()
+                                            .addComponent(btnUpdate)
+                                            .addGap(168, 168, 168)
+                                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGroup(jpImportExportLayout.createSequentialGroup()
+                                    .addGap(71, 71, 71)
+                                    .addComponent(cboxIEUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(49, 49, 49)
+                                    .addComponent(btnView)
+                                    .addGap(131, 131, 131)
+                                    .addComponent(txtIEStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpImportExportLayout.createSequentialGroup()
+                            .addGap(108, 108, 108)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(146, Short.MAX_VALUE))
         );
         jpImportExportLayout.setVerticalGroup(
@@ -806,21 +847,25 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboxIEType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboxIE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cboxIEType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cboxIE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jdcIEDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete)
                     .addComponent(btnAdd))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBoxAddAsUserSelected)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
                 .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnView)
-                    .addComponent(cboxIEUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboxIEUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIEStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(95, 95, 95))
@@ -1163,9 +1208,8 @@ public class Main extends javax.swing.JFrame {
                     .addGap(0, 35, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(layerThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 975, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(39, Short.MAX_VALUE)))
+                    .addComponent(layerStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, 976, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 48, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1186,9 +1230,8 @@ public class Main extends javax.swing.JFrame {
                     .addContainerGap()))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(layerThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 699, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(37, Short.MAX_VALUE)))
+                    .addComponent(layerStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, 726, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 21, Short.MAX_VALUE)))
         );
 
         pack();
@@ -1196,7 +1239,7 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         layerMenu.setVisible(false);
-        layerThongKe.setVisible(true);
+        layerStatistics.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void cboxIEItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxIEItemStateChanged
@@ -1222,85 +1265,55 @@ public class Main extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
       
             int i = cboxIE.getSelectedIndex();
-            boolean isImport;
-            if(i==1){
-                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Add cho Import");
-                isImport=true;           
-                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxIEType.getSelectedIndex(),isImport);
-                if(importExport.insert(infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Add thanh cong");
-                else JOptionPane.showMessageDialog(jpImportExport, "Add that bai");
+            InfoImportExport infoIE = new InfoImportExport(((JTextField)jdcIEDate.getDateEditor().getUiComponent()).getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxIEType.getSelectedIndex(),i==1?true:false);
+            if(user.id==1){
+                    if(jCheckBoxAddAsUserSelected.isSelected()) infoIE.user_id= user.getUserId((String)cboxIEUser.getSelectedItem());
+                    if(importExport.insert(infoIE)) txtIEStatus.setText("Add thanh cong");
+                    else txtIEStatus.setText("Add that bai");
             }
-            else if(i==2){
-                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Add cho Export");
-                isImport=false;
-                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxIEType.getSelectedIndex(),isImport);           
-                if(importExport.insert(infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Add thanh cong");
-                else JOptionPane.showMessageDialog(jpImportExport, "Add that bai");
+            else if(user.id==user.getUserId((String)cboxIEUser.getSelectedItem())){                                
+                    if(importExport.insert(infoIE)) txtIEStatus.setText("Add thanh cong");
+                    else txtIEStatus.setText("Add that bai");
             }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         if(tbImportExport.getSelectedRow()!= -1){
             int i = cboxIE.getSelectedIndex();
-            boolean isImport;
             int row = tbImportExport.getSelectedRow();
-            if(i==1){
-                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Update cho Import");
-                isImport=true;
-                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()), txtNote.getText(),user.getUserId(tbImportExport.getValueAt(row, 1).toString()), cboxIEType.getSelectedIndex(),isImport);           
-                if(importExport.update((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
-                else JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
+            InfoImportExport infoIE = new InfoImportExport(((JTextField)jdcIEDate.getDateEditor().getUiComponent()).getText(),Integer.parseInt(txtValue.getText()), txtNote.getText(),user.getUserId(tbImportExport.getValueAt(row, 1).toString()), cboxIEType.getSelectedIndex(), i==1?true:false);  
+            if(user.id==1 || user.id == user.getUserId((String)cboxIEUser.getSelectedItem())){                   
+                if(importExport.update((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), infoIE)) txtIEStatus.setText("Update thanh cong");
+                else txtIEStatus.setText("Update that bai"); 
             }
-            else if(i==2){
-                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Update cho Export");
-                isImport=false;
-                InfoImportExport infoIE = new InfoImportExport(txtDate.getText(),Integer.parseInt(txtValue.getText()),txtNote.getText(),user.id,cboxIEType.getSelectedIndex(),isImport);           
-                if(importExport.update((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), infoIE)) JOptionPane.showMessageDialog(jpImportExport, "Update thanh cong");
-                else JOptionPane.showMessageDialog(jpImportExport, "Update that bai");     
-            }
+            else txtIEStatus.setText("Khong thuc hien duoc chuc nang nay");
         }
+         else txtIEStatus.setText("Chua chon hang can Update");
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if(tbImportExport.getSelectedRow()!= -1){
             int i = cboxIE.getSelectedIndex();
-            boolean isImport;
-            if(i==1){
-                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Delete cho Import");
-                isImport=true;
-                if(importExport.delete((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), isImport)) JOptionPane.showMessageDialog(jpImportExport, "Delete Thanh cong");
-                else JOptionPane.showMessageDialog(jpImportExport, "Delete That bai");
-
+            if(user.id==1 || user.id==user.getUserId((String)cboxIEUser.getSelectedItem())){
+                if(importExport.delete((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), i==1?true:false)) txtIEStatus.setText("Delete thanh cong");
+                else txtIEStatus.setText("Delete that bai");    
             }
-            else if(i==2){
-                JOptionPane.showMessageDialog(jpImportExport, "Ban vua bam nut Delete cho Export");
-                isImport=false;
-                if(importExport.delete((int)tbImportExport.getValueAt(tbImportExport.getSelectedRow(), 0), isImport)) JOptionPane.showMessageDialog(jpImportExport, "Delete Thanh cong");
-                else JOptionPane.showMessageDialog(jpImportExport, "Delete That bai");          
-            }
+            else txtIEStatus.setText("Khong thuc hien duoc chuc nang nay");
         }
-
+        else txtIEStatus.setText("Chua chon hang can Delete");
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
         int i = cboxIE.getSelectedIndex();
-        boolean isImport;
-        if(i==1){
-                ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxIEUser.getSelectedItem()),cboxIEType.getSelectedIndex(), true);
-                tbImportExport.setModel(new rsTableModel(rs));
-          
-        }          
-        else if(i==2){
-            ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxIEUser.getSelectedItem()),cboxIEType.getSelectedIndex(), false);
-            tbImportExport.setModel(new rsTableModel(rs));
-        }
+        ResultSet rs = importExport.getData(user.id, user.getUserId((String)cboxIEUser.getSelectedItem()),cboxIEType.getSelectedIndex(), i==1?true:false);
+        tbImportExport.setModel(new rsTableModel(rs));
     }//GEN-LAST:event_btnViewActionPerformed
 
     private void tbImportExportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbImportExportMouseClicked
        if(evt.getButton()==MouseEvent.BUTTON1){
            int row = tbImportExport.getSelectedRow();
            txtValue.setText(tbImportExport.getValueAt(row, 4).toString());
-           txtDate.setText(tbImportExport.getValueAt(row, 2).toString());
+           ((JTextField)jdcIEDate.getDateEditor().getUiComponent()).setText(tbImportExport.getValueAt(row, 2).toString());
            cboxIEType.setSelectedItem(tbImportExport.getValueAt(row, 3).toString());
            try{
                txtNote.setText(tbImportExport.getValueAt(row, 5).toString());
@@ -1312,12 +1325,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_tbImportExportMouseClicked
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-    if(user.id!=1){
-        jtpAccount.removeTabAt(2);
-        jtpAccount.removeTabAt(1);
-        
-    }         
-        layerThongKe.setVisible(false);
+         
+        layerStatistics.setVisible(false);
         layerAccountSettings.setVisible(true);
         layerImportExport.setVisible(false);
         layerBorrowLend.setVisible(false);
@@ -1342,7 +1351,7 @@ public class Main extends javax.swing.JFrame {
         layerBorrowLend.setVisible(false);
         layerImportExport.setVisible(false);
         layerAccountSettings.setVisible(false);
-        layerThongKe.setVisible(false);
+        layerStatistics.setVisible(false);
         layerMenu.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -1352,7 +1361,7 @@ public class Main extends javax.swing.JFrame {
         if (row ==-1) return;
         txtValue.setText(tbBorrowLend.getValueAt(row, 2).toString());
         txtRate.setText(tbBorrowLend.getValueAt(row, 3).toString());
-        txtDate.setText(tbBorrowLend.getValueAt(row, 4).toString());
+        ((JTextField)jdcIEDate.getDateEditor().getUiComponent()).setText(tbBorrowLend.getValueAt(row, 4).toString());
         txtExpiry.setText(tbBorrowLend.getValueAt(row, 5).toString());
         txtPartner.setText(tbBorrowLend.getValueAt(row, 6).toString());
         int type_id=(Integer)tbBorrowLend.getValueAt(row, 7);
@@ -1459,7 +1468,7 @@ public class Main extends javax.swing.JFrame {
             InfoBorrowLend infoBL=new InfoBorrowLend(
                 Integer.parseInt(txtValue.getText()),
                 Integer.parseInt(txtRate.getText()),
-                txtDate.getText(),
+                ((JTextField)jdcIEDate.getDateEditor().getUiComponent()).getText(),
                 txtExpiry.getText(),
                 txtPartner.getText(),
                 0,//borrow_lend_id
@@ -1489,7 +1498,7 @@ public class Main extends javax.swing.JFrame {
             InfoBorrowLend infoBL=new InfoBorrowLend(
                 Integer.parseInt(txtValue.getText()),
                 Integer.parseInt(txtRate.getText()),
-                txtDate.getText(),
+                ((JTextField)jdcIEDate.getDateEditor().getUiComponent()).getText(),
                 txtExpiry.getText(),
                 txtPartner.getText(),
                 0,//borrow_lend_id
@@ -1530,111 +1539,67 @@ public class Main extends javax.swing.JFrame {
     private void txtStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStatusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStatusActionPerformed
-
+    
     private void btnPrivilegeSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrivilegeSetActionPerformed
         int fromId = user.getUserId((String)cboxPrivilegeFrom.getSelectedItem());
         int toId = user.getUserId((String)cboxPrivilegeTo.getSelectedItem());
 
-        ArrayList<InfoPrivilege> listPrivilege = new ArrayList<>();
-        int[] listIndex;
-
-        listIndex = listPrivilegeImport.getSelectedIndices();
-        for(int i=0;i<listIndex.length;i++){
-            listPrivilege.add(new InfoPrivilege(fromId, toId, 1, i+1, true));
+        ArrayList<InfoPrivilege> listPrivilege = new ArrayList<InfoPrivilege>();
+        
+        for(int i=0 ; i < listPrivilegeImport.getModel().getSize(); i++){
+            if(listPrivilegeImport.isSelectedIndex(i)) listPrivilege.add(new InfoPrivilege(fromId, toId, 1, i+1));           
         }
-
-        listIndex = listPrivilegeExport.getSelectedIndices();
-        for(int i=0;i<listIndex.length;i++){
-            listPrivilege.add(new InfoPrivilege(fromId, toId, 2, i, true));
+        
+        for(int i=0;i<listPrivilegeExport.getModel().getSize();i++){
+            if(listPrivilegeExport.isSelectedIndex(i)) listPrivilege.add(new InfoPrivilege(fromId, toId, 2, i+1));
         }
-
+        
+        if(jCheckBoxSPBorrow.isSelected()) listPrivilege.add(new InfoPrivilege(fromId, toId, 3, 0));
+        if(jCheckBoxSPLend.isSelected()) listPrivilege.add(new InfoPrivilege(fromId, toId, 4, 0));
+        
+        privilege.setPrivilege(listPrivilege, fromId, toId);
+        
     }//GEN-LAST:event_btnPrivilegeSetActionPerformed
 
-    private void tfPhanNhomKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPhanNhomKeyPressed
-        JOptionPane.showMessageDialog(null, "Mời bạn lựa chọn trong combobox");
-    }//GEN-LAST:event_tfPhanNhomKeyPressed
-
-    private void tfThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfThanhVienActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfThanhVienActionPerformed
-
-    private void tfThanhVienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfThanhVienKeyPressed
-        JOptionPane.showMessageDialog(null, "Mời bạn lựa chọn trong combobox");
-    }//GEN-LAST:event_tfThanhVienKeyPressed
-
-    private void btHuyBoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btHuyBoActionPerformed
-        tfPhanNhom.setText("");
-        tfThanhVien.setText("");
-    }//GEN-LAST:event_btHuyBoActionPerformed
-
-    private void cbPhanNhomPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbPhanNhomPopupMenuWillBecomeInvisible
-        String tmp = (String)cbPhanNhom.getSelectedItem();
-        tfPhanNhom.setText(tmp);
-    }//GEN-LAST:event_cbPhanNhomPopupMenuWillBecomeInvisible
-
-    private void cbThanhVienPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbThanhVienPopupMenuWillBecomeInvisible
-        String tmp = (String)cbThanhVien.getSelectedItem();
-        tfThanhVien.setText(tmp);
-    }//GEN-LAST:event_cbThanhVienPopupMenuWillBecomeInvisible
-
-    private void btThucHienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btThucHienActionPerformed
-        if(rbtThuNhap.isSelected())
-        thucHien1();
-        else
-        thucHien2();
-        //        thucHien();
-    }//GEN-LAST:event_btThucHienActionPerformed
-
-    private void rbtThuNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtThuNhapActionPerformed
-        //        cbPhanNhom.removeAllItems();
-        //        for(String s:importTypeList){
-            //            cbPhanNhom.addItem(s);
-            //        }
-        cbThanhVien.removeAllItems();
-        cbPhanNhom.removeAllItems();
-        initCombobox1();
-    }//GEN-LAST:event_rbtThuNhapActionPerformed
-
-    private void rbtChiTieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtChiTieuActionPerformed
-        cbThanhVien.removeAllItems();
-        cbPhanNhom.removeAllItems();
-        initCombobox2();
-    }//GEN-LAST:event_rbtChiTieuActionPerformed
-
-    private void btCharThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCharThuActionPerformed
-        try {
-
-            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-            String sql = "select sum(value) sum from importing where (year(date)) = 2013 group by(month(date))";
-            rs = Database.stm.executeQuery(sql);
-            int i = 0;
-            do {
-                if (rs.next()) {
-                    i++;
-                    int value = rs.getInt("sum");
-                    dataset.setValue(value, "", "Tháng " + i);
-                } else {
-                    i++;
-                    dataset.setValue(0, "", "Tháng " + i);
-                }
-            } while (i < 12);
-
-            JFreeChart chart = ChartFactory.createBarChart3D("Số tiền", "Bảng thống kê thu nhập 2013", "", dataset, PlotOrientation.VERTICAL,false,true,false);
-            CategoryPlot p = chart.getCategoryPlot();
-            p.setRangeGridlinePaint(Color.BLACK);
-            ChartFrame frame = new ChartFrame("Thống kê thu nhập",chart);
-            frame.setVisible(true);
-            frame.setSize(1000, 500);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void cboxViewPrivilegeUserItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxViewPrivilegeUserItemStateChanged
+        ArrayList<String> listType; 
+        DefaultListModel<String> modelImportType = new DefaultListModel<>();
+        DefaultListModel<String> modelExportType = new DefaultListModel<>();
+        jCheckBoxVPBorrow.setSelected(false);
+        jCheckBoxVPLend.setSelected(false);
+        
+        //xay dung danh sach quyen han cho import list
+        listType = privilege.getPrivilegeType(user.id, user.getUserId((String)cboxViewPrivilegeUser.getSelectedItem()),1);
+        for(String s:listType){
+            modelImportType.addElement(s);
         }
-    }//GEN-LAST:event_btCharThuActionPerformed
+        listVPImportType.setModel(modelImportType);
+        
+        //xay dung danh sach quyen han cho export list
+        listType = privilege.getPrivilegeType(user.id, user.getUserId((String)cboxViewPrivilegeUser.getSelectedItem()),2);
+        for(String s:listType){
+            modelExportType.addElement(s);
+        }
+        listVPExportType.setModel(modelExportType);
+        
+        
+        listType = privilege.getPrivilegeType(user.id, user.getUserId((String)cboxViewPrivilegeUser.getSelectedItem()),3);
+        if(listType.size()>0) jCheckBoxVPBorrow.setSelected(true);
+        
+        listType = privilege.getPrivilegeType(user.id, user.getUserId((String)cboxViewPrivilegeUser.getSelectedItem()),4);
+        if(listType.size()>0) jCheckBoxVPLend.setSelected(true);
+        
+    }//GEN-LAST:event_cboxViewPrivilegeUserItemStateChanged
+
+    private void jCheckBoxVPBorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxVPBorrowActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxVPBorrowActionPerformed
 
     private void btChartChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btChartChiActionPerformed
         try {
             DefaultCategoryDataset dataset = new DefaultCategoryDataset();
             String sql = "select sum(value) sum from importing where (year(date)) = 2013 group by(month(date))";
-            rs = Database.stm.executeQuery(sql);
+            ResultSet rs = Database.stm.executeQuery(sql);
             int i = 0;
             do {
                 if (rs.next()) {
@@ -1658,382 +1623,185 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btChartChiActionPerformed
 
+    private void btCharThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCharThuActionPerformed
+        try {
+
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+            String sql = "select sum(value) sum from importing where (year(date)) = 2013 group by(month(date))";
+            ResultSet rs = Database.stm.executeQuery(sql);
+            int i = 0;
+            do {
+                if (rs.next()) {
+                    i++;
+                    int value = rs.getInt("sum");
+                    dataset.setValue(value, "", "Tháng " + i);
+                } else {
+                    i++;
+                    dataset.setValue(0, "", "Tháng " + i);
+                }
+            } while (i < 12);
+
+            JFreeChart chart = ChartFactory.createBarChart3D("Số tiền", "Bảng thống kê thu nhập 2013", "", dataset, PlotOrientation.VERTICAL,false,true,false);
+            CategoryPlot p = chart.getCategoryPlot();
+            p.setRangeGridlinePaint(Color.BLACK);
+            ChartFrame chartFrame = new ChartFrame("Thống kê thu nhập",chart);
+            chartFrame.setVisible(true);
+            chartFrame.setSize(1000, 500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btCharThuActionPerformed
+
+    private void rbtChiTieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtChiTieuActionPerformed
+        rbtThuNhap.setSelected(false);
+        if (user.id != 1) {
+            cboxStatisticsType.removeAllItems();
+            this.cboxStatisticsUserItemStateChanged(null);
+        }
+        else{
+            cboxStatisticsType.removeAllItems();
+            cboxStatisticsType.addItem("All");
+            for(String s: exportTypeList){
+                cboxStatisticsType.addItem(s);
+            }
+        }
+    }//GEN-LAST:event_rbtChiTieuActionPerformed
+
+    private void rbtThuNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtThuNhapActionPerformed
+        rbtChiTieu.setSelected(false);
+        if (user.id != 1) {
+            cboxStatisticsType.removeAllItems();
+            this.cboxStatisticsUserItemStateChanged(null);
+        }
+        else{
+            cboxStatisticsType.removeAllItems();
+            cboxStatisticsType.addItem("All");
+            for(String s: importTypeList){
+                cboxStatisticsType.addItem(s);
+            }
+        }
+    }//GEN-LAST:event_rbtThuNhapActionPerformed
+
+    private void btThucHienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btThucHienActionPerformed
+
+        ResultSet rs = null;
+        String type = "", sql1 = null, sql2 = null, thanhvien = null;
+        String time = "";
+        String sday = (((JTextField) jdcStartDay.getDateEditor().getUiComponent()).getText());
+        String eday = (((JTextField) jdcEndDay.getDateEditor().getUiComponent()).getText());
+        sql1=importExport.getStringSql(user.id, user.getUserId((String) cboxStatisticsUser.getSelectedItem()), rbtThuNhap.isSelected()?importExport.getImportId((String)cboxStatisticsType.getSelectedItem()):importExport.getExportId((String)cboxStatisticsType.getSelectedItem()), rbtThuNhap.isSelected(), sday, eday);
+        System.out.println(sql1);
+        try {
+            rs = Database.stm.executeQuery(sql1);
+        } catch (SQLException ex) {
+            System.out.println("Error!!!");
+        }
+        sql2 = "select sum(value) sum from importing i ";
+        sql2 += "inner join user u on i.user_id = u.id ";
+        sql2 += "inner join import_type im on im.id = i.import_type_id ";
+        sql2 += "where u.name = '" + (String) cboxStatisticsUser.getSelectedItem() + "' and im.type = '" + (String) cboxStatisticsType.getSelectedItem() + "'and i.date between '" + sday + "' and '" + eday + "'";
+
+        try {
+
+            rs = Database.stm.executeQuery(sql1);
+            tbBangThongKe.setModel(new rsTableModel(rs));
+            rs = Database.stm.executeQuery(sql2);
+            if (rs.next()) {
+                int sum = rs.getInt("sum");
+                lbTong.setText("Tổng thu nhập là : " + sum);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btThucHienActionPerformed
+
+    private void cboxStatisticsUserItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxStatisticsUserItemStateChanged
+        if (user.id != 1) {
+            ArrayList<String> list = new ArrayList<>();
+            list = importExport.getImportExportListWithPrivilege(user.id, user.getUserId((String) cboxStatisticsUser.getSelectedItem()), rbtThuNhap.isSelected());
+            cboxStatisticsType.removeAllItems();
+            cboxStatisticsType.addItem("All");
+            for (String s : list) {
+                cboxStatisticsType.addItem(s);
+            }
+            cboxStatisticsType.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_cboxStatisticsUserItemStateChanged
+
+    private void cboxStatisticsUserPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cboxStatisticsUserPopupMenuWillBecomeInvisible
+
+    }//GEN-LAST:event_cboxStatisticsUserPopupMenuWillBecomeInvisible
+
+    private void cboxStatisticsTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxStatisticsTypeItemStateChanged
+
+    }//GEN-LAST:event_cboxStatisticsTypeItemStateChanged
+
+    private void cboxStatisticsTypePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cboxStatisticsTypePopupMenuWillBecomeInvisible
+
+    }//GEN-LAST:event_cboxStatisticsTypePopupMenuWillBecomeInvisible
+
     /**
      * @param args the command line arguments
      */
-    private void initLayerAccountSettings(){
+    private void initLayerAccountSettings() {
         DefaultListModel<String> modelImport = new DefaultListModel<>();
-        for(String s:importTypeList){
+
+        if (user.id != 1) {
+            jtpAccount.removeTabAt(3);
+            jtpAccount.removeTabAt(1);
+        }
+
+        for (String s : importTypeList) {
             modelImport.addElement(s);
         }
         listPrivilegeImport.setModel(modelImport);
-        
+
         DefaultListModel<String> modelExport = new DefaultListModel<>();
-        for(String s:exportTypeList){
+        for (String s : exportTypeList) {
             modelExport.addElement(s);
         }
-        listPrivilegeExport.setModel(modelExport);     
-       
+        listPrivilegeExport.setModel(modelExport);
+
         DefaultListModel<String> modelUser = new DefaultListModel<>();
-        for(String s : userList){
+        for (String s : userList) {
             cboxPrivilegeFrom.addItem(s);
             cboxPrivilegeTo.addItem(s);
         }
-                      
+
+        //thiet lap cbox ViewPrivilegeser
+        for (String s : userList) {
+            if (user.userName.equals(s) == false) {
+                cboxViewPrivilegeUser.addItem((String) s);
+            }
+        }
+
     }
     
-    private void initLayerImportExport(){
-        for(String s:userList){
+    private void initLayerImportExport() {
+        for (String s : userList) {
             cboxIEUser.addItem(s);
         }
+        if (user.id != 1) {
+            jCheckBoxAddAsUserSelected.setVisible(false);
+        }
     }
-    Statement st = null;
-    ResultSet rs = null;
-    String nhom = null,sql1=null,sql2= null,thanhvien=null;
-    public String time ="";
     
 
-    private void initLayerStatistics(){
+    private void initLayerStatistics() {
+
+        for (String s : userList) {
+            cboxStatisticsUser.addItem(s);
+        }
         
-        for(String s:userList){
-            cbThanhVien.addItem(s);
-        }        
-//        hienThoiGian();
+        cboxStatisticsType.addItem("All");
+        for(String s: importTypeList){
+            cboxStatisticsType.addItem(s);
+        }
+        
+        rbtThuNhap.setSelected(true);
     }
 
-    
-//    public void hienThoiGian(){
-//        Date thoiGian = new Date();
-//        SimpleDateFormat dinhDangThoiGian = new SimpleDateFormat("yyyy/MM/dd");
-//        String hienThiThoiGian = dinhDangThoiGian.format(thoiGian.getTime()); 
-////        System.out.println(hienThiThoiGian);
-//        tfEndDay.setText(hienThiThoiGian);
-//        int ngay = thoiGian.getDate();
-//        int thang = thoiGian.getMonth() + 1; // thứ, tháng, nhỏ hiện tại 1
-//        int nam = thoiGian.getYear() + 1900; //năm nhỏ hơn hiện tại 1900
-//        time = ""+nam+"/"+thang+"/01";
-//        tfStartDay.setText(nam+"/"+thang+"/01");
-//        
-//    }
-    
-     public void initCombobox1(){
-       
-        try {
-            
-            String sql = "select *from user";
-            rs = Database.stm.executeQuery(sql);
-            
-            while(rs.next()){
-                String s = rs.getString("name");
-                cbThanhVien.addItem(s);
-            }
-            
-            sql = "select *from import_type";
-            rs = Database.stm.executeQuery(sql);
-            
-            while(rs.next()){
-                String s = rs.getString("type");
-                cbPhanNhom.addItem(s);
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-     public void initCombobox2(){
-       cbThanhVien.removeAllItems();
-        cbThanhVien.removeAllItems();
-        try {
-            
-            String sql = "select *from user";
-            rs = Database.stm.executeQuery(sql);
-            
-            while(rs.next()){
-                String s = rs.getString("name");
-                cbThanhVien.addItem(s);
-            }
-            
-            sql = "select *from export_type";
-            rs = Database.stm.executeQuery(sql);
-           
-            while(rs.next()){
-                String s = rs.getString("type");
-                cbPhanNhom.addItem(s);
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void thucHien1(){
-        String sday = (((JTextField)jdcStartDay.getDateEditor().getUiComponent()).getText());
-        String eday = (((JTextField)jdcEndDay.getDateEditor().getUiComponent()).getText());
 
-        if((tfPhanNhom.getText().equals("") == false) && (tfThanhVien.getText().equals("") == false)){
-//          
-            nhom = tfPhanNhom.getText();
-//            
-            //cÃ¡i nÃ y dÃ¹ng Ä‘á»ƒ hiá»‡n ra báº£ng
-            sql1 = "select u.name, i.date, i.value, i.note, im.type from importing i ";
-            sql1 += "inner join user u on i.user_id = u.id ";
-            sql1 += "inner join import_type im on im.id = i.import_type_id ";
-            sql1 += "where u.name = '"+tfThanhVien.getText()+"' and im.type = '"+tfPhanNhom.getText()+"'and i.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql1);
-            
-            
-            //cÃ¡i nÃ y dÃ¹ng Ä‘á»ƒ tÃ­nh tá»•ng values(tiá»�n)
-            sql2 = "select sum(value) sum from importing i ";
-            sql2 += "inner join user u on i.user_id = u.id ";
-            sql2 += "inner join import_type im on im.id = i.import_type_id ";
-            sql2 += "where u.name = '"+tfThanhVien.getText()+"' and im.type = '"+tfPhanNhom.getText()+"'and i.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql2);
-            
-            try {
-                
-                
-                rs = Database.stm.executeQuery(sql1);
-                tbBangThongKe.setModel(new rsTableModel(rs));
-                rs = st.executeQuery(sql2);
-                if(rs.next()){
-                    int sum = rs.getInt("sum");
-                    lbTong.setText("Tổng thu nhập là : "+sum);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        else if(tfPhanNhom.getText().equals("") == true && tfThanhVien.getText().equals("") == false){
-//            System.out.println("2");
-            nhom = "";
-            thanhvien = tfThanhVien.getText();
-            sql1 = "select u.name, i.date, i.value, i.note, im.type from importing i ";
-            sql1 += "inner join user u on i.user_id = u.id ";
-            sql1 += "inner join import_type im on im.id = i.import_type_id ";
-            sql1 += "where u.name = '"+thanhvien+"' and i.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql1);
-            
-            sql2 = "select sum(value) sum from importing i ";
-            sql2 += "inner join user u on i.user_id = u.id ";
-            sql2 += "inner join import_type im on im.id = i.import_type_id ";
-            sql2 += "where u.name = '"+thanhvien+"' and i.date between '"+sday+"' and '"+eday+"'";
-            System.out.println(sql2);
-            
-            try {
-                
-                
-                rs = Database.stm.executeQuery(sql1);
-                tbBangThongKe.setModel(new rsTableModel(rs));
-                rs = Database.stm.executeQuery(sql2);
-                if(rs.next()){
-                    int sum = rs.getInt("sum");
-                    lbTong.setText("Tổng thu nhập là : "+sum);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        else if(tfPhanNhom.getText().equals("") == false && tfThanhVien.getText().equals("") == true){
-//            System.out.println("3");
-            nhom = tfPhanNhom.getText();
-            thanhvien = tfThanhVien.getText();
-            System.out.println(nhom );
-            System.out.println(thanhvien);
-            sql1 = "select u.name, i.date, i.value, i.note, im.type from importing i  ";
-            sql1 += "inner join user u on i.user_id = u.id ";
-            sql1 += "inner join import_type im on im.id = i.import_type_id ";
-            sql1 += "where im.type = '"+nhom+"' and i.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql1);
-            
-            sql2 = "select sum(value) sum from importing i  ";
-            sql2 += "inner join user u on i.user_id = u.id ";
-            sql2 += "inner join import_type im on im.id = i.import_type_id ";
-            sql2 += "where im.type = '"+nhom+"' and i.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql2);
-            
-            try {
-                
-                
-                rs = Database.stm.executeQuery(sql1);
-                tbBangThongKe.setModel(new rsTableModel(rs));
-                rs = Database.stm.executeQuery(sql2);
-                if(rs.next()){
-                    int sum = rs.getInt("sum");
-                    lbTong.setText("Tổng thu nhập là : "+sum);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
-        }
-        
-        else{
-//            System.out.println("4");
-//            nhom = "";
-//            thanhvien = "";
-            sql1 = "select u.name, i.date, i.value, i.note, im.type from importing i  ";
-            sql1 += "inner join user u on i.user_id = u.id ";
-            sql1 += "inner join import_type im on im.id = i.import_type_id ";
-            sql1 += "where i.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql1);
-            
-            sql2 = "select sum(value) sum from importing i  ";
-            sql2 += "inner join user u on i.user_id = u.id ";
-            sql2 += "inner join import_type im on im.id = i.import_type_id ";
-            sql2 += "where i.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql2);
-            
-            try {
-                
-                
-                rs = Database.stm.executeQuery(sql1);
-                tbBangThongKe.setModel(new rsTableModel(rs));
-                rs = Database.stm.executeQuery(sql2);
-                if(rs.next()){
-                    int sum = rs.getInt("sum");
-                    lbTong.setText("Tổng thu nhập là : "+sum);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    public void thucHien2(){
-        String sday = (((JTextField)jdcStartDay.getDateEditor().getUiComponent()).getText());
-        String eday = (((JTextField)jdcEndDay.getDateEditor().getUiComponent()).getText());
-        if((tfPhanNhom.getText().equals("") == false) && (tfThanhVien.getText().equals("") == false)){
-//            System.out.println("1");
-            nhom = tfPhanNhom.getText();
-//            thanhvien = "";
-            //cÃ¡i nÃ y dÃ¹ng Ä‘á»ƒ hiá»‡n ra báº£ng
-            sql1 = "select u.name, e.date, e.value, e.note, ex.type from exporting e ";
-            sql1 += "inner join user u on e.user_id = u.id ";
-            sql1 += "inner join export_type ex on ex.id = e.export_type_id ";
-            sql1 += "where ex.type = '"+nhom+"' and ex.type = '"+tfPhanNhom.getText()+"'and e.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql1);
-            
-            
-            //cÃ¡i nÃ y dÃ¹ng Ä‘á»ƒ tÃ­nh tá»•ng values(tiá»�n)
-            sql2 = "select sum(value) sum from exporting e ";
-            sql2 += "inner join user u on e.user_id = u.id ";
-            sql2 += "inner join export_type ex on ex.id = e.export_type_id ";
-            sql2 += "where ex.type = '"+nhom+"' and ex.type = '"+tfPhanNhom.getText()+"'and e.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql2);
-            
-            try {
-                
-                
-                rs = Database.stm.executeQuery(sql1);
-                tbBangThongKe.setModel(new rsTableModel(rs));
-                rs = Database.stm.executeQuery(sql2);
-                if(rs.next()){
-                    int sum = rs.getInt("sum");
-                    lbTong.setText("Tổng chi tiêu là : "+sum);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        else if(tfPhanNhom.getText().equals("") == true && tfThanhVien.getText().equals("") == false){
-//            System.out.println("2");
-            nhom = "";
-            thanhvien = tfThanhVien.getText();
-            sql1 = "select u.name, e.date, e.value, e.note, ex.type from exporting e ";
-            sql1 += "inner join user u on e.user_id = u.id ";
-            sql1 += "inner join export_type ex on ex.id = e.export_type_id ";
-            sql1 += "where u.name = '"+thanhvien+"' and e.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql1);
-            
-            sql2 = "select sum(value) sum from exporting e ";
-            sql2 += "inner join user u on e.user_id = u.id ";
-            sql2 += "inner join export_type ex on ex.id = e.export_type_id ";
-            sql2 += "where u.name = '"+thanhvien+"' and e.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql2);
-            
-            try {
-                
-                
-                rs = Database.stm.executeQuery(sql1);
-                tbBangThongKe.setModel(new rsTableModel(rs));
-                rs = Database.stm.executeQuery(sql2);
-                if(rs.next()){
-                    int sum = rs.getInt("sum");
-                    lbTong.setText("Tổng chi tiêu là : "+sum);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        else if(tfPhanNhom.getText().equals("") == false && tfThanhVien.getText().equals("") == true){
-//            System.out.println("3");
-            nhom = tfPhanNhom.getText();
-            thanhvien = tfThanhVien.getText();
-            System.out.println(nhom );
-            System.out.println(thanhvien);
-            sql1 = "select u.name, e.date, e.value, e.note, ex.type from exporting e ";
-            sql1 += "inner join user u on e.user_id = u.id ";
-            sql1 += "inner join export_type ex on ex.id = e.export_type_id ";
-            sql1 += "where ex.type = '"+nhom+"' and e.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql1);
-            
-            sql2 = "select sum(value) sum from exporting e ";
-            sql2 += "inner join user u on e.user_id = u.id ";
-            sql2 += "inner join export_type ex on ex.id = e.export_type_id ";
-            sql2 += "where ex.type = '"+nhom+"' and e.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql2);
-            
-            try {
-                
-               rs = Database.stm.executeQuery(sql1);
-                tbBangThongKe.setModel(new rsTableModel(rs));
-                rs = Database.stm.executeQuery(sql2);
-                if(rs.next()){
-                    int sum = rs.getInt("sum");
-                    lbTong.setText("Tổng chi tiêu là : "+sum);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
-        }
-        
-        else{
-//            System.out.println("4");
-//            nhom = "";
-//            thanhvien = "";
-            sql1 = "select u.name, e.date, e.value, e.note, ex.type from exporting e ";
-            sql1 += "inner join user u on e.user_id = u.id ";
-            sql1 += "inner join export_type ex on ex.id = e.export_type_id ";
-            sql1 += "where e.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql1);
-            
-            sql2 = "select sum(value) sum from exporting e ";
-            sql2 += "inner join user u on e.user_id = u.id ";
-            sql2 += "inner join export_type ex on ex.id = e.export_type_id ";
-            sql2 += "where e.date between '"+sday+"' and '"+eday+"'";
-//            System.out.println(sql2);
-            
-            try {
-                
-               
-                rs = Database.stm.executeQuery(sql1);
-                tbBangThongKe.setModel(new rsTableModel(rs));
-                rs = Database.stm.executeQuery(sql2);
-                if(rs.next()){
-                    int sum = rs.getInt("sum");
-                    lbTong.setText("Tổng chi tiêu là : "+sum);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -2061,14 +1829,14 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                new Main("no name").setVisible(true);
             }
         });
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCharThu;
     private javax.swing.JButton btChartChi;
-    private javax.swing.JButton btHuyBo;
     private javax.swing.JButton btThucHien;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnAddImportExport;
@@ -2076,16 +1844,17 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnPrivilegeSet;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnView;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox cbPhanNhom;
-    private javax.swing.JComboBox cbThanhVien;
+    private javax.swing.ButtonGroup buttonGroup;
     private javax.swing.JComboBox cboxBL;
     private javax.swing.JComboBox cboxIE;
     private javax.swing.JComboBox cboxIEType;
     private javax.swing.JComboBox cboxIEUser;
     private javax.swing.JComboBox cboxPrivilegeFrom;
     private javax.swing.JComboBox cboxPrivilegeTo;
+    private javax.swing.JComboBox cboxStatisticsType;
+    private javax.swing.JComboBox cboxStatisticsUser;
     private javax.swing.JComboBox cboxType;
+    private javax.swing.JComboBox cboxViewPrivilegeUser;
     private javax.swing.JDesktopPane dpAccountSettings;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -2093,6 +1862,11 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JCheckBox jCheckBoxAddAsUserSelected;
+    private javax.swing.JCheckBox jCheckBoxSPBorrow;
+    private javax.swing.JCheckBox jCheckBoxSPLend;
+    private javax.swing.JCheckBox jCheckBoxVPBorrow;
+    private javax.swing.JCheckBox jCheckBoxVPLend;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JDesktopPane jDesktopPane2;
     private javax.swing.JDesktopPane jDesktopPane3;
@@ -2117,55 +1891,54 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private com.toedter.calendar.JDateChooser jdcEndDay;
+    private com.toedter.calendar.JDateChooser jdcIEDate;
     private com.toedter.calendar.JDateChooser jdcStartDay;
+    private javax.swing.JPanel jpASAddDelete;
+    private javax.swing.JPanel jpASEdit;
+    private javax.swing.JPanel jpASSetPrivilege;
+    private javax.swing.JPanel jpASViewPrivilege;
     private javax.swing.JPanel jpAccount;
-    private javax.swing.JPanel jpAddDelete;
     private javax.swing.JPanel jpBorrowLend;
-    private javax.swing.JPanel jpEdit;
     private javax.swing.JPanel jpImportExport;
     private javax.swing.JPanel jpMain;
-    private javax.swing.JPanel jpPrivilegeBorrow;
     private javax.swing.JPanel jpPrivilegeExport;
     private javax.swing.JPanel jpPrivilegeImport;
-    private javax.swing.JPanel jpPrivilegeLend;
-    private javax.swing.JPanel jpSetPrivilege;
     private javax.swing.JPanel jpThongKe;
     private javax.swing.JTabbedPane jtpAccount;
     private javax.swing.JLayeredPane layerAccountSettings;
     private javax.swing.JLayeredPane layerBorrowLend;
     private javax.swing.JLayeredPane layerImportExport;
     private javax.swing.JLayeredPane layerMenu;
-    private javax.swing.JLayeredPane layerThongKe;
+    private javax.swing.JLayeredPane layerStatistics;
     private javax.swing.JLabel lbTong;
-    private javax.swing.JList listPrivilegeBorrow;
     private javax.swing.JList listPrivilegeExport;
     private javax.swing.JList listPrivilegeImport;
-    private javax.swing.JList listPrivilegeLend;
+    private javax.swing.JList listVPExportType;
+    private javax.swing.JList listVPImportType;
     private javax.swing.JRadioButton rbtChiTieu;
     private javax.swing.JRadioButton rbtThuNhap;
     private javax.swing.JTable tbBangThongKe;
     private javax.swing.JTable tbBorrowLend;
     private javax.swing.JTable tbImportExport;
-    private javax.swing.JTextField tfPhanNhom;
-    private javax.swing.JTextField tfThanhVien;
-    private javax.swing.JTextField txtDate;
     private javax.swing.JTextField txtDate2;
     private javax.swing.JTextField txtExpiry;
+    private javax.swing.JTextField txtIEStatus;
     private javax.swing.JTextField txtNote;
     private javax.swing.JTextField txtPartner;
     private javax.swing.JTextField txtRate;
