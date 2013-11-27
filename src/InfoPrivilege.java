@@ -12,14 +12,12 @@ public class InfoPrivilege {
     int to_id;
     int type_id;
     int subType_id;
-    boolean isAdd;
     
-    public InfoPrivilege(int from, int to, int type, int subType, boolean isAdd){
+    public InfoPrivilege(int from, int to, int type, int subType){
         from_id = from;
         to_id = to;
         type_id = type;
         subType_id = subType;
-        this.isAdd = isAdd;
     }
       
 }

@@ -131,9 +131,8 @@ public class Login extends javax.swing.JFrame {
             try {             
                 ResultSet rs = Database.stm.executeQuery("Select * from user where userName='"+ txtUserName.getText()+"' and passWord='"+txtPassWord.getText()+"';");
                 if(rs.next()){   
-                    Main main = new Main();
+                    Main main = new Main(txtUserName.getText());
                     this.setVisible(false);
-                    main.setUser(txtUserName.getText());
                     main.show();
                     
                 }
