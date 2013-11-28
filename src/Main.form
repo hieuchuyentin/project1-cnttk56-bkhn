@@ -4,6 +4,37 @@
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="buttonGroup">
     </Component>
+    <Container class="javax.swing.JMenuBar" name="jMenuBar2">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <Menu class="javax.swing.JMenu" name="jMenu4">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="File"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu4ActionPerformed"/>
+          </Events>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="jMenuItem3"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu5">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit"/>
+          </Properties>
+        </Menu>
+      </SubComponents>
+    </Container>
     <Container class="javax.swing.JMenu" name="jMenu3">
       <Properties>
         <Property name="text" type="java.lang.String" value="jMenu3"/>
@@ -76,27 +107,27 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="layerImportExport" min="-2" pref="900" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="124" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="89" max="32767" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Component id="layerMenu" alignment="1" pref="1024" max="32767" attributes="0"/>
+              <Component id="layerMenu" alignment="1" pref="989" max="32767" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="2" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="layerBorrowLend" min="-2" pref="900" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="124" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="89" max="32767" attributes="0"/>
               </Group>
           </Group>
           <Group type="103" rootIndex="3" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="layerAccountSettings" min="-2" pref="989" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="35" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
           <Group type="103" rootIndex="4" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="layerStatistics" min="-2" pref="976" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="48" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="13" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -105,30 +136,30 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="layerImportExport" min="-2" pref="700" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="47" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="layerMenu" min="-2" pref="694" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="53" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
               </Group>
           </Group>
           <Group type="103" rootIndex="2" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="layerBorrowLend" min="-2" pref="700" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="47" max="32767" attributes="0"/>
+                  <Component id="layerBorrowLend" min="-2" pref="681" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
               </Group>
           </Group>
           <Group type="103" rootIndex="3" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="layerAccountSettings" pref="736" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="layerAccountSettings" min="-2" pref="684" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
               </Group>
           </Group>
           <Group type="103" rootIndex="4" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="layerStatistics" min="-2" pref="726" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="21" max="32767" attributes="0"/>
+                  <Component id="layerStatistics" min="-2" pref="657" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="43" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -153,7 +184,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
-              <JLayeredPaneConstraints x="0" y="0" width="970" height="420" layer="0" position="-1"/>
+              <JLayeredPaneConstraints x="0" y="0" width="970" height="670" layer="0" position="-1"/>
             </Constraint>
           </Constraints>
 
@@ -162,7 +193,7 @@
             <Container class="javax.swing.JPanel" name="jpThongKe">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
-                  <JLayeredPaneConstraints x="0" y="0" width="960" height="670" layer="0" position="-1"/>
+                  <JLayeredPaneConstraints x="0" y="0" width="960" height="660" layer="0" position="-1"/>
                 </Constraint>
               </Constraints>
 
@@ -188,34 +219,20 @@
                                       <Component id="rbtThuNhap" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="rbtChiTieu" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace min="-2" pref="412" max="-2" attributes="0"/>
-                                                  <Component id="btChartChi" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="jdcStartDay" min="-2" pref="171" max="-2" attributes="0"/>
-                                                  <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
-                                                  <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Component id="jdcEndDay" min="-2" pref="158" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                      </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="cboxStatisticsUser" min="-2" pref="148" max="-2" attributes="0"/>
-                                              <Component id="cboxStatisticsType" min="-2" pref="148" max="-2" attributes="0"/>
-                                          </Group>
+                                          <Component id="jdcStartDay" min="-2" pref="171" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+                                          <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="jdcEndDay" min="-2" pref="158" max="-2" attributes="0"/>
                                       </Group>
+                                      <Component id="cboxStatisticsUser" min="-2" pref="148" max="-2" attributes="0"/>
+                                      <Component id="cboxStatisticsType" min="-2" pref="148" max="-2" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                                           <Component id="btThucHien" min="-2" pref="125" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
                                           <Component id="btCharThu" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -225,7 +242,7 @@
                                   <Component id="jScrollPane9" min="-2" pref="617" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="194" max="32767" attributes="0"/>
+                          <EmptySpace pref="210" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -233,30 +250,30 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="jLabel28" alignment="1" min="-2" max="-2" attributes="0"/>
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <Component id="jLabel27" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="1" attributes="0">
+                                                      <Component id="jLabel28" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="102" alignment="1" attributes="0">
+                                                          <Component id="jLabel27" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
                                               </Group>
+                                              <Component id="jdcStartDay" alignment="0" min="-2" pref="34" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <Component id="jdcStartDay" alignment="0" min="-2" pref="34" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jdcEndDay" min="-2" pref="34" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jdcEndDay" min="-2" pref="34" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="cboxStatisticsType" alignment="0" min="-2" pref="31" max="-2" attributes="0"/>
                                       <Component id="jLabel29" alignment="0" min="-2" pref="23" max="-2" attributes="0"/>
@@ -273,22 +290,20 @@
                                   </Group>
                                   <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                                   <Component id="rbtThuNhap" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="rbtChiTieu" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="58" max="32767" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="32767" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="btThucHien" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="btCharThu" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btChartChi" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="jScrollPane9" min="-2" pref="253" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="rbtChiTieu" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="44" max="32767" attributes="0"/>
+                          <Component id="jScrollPane9" min="-2" pref="255" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                           <Component id="lbTong" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -401,18 +416,10 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btCharThu">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Bi&#x1ec3;u &#x111;&#x1ed3; thu nh&#x1ead;p"/>
+                    <Property name="text" type="java.lang.String" value="Bi&#x1ec3;u &#x111;&#x1ed3;"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCharThuActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="btChartChi">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Bi&#x1ec3;u &#x111;&#x1ed3; chi ti&#xea;u"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btChartChiActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -428,7 +435,7 @@
         <Container class="javax.swing.JDesktopPane" name="dpAccountSettings">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
-              <JLayeredPaneConstraints x="10" y="10" width="970" height="710" layer="0" position="-1"/>
+              <JLayeredPaneConstraints x="10" y="10" width="970" height="660" layer="0" position="-1"/>
             </Constraint>
           </Constraints>
 
@@ -967,7 +974,7 @@
             <Container class="javax.swing.JPanel" name="jpImportExport">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
-                  <JLayeredPaneConstraints x="10" y="10" width="880" height="680" layer="0" position="-1"/>
+                  <JLayeredPaneConstraints x="-20" y="10" width="910" height="660" layer="0" position="-1"/>
                 </Constraint>
               </Constraints>
 
@@ -1036,7 +1043,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="146" max="32767" attributes="0"/>
+                          <EmptySpace pref="176" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1067,7 +1074,7 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jCheckBoxAddAsUserSelected" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="135" max="32767" attributes="0"/>
+                          <EmptySpace pref="115" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btnView" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="cboxIEUser" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1225,7 +1232,7 @@
         <Container class="javax.swing.JDesktopPane" name="jDesktopPane1">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
-              <JLayeredPaneConstraints x="10" y="10" width="890" height="690" layer="0" position="-1"/>
+              <JLayeredPaneConstraints x="10" y="10" width="890" height="670" layer="0" position="-1"/>
             </Constraint>
           </Constraints>
 
@@ -1234,7 +1241,7 @@
             <Container class="javax.swing.JPanel" name="jpBorrowLend">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout$JLayeredPaneConstraintsDescription">
-                  <JLayeredPaneConstraints x="0" y="0" width="-1" height="-1" layer="0" position="-1"/>
+                  <JLayeredPaneConstraints x="0" y="0" width="940" height="650" layer="0" position="-1"/>
                 </Constraint>
               </Constraints>
 
@@ -1299,7 +1306,7 @@
                                                   <Component id="jButton11" min="-2" pref="80" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <EmptySpace pref="67" max="32767" attributes="0"/>
+                                          <EmptySpace pref="344" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -1318,7 +1325,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace pref="39" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel22" alignment="3" min="-2" max="-2" attributes="0"/>
