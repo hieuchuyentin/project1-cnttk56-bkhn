@@ -53,7 +53,7 @@ public class Main extends javax.swing.JFrame {
     ImportExport importExport = new ImportExport();
     BorrowLend borrowLend = new BorrowLend();
     Privilege privilege = new Privilege();
-    StatisticsChartFrame statisticsChartFrame = new StatisticsChartFrame(user.userName);
+    StatisticsChartFrame statisticsChartFrame;
     ArrayList<String> importTypeList = new ArrayList<String>();
     ArrayList<String> exportTypeList = new ArrayList<String>();
     ArrayList<String> userList = new ArrayList<String>();
@@ -85,6 +85,8 @@ public class Main extends javax.swing.JFrame {
         setExportTypeList(importExport.getExportTypeList());
         setUserList(user.getUserList());   
         this.setUser(userName);
+        statisticsChartFrame = new StatisticsChartFrame(user.userName);
+        
         
         layerBorrowLend.setVisible(false);
         layerImportExport.setVisible(false);
