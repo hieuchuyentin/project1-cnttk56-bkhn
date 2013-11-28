@@ -1,7 +1,11 @@
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.LayoutManager;
 import java.awt.PopupMenu;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -27,6 +31,9 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.Align;
+import org.jfree.data.*;
+import org.jfree.data.general.DefaultPieDataset;
 
 /*
  * To change this template, choose Tools | Templates
@@ -46,6 +53,7 @@ public class Main extends javax.swing.JFrame {
     ImportExport importExport = new ImportExport();
     BorrowLend borrowLend = new BorrowLend();
     Privilege privilege = new Privilege();
+    StatisticsChartFrame statisticsChartFrame = new StatisticsChartFrame(user.userName);
     ArrayList<String> importTypeList = new ArrayList<String>();
     ArrayList<String> exportTypeList = new ArrayList<String>();
     ArrayList<String> userList = new ArrayList<String>();
@@ -113,6 +121,10 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup = new javax.swing.ButtonGroup();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         layerStatistics = new javax.swing.JLayeredPane();
         jDesktopPane4 = new javax.swing.JDesktopPane();
@@ -132,7 +144,6 @@ public class Main extends javax.swing.JFrame {
         jdcEndDay = new com.toedter.calendar.JDateChooser();
         jdcStartDay = new com.toedter.calendar.JDateChooser();
         btCharThu = new javax.swing.JButton();
-        btChartChi = new javax.swing.JButton();
         layerAccountSettings = new javax.swing.JLayeredPane();
         dpAccountSettings = new javax.swing.JDesktopPane();
         jpAccount = new javax.swing.JPanel();
@@ -223,6 +234,26 @@ public class Main extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
 
+        jMenu4.setText("File");
+        jMenu4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu4ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem3.setText("jMenuItem3");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem3);
+
+        jMenuBar2.add(jMenu4);
+
+        jMenu5.setText("Edit");
+        jMenuBar2.add(jMenu5);
+
         jMenu3.setText("jMenu3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -311,17 +342,10 @@ public class Main extends javax.swing.JFrame {
 
         jdcStartDay.setDateFormatString("yyyy/MM/dd");
 
-        btCharThu.setText("Biểu đồ thu nhập");
+        btCharThu.setText("Biểu đồ");
         btCharThu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCharThuActionPerformed(evt);
-            }
-        });
-
-        btChartChi.setText("Biểu đồ chi tiêu");
-        btChartChi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btChartChiActionPerformed(evt);
             }
         });
 
@@ -345,55 +369,46 @@ public class Main extends javax.swing.JFrame {
                                 .addGap(62, 62, 62))
                             .addComponent(rbtThuNhap)
                             .addComponent(rbtChiTieu))
+                        .addGap(116, 116, 116)
                         .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpThongKeLayout.createSequentialGroup()
-                                .addGap(85, 85, 85)
-                                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jpThongKeLayout.createSequentialGroup()
-                                        .addGap(412, 412, 412)
-                                        .addComponent(btChartChi))
-                                    .addGroup(jpThongKeLayout.createSequentialGroup()
-                                        .addComponent(jdcStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(75, 75, 75)
-                                        .addComponent(jLabel28)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jdcEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jdcStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(75, 75, 75)
+                                .addComponent(jLabel28)
+                                .addGap(18, 18, 18)
+                                .addComponent(jdcEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cboxStatisticsUser, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cboxStatisticsType, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jpThongKeLayout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cboxStatisticsUser, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cboxStatisticsType, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jpThongKeLayout.createSequentialGroup()
-                                .addGap(34, 34, 34)
                                 .addComponent(btThucHien, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(117, 117, 117)
+                                .addGap(148, 148, 148)
                                 .addComponent(btCharThu))))
                     .addGroup(jpThongKeLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addContainerGap(210, Short.MAX_VALUE))
         );
         jpThongKeLayout.setVerticalGroup(
             jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpThongKeLayout.createSequentialGroup()
                 .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpThongKeLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
                         .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpThongKeLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel28)
+                                .addGap(30, 30, 30)
+                                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jpThongKeLayout.createSequentialGroup()
-                                        .addComponent(jLabel27)
-                                        .addGap(6, 6, 6))))
-                            .addComponent(jdcStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpThongKeLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jdcEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpThongKeLayout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel28)
+                                            .addGroup(jpThongKeLayout.createSequentialGroup()
+                                                .addComponent(jLabel27)
+                                                .addGap(6, 6, 6))))
+                                    .addComponent(jdcStartDay, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpThongKeLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jdcEndDay, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
                         .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cboxStatisticsType, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -405,26 +420,24 @@ public class Main extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cboxStatisticsUser, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(49, 49, 49)
-                        .addComponent(rbtThuNhap)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rbtChiTieu)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE))
-                    .addGroup(jpThongKeLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rbtThuNhap))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpThongKeLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jpThongKeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btThucHien)
-                            .addComponent(btCharThu)
-                            .addComponent(btChartChi))
-                        .addGap(40, 40, 40)))
-                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(92, 92, 92)
+                            .addComponent(btCharThu))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(rbtChiTieu)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90)
                 .addComponent(lbTong))
         );
 
-        jpThongKe.setBounds(0, 0, 960, 670);
+        jpThongKe.setBounds(0, 0, 960, 660);
         jDesktopPane4.add(jpThongKe, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jDesktopPane4.setBounds(0, 0, 970, 420);
+        jDesktopPane4.setBounds(0, 0, 970, 670);
         layerStatistics.add(jDesktopPane4, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jtpAccount.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -703,7 +716,7 @@ public class Main extends javax.swing.JFrame {
         jpAccount.setBounds(20, 10, 930, 670);
         dpAccountSettings.add(jpAccount, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        dpAccountSettings.setBounds(10, 10, 970, 710);
+        dpAccountSettings.setBounds(10, 10, 970, 660);
         layerAccountSettings.add(dpAccountSettings, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnAdd.setText("Add");
@@ -836,7 +849,7 @@ public class Main extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpImportExportLayout.createSequentialGroup()
                             .addGap(108, 108, 108)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap(176, Short.MAX_VALUE))
         );
         jpImportExportLayout.setVerticalGroup(
             jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -861,7 +874,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(btnAdd))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxAddAsUserSelected)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
                 .addGroup(jpImportExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnView)
                     .addComponent(cboxIEUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -871,7 +884,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(95, 95, 95))
         );
 
-        jpImportExport.setBounds(10, 10, 880, 680);
+        jpImportExport.setBounds(-20, 10, 910, 660);
         jDesktopPane2.add(jpImportExport, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jDesktopPane2.setBounds(20, 20, 890, 690);
@@ -1054,7 +1067,7 @@ public class Main extends javax.swing.JFrame {
                                     .addGroup(jpBorrowLendLayout.createSequentialGroup()
                                         .addGap(88, 88, 88)
                                         .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(67, Short.MAX_VALUE))))
+                                .addContainerGap(344, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBorrowLendLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1066,7 +1079,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBorrowLendLayout.createSequentialGroup()
                 .addGroup(jpBorrowLendLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpBorrowLendLayout.createSequentialGroup()
-                        .addContainerGap(39, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jpBorrowLendLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel21)
                             .addComponent(jLabel22)
@@ -1100,10 +1113,10 @@ public class Main extends javax.swing.JFrame {
                 .addGap(256, 256, 256))
         );
 
-        jpBorrowLend.setBounds(0, 0, 663, 716);
+        jpBorrowLend.setBounds(0, 0, 940, 650);
         jDesktopPane1.add(jpBorrowLend, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jDesktopPane1.setBounds(10, 10, 890, 690);
+        jDesktopPane1.setBounds(10, 10, 890, 670);
         layerBorrowLend.add(jDesktopPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnAddImportExport.setText("Add Import/Export");
@@ -1195,43 +1208,43 @@ public class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(layerImportExport, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 124, Short.MAX_VALUE))
+                .addGap(0, 89, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(layerMenu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE))
+                .addComponent(layerMenu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(layerBorrowLend, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 124, Short.MAX_VALUE)))
+                    .addGap(0, 89, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(layerAccountSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 989, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 35, Short.MAX_VALUE)))
+                    .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(layerStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, 976, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 48, Short.MAX_VALUE)))
+                    .addGap(0, 13, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(layerImportExport, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 47, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(layerMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 694, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 53, Short.MAX_VALUE)))
+                    .addGap(0, 6, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(layerBorrowLend, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 47, Short.MAX_VALUE)))
+                    .addComponent(layerBorrowLend, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 19, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(layerAccountSettings, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-                    .addContainerGap()))
+                    .addComponent(layerAccountSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 16, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(layerStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, 726, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 21, Short.MAX_VALUE)))
+                    .addComponent(layerStatistics, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 43, Short.MAX_VALUE)))
         );
 
         pack();
@@ -1595,61 +1608,9 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBoxVPBorrowActionPerformed
 
-    private void btChartChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btChartChiActionPerformed
-        try {
-            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-            String sql = "select sum(value) sum from importing where (year(date)) = 2013 group by(month(date))";
-            ResultSet rs = Database.stm.executeQuery(sql);
-            int i = 0;
-            do {
-                if (rs.next()) {
-                    i++;
-                    int value = rs.getInt("sum");
-                    dataset.setValue(value, "", "Tháng " + i);
-                } else {
-                    i++;
-                    dataset.setValue(0, "", "Tháng " + i);
-                }
-            } while (i < 12);
-
-            JFreeChart chart = ChartFactory.createBarChart3D("Số tiền", "Bảng thống kê chi tiêu 2013", "", dataset, PlotOrientation.VERTICAL,false,true,false);
-            CategoryPlot p = chart.getCategoryPlot();
-            p.setRangeGridlinePaint(Color.BLACK);
-            ChartFrame frame = new ChartFrame("Thống kê chi tiêu",chart);
-            frame.setVisible(true);
-            frame.setSize(1000, 500);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_btChartChiActionPerformed
-
+    
     private void btCharThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCharThuActionPerformed
-        try {
-
-            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-            String sql = "select sum(value) sum from importing where (year(date)) = 2013 group by(month(date))";
-            ResultSet rs = Database.stm.executeQuery(sql);
-            int i = 0;
-            do {
-                if (rs.next()) {
-                    i++;
-                    int value = rs.getInt("sum");
-                    dataset.setValue(value, "", "Tháng " + i);
-                } else {
-                    i++;
-                    dataset.setValue(0, "", "Tháng " + i);
-                }
-            } while (i < 12);
-
-            JFreeChart chart = ChartFactory.createBarChart3D("Số tiền", "Bảng thống kê thu nhập 2013", "", dataset, PlotOrientation.VERTICAL,false,true,false);
-            CategoryPlot p = chart.getCategoryPlot();
-            p.setRangeGridlinePaint(Color.BLACK);
-            ChartFrame chartFrame = new ChartFrame("Thống kê thu nhập",chart);
-            chartFrame.setVisible(true);
-            chartFrame.setSize(1000, 500);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        statisticsChartFrame.setVisible(true);             
     }//GEN-LAST:event_btCharThuActionPerformed
 
     private void rbtChiTieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtChiTieuActionPerformed
@@ -1739,6 +1700,14 @@ public class Main extends javax.swing.JFrame {
     private void cboxStatisticsTypePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cboxStatisticsTypePopupMenuWillBecomeInvisible
 
     }//GEN-LAST:event_cboxStatisticsTypePopupMenuWillBecomeInvisible
+
+    private void jMenu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu4ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1836,7 +1805,6 @@ public class Main extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCharThu;
-    private javax.swing.JButton btChartChi;
     private javax.swing.JButton btThucHien;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnAddImportExport;
@@ -1895,9 +1863,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
