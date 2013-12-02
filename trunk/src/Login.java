@@ -1,4 +1,6 @@
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -45,10 +47,37 @@ public class Login extends javax.swing.JFrame {
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         setName("Login"); // NOI18N
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                formKeyTyped(evt);
+            }
+        });
 
         txtUserName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUserNameActionPerformed(evt);
+            }
+        });
+        txtUserName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUserNameKeyTyped(evt);
+            }
+        });
+
+        txtPassWord.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPassWordActionPerformed(evt);
+            }
+        });
+        txtPassWord.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPassWordKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassWordKeyTyped(evt);
             }
         });
 
@@ -145,6 +174,38 @@ public class Login extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_formKeyTyped
+
+    private void txtPassWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassWordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPassWordActionPerformed
+
+    private void txtPassWordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassWordKeyTyped
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txtPassWordKeyTyped
+
+    private void txtUserNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUserNameKeyTyped
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_txtUserNameKeyTyped
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_formKeyPressed
+
+    private void txtPassWordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassWordKeyPressed
+        // TODO add your handling code here:
+        
+            if(evt.getExtendedKeyCode()==10){
+            this.btnLoginActionPerformed(null);
+        };
+    }//GEN-LAST:event_txtPassWordKeyPressed
 
     /**
      * @param args the command line arguments
