@@ -25,7 +25,7 @@ public class BorrowLend{
             return true;
         } catch (Exception e) {
             return false;
-            //e.printStackTrace();
+            //Database.stm.executeUpdate/e.printStackTrace();
             
         }
      
@@ -56,8 +56,12 @@ public class BorrowLend{
     
     public boolean update_Borrow(int id, InfoBorrowLend infoBL) {
         try {
-            String sql = "update borrowing set value = "+infoBL.value+",interestRate ="+infoBL.interestRate+",dateBorrow = "+infoBL.date+",";
-            sql += "expiryDate = "+infoBL.expiryDate+",infoLender = "+infoBL.infoPartner+",borrow_lend_type_id = "+infoBL.borrow_lend_id+",user_id = "+infoBL.user_id+" ;";
+            String sql = "update borrowing set value = "+infoBL.value+",interestRate ="+infoBL.interestRate+",dateBorrow = "+"'"+infoBL.date+"'"+",";
+            sql+= "expiryDate = "+"'"+infoBL.expiryDate+"'"+
+                    ",infoLender = "+"'"+infoBL.infoPartner+"'"+
+                    ",borrow_lend_type_id = "+infoBL.borrow_lend_id+
+                    ",user_id = "+infoBL.user_id;
+            sql+=" where id="+id+";";
             Database.stm.executeUpdate(sql);
             return true;
         } catch (Exception e) {
@@ -67,8 +71,10 @@ public class BorrowLend{
     
     public boolean update_Lend(int id, InfoBorrowLend infoBL) {
         try {
-            String sql = "update borrowing set value = "+infoBL.value+",interestRate ="+infoBL.interestRate+",dateLend = "+infoBL.date+",";
-            sql += "infoBorrower = "+infoBL.infoPartner+",expiryDate = "+infoBL.expiryDate+",borrow_lend_type_id = "+infoBL.borrow_lend_id+",user_id = "+infoBL.user_id+" ;";
+            String sql = "update lending set value = "+infoBL.value+",interestRate ="+infoBL.interestRate+",dateLend = "+"'"+infoBL.date+"'"+",";
+            sql += "infoBorrower = "+"'"+infoBL.infoPartner+"'"
+                    +",expiryDate = "+"'"+infoBL.expiryDate+"'"+",borrow_lend_type_id = "+infoBL.borrow_lend_id+",user_id = "+infoBL.user_id;
+            sql+=" where id="+id+";";
             Database.stm.executeUpdate(sql);
             return true;
         } catch (Exception e) {

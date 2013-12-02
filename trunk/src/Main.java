@@ -436,11 +436,11 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(lbTong))
         );
 
+        jDesktopPane4.add(jpThongKe);
         jpThongKe.setBounds(0, 0, 960, 660);
-        jDesktopPane4.add(jpThongKe, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        layerStatistics.add(jDesktopPane4);
         jDesktopPane4.setBounds(0, 0, 970, 670);
-        layerStatistics.add(jDesktopPane4, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jtpAccount.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
@@ -715,11 +715,11 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(36, Short.MAX_VALUE))
         );
 
+        dpAccountSettings.add(jpAccount);
         jpAccount.setBounds(20, 10, 930, 670);
-        dpAccountSettings.add(jpAccount, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        layerAccountSettings.add(dpAccountSettings);
         dpAccountSettings.setBounds(10, 10, 970, 660);
-        layerAccountSettings.add(dpAccountSettings, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -886,11 +886,11 @@ public class Main extends javax.swing.JFrame {
                 .addGap(95, 95, 95))
         );
 
+        jDesktopPane2.add(jpImportExport);
         jpImportExport.setBounds(-20, 10, 910, 660);
-        jDesktopPane2.add(jpImportExport, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        layerImportExport.add(jDesktopPane2);
         jDesktopPane2.setBounds(20, 20, 890, 690);
-        layerImportExport.add(jDesktopPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         tbBorrowLend.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1115,11 +1115,11 @@ public class Main extends javax.swing.JFrame {
                 .addGap(256, 256, 256))
         );
 
+        jDesktopPane1.add(jpBorrowLend);
         jpBorrowLend.setBounds(0, 0, 940, 650);
-        jDesktopPane1.add(jpBorrowLend, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        layerBorrowLend.add(jDesktopPane1);
         jDesktopPane1.setBounds(10, 10, 890, 670);
-        layerBorrowLend.add(jDesktopPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnAddImportExport.setText("Add Import/Export");
         btnAddImportExport.addActionListener(new java.awt.event.ActionListener() {
@@ -1167,11 +1167,11 @@ public class Main extends javax.swing.JFrame {
                 .addGap(82, 82, 82))
         );
 
+        jDesktopPane3.add(jpMain);
         jpMain.setBounds(10, 20, 710, 300);
-        jDesktopPane3.add(jpMain, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        layerMenu.add(jDesktopPane3);
         jDesktopPane3.setBounds(20, 10, 760, 340);
-        layerMenu.add(jDesktopPane3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jMenu1.setText("Option");
 
@@ -1374,9 +1374,9 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         int row = tbBorrowLend.getSelectedRow();
         if (row ==-1) return;
-        txtValue.setText(tbBorrowLend.getValueAt(row, 2).toString());
+        txtValue2.setText(tbBorrowLend.getValueAt(row, 2).toString());
         txtRate.setText(tbBorrowLend.getValueAt(row, 3).toString());
-        ((JTextField)jdcIEDate.getDateEditor().getUiComponent()).setText(tbBorrowLend.getValueAt(row, 4).toString());
+        txtDate2.setText(tbBorrowLend.getValueAt(row, 4).toString());
         txtExpiry.setText(tbBorrowLend.getValueAt(row, 5).toString());
         txtPartner.setText(tbBorrowLend.getValueAt(row, 6).toString());
         int type_id=(Integer)tbBorrowLend.getValueAt(row, 7);
@@ -1481,9 +1481,9 @@ public class Main extends javax.swing.JFrame {
         try
         {
             InfoBorrowLend infoBL=new InfoBorrowLend(
-                Integer.parseInt(txtValue.getText()),
+                Integer.parseInt(txtValue2.getText()),
                 Integer.parseInt(txtRate.getText()),
-                ((JTextField)jdcIEDate.getDateEditor().getUiComponent()).getText(),
+                (txtDate2.getText()),
                 txtExpiry.getText(),
                 txtPartner.getText(),
                 0,//borrow_lend_id
@@ -1511,9 +1511,9 @@ public class Main extends javax.swing.JFrame {
         try
         {
             InfoBorrowLend infoBL=new InfoBorrowLend(
-                Integer.parseInt(txtValue.getText()),
+                Integer.parseInt(txtValue2.getText()),
                 Integer.parseInt(txtRate.getText()),
-                ((JTextField)jdcIEDate.getDateEditor().getUiComponent()).getText(),
+                txtDate2.getText(),
                 txtExpiry.getText(),
                 txtPartner.getText(),
                 0,//borrow_lend_id
@@ -1525,8 +1525,10 @@ public class Main extends javax.swing.JFrame {
             i++;
 
             infoBL.setBorrow_lend_id(Integer.parseInt(strtype.substring(0,i)));
-            borrowLend.update((int)tbBorrowLend.getValueAt(tbBorrowLend.getSelectedRow(),0),infoBL);
-            txtStatus.setText("Viec cap nhat thanh cong");
+            if (borrowLend.update((int)tbBorrowLend.getValueAt(tbBorrowLend.getSelectedRow(),0),infoBL))
+                txtStatus.setText("Viec cap nhat thanh cong");
+            else 
+                txtStatus.setText("Viec cap nhat that bai");
         }
         catch(Exception e)
         {
