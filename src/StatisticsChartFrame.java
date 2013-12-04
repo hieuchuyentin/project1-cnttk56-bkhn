@@ -222,12 +222,12 @@ public class StatisticsChartFrame extends javax.swing.JFrame {
         if (cboxChartType.getSelectedIndex() == 0) {
             s1 = "importing";
             s2 = "import_type_id";
-            s3 = "chi tiêu";
+            s3 = "thu nhập";
             subTypeId = importExport.getImportId((String) cboxChartSubType.getSelectedItem());
         } else {
             s1 = "exporting";
             s2 = "export_type_id";
-            s3 = "thu nhập";
+            s3 = "chi tiêu";
             subTypeId = importExport.getExportId((String) cboxChartSubType.getSelectedItem());
         }
 
