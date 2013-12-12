@@ -367,7 +367,7 @@ public class ImportExport {
             s5 = " and " + s1 + "_type_id = " + type_id;
         }
 
-        String sql = "select x.id,user.userName as UserName,x.date as Date," + s1 + "_type.type,x.value as Value,x.note as Note,x.imageURL"
+        String sql = "select x.id,user.userName as UserName,x.date as Date," + s1 + "_type.type,x.value as Value,x.note as Note"
                 + " from (select * from " + s2 + " where user_id=" + toUserId + s3 + s5 + ")as x,user," + s1 + "_type"
                 + " where x.user_id=user.id  and x." + s1 + "_type_id = " + s1 + "_type.id" + " and x.date between '"+startDay+"' and '"+endDay+"';";
         
