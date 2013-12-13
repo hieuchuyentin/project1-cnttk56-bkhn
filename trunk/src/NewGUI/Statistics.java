@@ -6,6 +6,11 @@
 
 package NewGUI;
 
+import Control.ComboxRender;
+import Control.Database;
+import Control.ImportExport;
+import Control.User;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -17,11 +22,42 @@ public class Statistics extends javax.swing.JFrame {
     /**
      * Creates new form Statistics
      */
+    
+    ImportExport importExport = new ImportExport();
+    User user = new User();
+    ArrayList<String> userList;
+    ArrayList<String> incomeList;
+    ArrayList<String> expenseList ;
+    
+    Filter filter = new Filter();
+    
     public Statistics() {
+        Database.setState();
         initComponents();
+        initStatistics();
+    }
+    public void initStatistics(){
+        
+        userList = user.getUserList();
+        incomeList = importExport.getImportTypeList();
+        expenseList = importExport.getExportTypeList();
+        
+        //khoi tao cboxAccount
+        for(String s:userList){
+            cboxAccount.addItem(s);
+        }
+        
+    
+    //khoi tao cbox category
+        cboxCategory.removeAllItems();
+        cboxCategory.addItem("All Categorys");
+        for(String s:incomeList){
+            cboxCategory.addItem(s);
+        }
+        cboxCategory.setRenderer(new ComboxRender("src/image/import_type/",0));
+        
         
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,7 +75,7 @@ public class Statistics extends javax.swing.JFrame {
         btnFilter = new javax.swing.JButton();
         btnExport = new javax.swing.JButton();
         cboxType = new javax.swing.JComboBox();
-        cboxCartegory = new javax.swing.JComboBox();
+        cboxCategory = new javax.swing.JComboBox();
         jdcFrom = new com.toedter.calendar.JDateChooser();
         jdcTo = new com.toedter.calendar.JDateChooser();
         jycYear = new com.toedter.calendar.JYearChooser();
@@ -52,12 +88,22 @@ public class Statistics extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        jpView = new javax.swing.JPanel();
         cboxMonth = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        cboxAccount = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 0, 255));
         setMinimumSize(new java.awt.Dimension(890, 560));
         setPreferredSize(new java.awt.Dimension(890, 560));
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(245, 246, 247));
         jPanel1.setMaximumSize(new java.awt.Dimension(32767, 60));
@@ -144,6 +190,11 @@ public class Statistics extends javax.swing.JFrame {
         btnFilter.setName(""); // NOI18N
         btnFilter.setPreferredSize(new java.awt.Dimension(60, 60));
         btnFilter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnFilter);
         btnFilter.setBounds(330, 0, 70, 60);
 
@@ -166,17 +217,22 @@ public class Statistics extends javax.swing.JFrame {
 
         cboxType.setEditable(true);
         cboxType.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cboxType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Importing", "Exporting" }));
+        cboxType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Income", "Expense" }));
         cboxType.setMaximumSize(new java.awt.Dimension(125, 25));
         cboxType.setMinimumSize(new java.awt.Dimension(125, 25));
         cboxType.setPreferredSize(new java.awt.Dimension(125, 25));
+        cboxType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxTypeItemStateChanged(evt);
+            }
+        });
 
-        cboxCartegory.setEditable(true);
-        cboxCartegory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cboxCartegory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Categorys" }));
-        cboxCartegory.setMaximumSize(new java.awt.Dimension(125, 25));
-        cboxCartegory.setMinimumSize(new java.awt.Dimension(125, 25));
-        cboxCartegory.setPreferredSize(new java.awt.Dimension(125, 25));
+        cboxCategory.setEditable(true);
+        cboxCategory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cboxCategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Categorys" }));
+        cboxCategory.setMaximumSize(new java.awt.Dimension(125, 25));
+        cboxCategory.setMinimumSize(new java.awt.Dimension(125, 25));
+        cboxCategory.setPreferredSize(new java.awt.Dimension(125, 25));
 
         jdcFrom.setDateFormatString("yyyy/MM/dd");
         jdcFrom.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -191,6 +247,7 @@ public class Statistics extends javax.swing.JFrame {
         jdcTo.setPreferredSize(new java.awt.Dimension(125, 25));
 
         jycYear.setToolTipText("");
+        jycYear.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jycYear.setMaximumSize(new java.awt.Dimension(125, 25));
         jycYear.setMinimumSize(new java.awt.Dimension(125, 25));
         jycYear.setPreferredSize(new java.awt.Dimension(125, 25));
@@ -217,21 +274,21 @@ public class Statistics extends javax.swing.JFrame {
         jLabel7.setText("Year:");
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel8.setText("Filter");
+        jLabel8.setText("Filter Date");
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
-        jPanel2.setMinimumSize(new java.awt.Dimension(700, 450));
-        jPanel2.setPreferredSize(new java.awt.Dimension(700, 450));
+        jpView.setBackground(new java.awt.Color(255, 255, 255));
+        jpView.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
+        jpView.setMinimumSize(new java.awt.Dimension(700, 450));
+        jpView.setPreferredSize(new java.awt.Dimension(700, 450));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jpViewLayout = new javax.swing.GroupLayout(jpView);
+        jpView.setLayout(jpViewLayout);
+        jpViewLayout.setHorizontalGroup(
+            jpViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jpViewLayout.setVerticalGroup(
+            jpViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -242,52 +299,66 @@ public class Statistics extends javax.swing.JFrame {
         cboxMonth.setMinimumSize(new java.awt.Dimension(125, 25));
         cboxMonth.setPreferredSize(new java.awt.Dimension(125, 25));
 
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel9.setText("Filter Account");
+
+        cboxAccount.setEditable(true);
+        cboxAccount.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cboxAccount.setMaximumSize(new java.awt.Dimension(125, 25));
+        cboxAccount.setMinimumSize(new java.awt.Dimension(125, 25));
+        cboxAccount.setPreferredSize(new java.awt.Dimension(125, 25));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel1)
-                                            .addComponent(jLabel3))
-                                        .addGap(13, 13, 13)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cboxCartegory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jLabel8))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(22, 22, 22)
-                                        .addComponent(jdcFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(37, 37, 37)
-                                        .addComponent(jdcTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(cboxMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addGap(26, 26, 26)
-                                        .addComponent(jycYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                        .addComponent(jLabel9))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel2)
+                                                .addComponent(jLabel1)
+                                                .addComponent(jLabel3))
+                                            .addGap(13, 13, 13)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(cboxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jLabel8))
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGap(0, 0, Short.MAX_VALUE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jLabel4)
+                                            .addGap(22, 22, 22)
+                                            .addComponent(jdcFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jLabel5)
+                                            .addGap(37, 37, 37)
+                                            .addComponent(jdcTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jLabel6)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(cboxMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jLabel7)
+                                            .addGap(26, 26, 26)
+                                            .addComponent(jycYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(cboxAccount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jpView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(16, 16, 16))
         );
         layout.setVerticalGroup(
@@ -297,7 +368,7 @@ public class Statistics extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboxCartegory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -325,18 +396,56 @@ public class Statistics extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jycYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addContainerGap(233, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cboxAccount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 440, Short.MAX_VALUE)
+                .addComponent(jpView, javax.swing.GroupLayout.PREFERRED_SIZE, 440, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jdcFrom.setDate(new Date("2013/11/12"));
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    
+    private void cboxTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxTypeItemStateChanged
+        // TODO add your handling code here:
+      
+        if(cboxType.getSelectedIndex()==0){
+            cboxCategory.removeAllItems();
+            cboxCategory.addItem("All Categorys");
+            for(String s:incomeList){
+                cboxCategory.addItem(s);
+            }
+            cboxCategory.setRenderer(new  ComboxRender("src/image/import_type",0));
+        }
+        else{
+            cboxCategory.removeAllItems();
+            cboxCategory.addItem("All Categorys");
+            for(String s:expenseList){
+                cboxCategory.addItem(s);
+            }
+            cboxCategory.setRenderer(new  ComboxRender("src/image/export_type",0));     
+        }
+    }//GEN-LAST:event_cboxTypeItemStateChanged
+
+    private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
+        // TODO add your handling code here:
+        filter.setVisible(true);
+    }//GEN-LAST:event_btnFilterActionPerformed
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        // TODO add your handling code here:
+        if(!filter.isVisible()){
+            jdcFrom.setDate(filter.getDateFrom());
+            jdcTo.setDate(filter.getDateTo());
+            
+        }
+    }//GEN-LAST:event_formWindowGainedFocus
 
     /**
      * @param args the command line arguments
@@ -380,7 +489,8 @@ public class Statistics extends javax.swing.JFrame {
     private javax.swing.JButton btnFilter;
     private javax.swing.JButton btnList;
     private javax.swing.JButton btnPie;
-    private javax.swing.JComboBox cboxCartegory;
+    private javax.swing.JComboBox cboxAccount;
+    private javax.swing.JComboBox cboxCategory;
     private javax.swing.JComboBox cboxMonth;
     private javax.swing.JComboBox cboxType;
     private javax.swing.Box.Filler filler1;
@@ -393,10 +503,11 @@ public class Statistics extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private com.toedter.calendar.JDateChooser jdcFrom;
     private com.toedter.calendar.JDateChooser jdcTo;
+    private javax.swing.JPanel jpView;
     private com.toedter.calendar.JYearChooser jycYear;
     // End of variables declaration//GEN-END:variables
 }
