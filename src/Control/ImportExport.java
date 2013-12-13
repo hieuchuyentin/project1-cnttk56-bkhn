@@ -187,7 +187,7 @@ public class ImportExport {
 
         ResultSet rs;
         try {
-            rs = Database.stm.executeQuery("select type from import_type");
+            rs = Database.stm.executeQuery("select name from import_type");
             while (rs.next()) {
                 list.add(rs.getString(1));
             }
@@ -203,7 +203,7 @@ public class ImportExport {
 
         ResultSet rs;
         try {
-            rs = Database.stm.executeQuery("select type from Export_type");
+            rs = Database.stm.executeQuery("select name from Export_type");
             while (rs.next()) {
                 list.add(rs.getString(1));
             }
@@ -239,18 +239,18 @@ public class ImportExport {
                 s4 += list.get(i) + ",";
             }
             s4 += 0;
-            s3 = " and " + s1 + "_type_id in(" + s4 + ")";
+            s3 = " and category_id in(" + s4 + ")";
         }
 
         if (type_id == 0) {
             s5 = "";
         } else {
-            s5 = " and " + s1 + "_type_id = " + type_id;
+            s5 = " and category_id = " + type_id;
         }
 
-        String sql = "select x.id,user.userName as UserName,x.date as Date," + s1 + "_type.type,x.value as Value,x.note as Note,x.imageURL"
+        String sql = "select x.id,user.userName as UserName,x.date as Date," + s1 + "_type.name,x.value as Value,x.decription as Note"
                 + " from (select * from " + s2 + " where user_id=" + toUserId + s3 + s5 + ")as x,user," + s1 + "_type"
-                + " where x.user_id=user.id  and x." + s1 + "_type_id = " + s1 + "_type.id";
+                + " where x.user_id=user.id  and x.category_id = " + s1 + "_type.id";
         System.out.println(sql);
         try {
             rs = Database.stm.executeQuery(sql);
@@ -264,7 +264,7 @@ public class ImportExport {
         ResultSet rs = null;
         int id = 0;
         try {
-            rs = Database.stm.executeQuery("select id from import_type where type='" + type+"';");
+            rs = Database.stm.executeQuery("select id from import_type where name='" + type+"';");
             rs.next();
             id = rs.getInt(1);
         } catch (SQLException ex) {
@@ -277,7 +277,7 @@ public class ImportExport {
         ResultSet rs = null;
         String type ="";
         try{
-            rs = Database.stm.executeQuery("select type from import_type where id="+id);
+            rs = Database.stm.executeQuery("select name from import_type where id="+id);
             rs.next();
             type=rs.getString(1);
         }catch(SQLException ex){
@@ -289,7 +289,7 @@ public class ImportExport {
         ResultSet rs = null;
         String type ="";
         try{
-            rs = Database.stm.executeQuery("select type from export_type where id="+id);
+            rs = Database.stm.executeQuery("select name from export_type where id="+id);
             rs.next();
             type=rs.getString(1);
         }catch(SQLException ex){
@@ -302,7 +302,7 @@ public class ImportExport {
         int id = 0;
         System.out.println(type);
         try {
-            rs = Database.stm.executeQuery("select id from export_type where type='" + type+"';");
+            rs = Database.stm.executeQuery("select id from export_type where name='" + type+"';");
             rs.next();
             id = rs.getInt(1);
         } catch (SQLException ex) {
@@ -325,7 +325,7 @@ public class ImportExport {
 
             ResultSet rs = null;
             try {
-                rs = Database.stm.executeQuery("select " + s1 + ".type from " + s1 + ", privilege where privilege.from_id=" + fromUserId + " and " + s1 + ".id=privilege.subType_id and privilege.to_id=" + toUserId + " group by privilege.subType_id");
+                rs = Database.stm.executeQuery("select " + s1 + ".name from " + s1 + ", privilege where privilege.from_id=" + fromUserId + " and " + s1 + ".id=privilege.subType_id and privilege.to_id=" + toUserId + " group by privilege.subType_id");
                 while (rs.next()) {
                     list.add(rs.getString(1));
                 }
@@ -358,18 +358,18 @@ public class ImportExport {
                 s4 += list.get(i) + ",";
             }
             s4 += 0;
-            s3 = " and " + s1 + "_type_id in(" + s4 + ")";
+            s3 = " and category_id in(" + s4 + ")";
         }
 
         if (type_id == 0) {
             s5 = "";
         } else {
-            s5 = " and " + s1 + "_type_id = " + type_id;
+            s5 = " and category_id = " + type_id;
         }
 
-        String sql = "select x.id,user.userName as UserName,x.date as Date," + s1 + "_type.type,x.value as Value,x.note as Note"
+        String sql = "select x.id,user.userName as UserName,x.date as Date," + s1 + "_type.name,x.value as Value,x.description as Description"
                 + " from (select * from " + s2 + " where user_id=" + toUserId + s3 + s5 + ")as x,user," + s1 + "_type"
-                + " where x.user_id=user.id  and x." + s1 + "_type_id = " + s1 + "_type.id" + " and x.date between '"+startDay+"' and '"+endDay+"';";
+                + " where x.user_id=user.id  and x.category_id = " + s1 + "_type.id" + " and x.date between '"+startDay+"' and '"+endDay+"';";
         
         return sql;
     }
@@ -412,19 +412,19 @@ public class ImportExport {
                 title3 = "";
                 break;
             case 3:
-                sql = "select x.sum,y.type from (select sum(value) sum," + s2  + " from "+s1+" where user_id=" + userId + " and month(date)=" + month + " and year(date)=" + year + " group by " + s2+") as x,"+s4+" as y where x."+s2+"=y.id";
+                sql = "select x.sum,y.type from (select sum(value) sum,category_id from "+s1+" where user_id=" + userId + " and month(date)=" + month + " and year(date)=" + year + " group by " + s2+") as x,"+s4+" as y where x."+s2+"=y.id";
                 title1 = "";
                 title2 = "Bảng thống kê " + s3 + " tháng " + month + " trong năm " + year;
                 title3 = "";
                 break;
             case 4:
-                sql = "select sum(value),year(date) from " + s1 + " where user_id=" + userId + " and " + s2 + "=" + subType_id + " group by (year(date))";
+                sql = "select sum(value),year(date) from " + s1 + " where user_id=" + userId + " and category_id =" + subType_id + " group by (year(date))";
                 title1 = "";
                 title2 = "Bảng thống kê " + s3 + " '" +  (isImport?getImportType(subType_id):getExportType(subType_id)) + "' trong các năm";
                 title3 = "";
                 break;
             case 5:
-                sql = "select sum(value),month(date) from " + s1 + " where user_id=" + userId + " and " + s2 + "=" + subType_id + " and year(date)=" + year + " group by (month(date))";
+                sql = "select sum(value),month(date) from " + s1 + " where user_id=" + userId + " and category_id=" + subType_id + " and year(date)=" + year + " group by (month(date))";
                 title1 = "T.";
                 title2 = "Bảng thống kê " + s3 + " '" + (isImport?getImportType(subType_id):getExportType(subType_id)) + "' trong năm " + year;
                 title3 = "";

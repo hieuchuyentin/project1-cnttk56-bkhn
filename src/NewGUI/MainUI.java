@@ -15,6 +15,11 @@ public class MainUI extends javax.swing.JFrame {
     /**
      * Creates new form MainUI
      */
+    Account account;
+    AddTransaction addTransaction;
+    Category category;
+    Project project;
+    Statistics statistics;
     public MainUI() {
         initComponents();
     }
@@ -67,13 +72,17 @@ public class MainUI extends javax.swing.JFrame {
         btunStatistics.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btunStatistics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/barChart 24.png"))); // NOI18N
         btunStatistics.setText("Statistics");
-        btunStatistics.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btunStatistics.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btunStatistics.setMaximumSize(new java.awt.Dimension(60, 60));
         btunStatistics.setMinimumSize(new java.awt.Dimension(60, 60));
         btunStatistics.setPreferredSize(new java.awt.Dimension(60, 60));
         btunStatistics.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btunStatistics.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btunStatistics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btunStatisticsActionPerformed(evt);
+            }
+        });
         jPanel1.add(btunStatistics);
         btunStatistics.setBounds(80, 0, 80, 60);
 
@@ -201,8 +210,7 @@ public class MainUI extends javax.swing.JFrame {
     private void btnProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjectActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnProjectActionPerformed
-   
-    AddTransaction addTransaction = null;
+
     private void btuAddTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btuAddTransactionActionPerformed
         // TODO add your handling code here:
         
@@ -227,6 +235,12 @@ public class MainUI extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_formWindowGainedFocus
+
+    private void btunStatisticsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btunStatisticsActionPerformed
+        // TODO add your handling code here:
+        statistics = new Statistics();
+        statistics.setVisible(true);
+    }//GEN-LAST:event_btunStatisticsActionPerformed
 
     /**
      * @param args the command line arguments

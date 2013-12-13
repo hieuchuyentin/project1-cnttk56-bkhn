@@ -17,6 +17,7 @@ public class Account extends javax.swing.JFrame {
      */
     public Account() {
         initComponents();
+        
     }
 
     /**
