@@ -7,12 +7,22 @@
 package NewGUI;
 
 import Control.ComboxRender;
+import Control.Database;
 import Control.ImportExport;
+import Control.User;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.ListModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellEditor;
@@ -30,29 +40,47 @@ public class Filter extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    
+    Statistics statistics;
+    User user = new User();
+    ImportExport importExport = new ImportExport();
+    ArrayList<String> importList;
+    ArrayList<String> exportList;
+    ArrayList<String> userList;
     public Filter() {
         initComponents();
+        initFilter();
     }
-
+    public Filter(Statistics statistics,User user){
+        this.statistics = statistics;
+        this.user = user;
+        initComponents();
+        initFilter();
+    }
+    
+    public DefaultListModel modelCategory= new DefaultListModel();    
+    public DefaultListModel modelAccount= new DefaultListModel(); 
     public void initFilter(){
         //init ListIncome
-        ArrayList<String> list = new ImportExport().getImportTypeList();
-        listIncome.removeAll();
-        for(String s:list){
-            list.add(s);
+        Database.setState();
+        userList = user.getUserList();
+        importList = importExport.getImportTypeList();
+        exportList = importExport.getExportTypeList();
+                 
+        //init ListCategory
+          
+        for(String s:importList){
+            modelCategory.addElement(s);
         }
-        listIncome.setCellRenderer(new ComboxRender("src/image/import_type/",1));
+        listCategory.setModel(modelCategory);
+        listCategory.setCellRenderer(new ComboxRender("src/image/import_type/",1));
         
-        //init ListExpense
-        list = new ImportExport().getExportTypeList();
-        listExpense.removeAll();
-        for(String s:list){
-            list.add(s);
+        //init cboxAccount
+        
+        for(String s:userList){
+            modelAccount.addElement(s);
         }
-        listExpense.setCellRenderer(new ComboxRender("src/image/export_type",1));
-        
-        //
+        listAccount.setModel(modelAccount);     
+       
     }
     
     public Date getDateFrom(){
@@ -104,6 +132,31 @@ public class Filter extends javax.swing.JFrame {
         spinTo.setValue(i);
     }
     
+    public ArrayList<Integer> getListAcount(){
+        ArrayList<Integer> list= new ArrayList<>();
+        List<String> listItem = listAccount.getSelectedValuesList();
+        
+        for(int i=0;i<listItem.size();i++){  
+            list.add(user.getUserId(listItem.get(i)));
+        }
+        return list;    
+    }
+    
+    public ArrayList<Integer> getListCategory(){
+        ArrayList<Integer> list = new ArrayList<>();
+        List<String> listItem = listCategory.getSelectedValuesList();
+        if (cboxType.getSelectedIndex() == 0) {
+            for (int i = 0; i < listItem.size(); i++) {
+                list.add(importExport.getImportId(listItem.get(i)));
+            }
+        } else {
+            for (int i = 0; i < listItem.size(); i++) {
+                list.add(importExport.getExportId(listItem.get(i)));
+            }
+        }
+        return list;
+
+    }
     public int getOptionDate(){
         return cboxOptionDate.getSelectedIndex();
     }
@@ -136,6 +189,13 @@ public class Filter extends javax.swing.JFrame {
         cboxOptionCategory.setSelectedIndex(i);
     }
     
+    public int getOptionAccount(){
+        return cboxOptionAccount.getSelectedIndex();
+    }
+    
+    public void setOptionAccount(int i){
+        cboxOptionAccount.setSelectedIndex(i);
+    }
     
     
     /**
@@ -148,15 +208,6 @@ public class Filter extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        cboxOptionCategory = new javax.swing.JComboBox();
-        jLabel13 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        listIncome = new javax.swing.JList();
-        jLabel18 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        listExpense = new javax.swing.JList();
-        jLabel19 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         cboxOptionDate = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
@@ -179,130 +230,75 @@ public class Filter extends javax.swing.JFrame {
         spinTo = new javax.swing.JSpinner();
         jLabel15 = new javax.swing.JLabel();
         cboxOptionText = new javax.swing.JComboBox();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        cboxOptionAccount = new javax.swing.JComboBox();
+        jLabel17 = new javax.swing.JLabel();
+        cboxType = new javax.swing.JComboBox();
+        jLabel18 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        listCategory = new javax.swing.JList();
+        jLabel13 = new javax.swing.JLabel();
+        cboxOptionCategory = new javax.swing.JComboBox();
+        jLabel19 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listAccount = new javax.swing.JList();
+        jLabel14 = new javax.swing.JLabel();
+        btnClose = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(720, 460));
-        setPreferredSize(new java.awt.Dimension(720, 460));
+        setMaximumSize(new java.awt.Dimension(900, 600));
+        setMinimumSize(new java.awt.Dimension(900, 600));
+        setPreferredSize(new java.awt.Dimension(900, 600));
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        cboxOptionCategory.setEditable(true);
-        cboxOptionCategory.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cboxOptionCategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Inactive", "Include", "Exclude" }));
-        cboxOptionCategory.setMaximumSize(new java.awt.Dimension(115, 28));
-        cboxOptionCategory.setMinimumSize(new java.awt.Dimension(115, 28));
-        cboxOptionCategory.setPreferredSize(new java.awt.Dimension(115, 28));
-        cboxOptionCategory.setRenderer(new Control.ComboxRender("src/image/main/option/",0));
-        cboxOptionCategory.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cboxOptionCategoryItemStateChanged(evt);
-            }
-        });
-
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel13.setText("Option:");
-        jLabel13.setPreferredSize(new java.awt.Dimension(34, 28));
-
-        listIncome.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        listIncome.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane4.setViewportView(listIncome);
-
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel18.setText("Income");
-
-        listExpense.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        listExpense.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane5.setViewportView(listExpense);
-
-        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel19.setText("Expense");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(319, Short.MAX_VALUE)
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cboxOptionCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(118, 118, 118)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(129, 129, 129)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(141, Short.MAX_VALUE)))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboxOptionCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(359, 359, 359))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(65, 65, 65)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel18)
-                        .addComponent(jLabel19))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
-                        .addComponent(jScrollPane5))
-                    .addContainerGap(66, Short.MAX_VALUE)))
-        );
-
-        jTabbedPane1.addTab("Category", jPanel2);
+        jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTabbedPane1.setMinimumSize(new java.awt.Dimension(837, 482));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setMaximumSize(new java.awt.Dimension(900, 600));
+        jPanel1.setMinimumSize(new java.awt.Dimension(900, 600));
+        jPanel1.setPreferredSize(new java.awt.Dimension(900, 600));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         cboxOptionDate.setEditable(true);
         cboxOptionDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cboxOptionDate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Inactive", "Include", "Exclude" }));
+        cboxOptionDate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Include", "Exclude" }));
         cboxOptionDate.setMaximumSize(new java.awt.Dimension(115, 28));
         cboxOptionDate.setMinimumSize(new java.awt.Dimension(115, 28));
         cboxOptionDate.setPreferredSize(new java.awt.Dimension(115, 28));
-        cboxOptionDate.setRenderer(new Control.ComboxRender("src/image/main/option/",0));
+        cboxOptionDate.setRenderer(new Control.ComboxRender("src/image/main/option/",1));
         cboxOptionDate.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cboxOptionDateItemStateChanged(evt);
             }
         });
+        jPanel1.add(cboxOptionDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Option:");
         jLabel1.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 34, 48, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("To:");
         jLabel2.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 109, 48, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setText("From:");
         jLabel3.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 73, 48, -1));
 
+        jdcFrom.setDateFormatString("yyyy-MM-dd");
         jdcFrom.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jdcFrom.setMinimumSize(new java.awt.Dimension(115, 25));
         jdcFrom.setPreferredSize(new java.awt.Dimension(115, 25));
+        jdcFrom.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jdcFromPropertyChange(evt);
+            }
+        });
         jdcFrom.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -310,16 +306,33 @@ public class Filter extends javax.swing.JFrame {
                 jdcFromInputMethodTextChanged(evt);
             }
         });
+        jPanel1.add(jdcFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, -1, -1));
 
+        jdcTo.setDateFormatString("yyyy-MM-dd");
         jdcTo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jdcTo.setMinimumSize(new java.awt.Dimension(115, 25));
         jdcTo.setPreferredSize(new java.awt.Dimension(115, 25));
+        jdcTo.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jdcToPropertyChange(evt);
+            }
+        });
+        jdcTo.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jdcToInputMethodTextChanged(evt);
+            }
+        });
+        jPanel1.add(jdcTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("Filter Date");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("Filter Amount");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, -1, -1));
 
         cboxOptionAmount.setEditable(true);
         cboxOptionAmount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -333,53 +346,74 @@ public class Filter extends javax.swing.JFrame {
                 cboxOptionAmountItemStateChanged(evt);
             }
         });
+        jPanel1.add(cboxOptionAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 40, -1, -1));
+        if(cboxOptionAmount.getSelectedIndex()==0){
+            spinFrom.setEnabled(false);
+            spinTo.setEnabled(false);
+        }
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Option:");
         jLabel6.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, 48, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("From:");
         jLabel7.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 80, 48, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setText("To:");
         jLabel8.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 120, 48, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("Filter Text");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel10.setText("Description:");
         jLabel10.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 80, 76, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel11.setText("Info:");
         jLabel11.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 120, 48, -1));
 
         txtInfo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtInfo.setMaximumSize(new java.awt.Dimension(200, 25));
         txtInfo.setMinimumSize(new java.awt.Dimension(200, 25));
         txtInfo.setPreferredSize(new java.awt.Dimension(200, 25));
+        jPanel1.add(txtInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 130, -1, -1));
 
         txtDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtDescription.setMaximumSize(new java.awt.Dimension(200, 25));
         txtDescription.setMinimumSize(new java.awt.Dimension(200, 25));
         txtDescription.setPreferredSize(new java.awt.Dimension(200, 25));
+        txtDescription.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDescriptionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, -1, -1));
 
         spinFrom.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         spinFrom.setMaximumSize(new java.awt.Dimension(115, 25));
         spinFrom.setMinimumSize(new java.awt.Dimension(115, 25));
         spinFrom.setPreferredSize(new java.awt.Dimension(115, 25));
+        jPanel1.add(spinFrom, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, -1, -1));
 
         spinTo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         spinTo.setMaximumSize(new java.awt.Dimension(115, 25));
         spinTo.setMinimumSize(new java.awt.Dimension(115, 25));
         spinTo.setPreferredSize(new java.awt.Dimension(115, 25));
+        jPanel1.add(spinTo, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 120, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel15.setText("Option:");
         jLabel15.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 40, 48, -1));
 
         cboxOptionText.setEditable(true);
         cboxOptionText.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -393,175 +427,186 @@ public class Filter extends javax.swing.JFrame {
                 cboxOptionTextItemStateChanged(evt);
             }
         });
+        jPanel1.add(cboxOptionText, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, 200, -1));
+        if(cboxOptionText.getSelectedIndex()==0){
+            txtDescription.setEnabled(false);
+            txtInfo.setEnabled(false);
+        }
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(cboxOptionDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jdcTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jdcFrom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                            .addComponent(jLabel4))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(200, 200, 200)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cboxOptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(65, 65, 65))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(152, 152, 152)
-                                .addComponent(jLabel9)
-                                .addGap(134, 134, 134))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(109, 109, 109))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cboxOptionAmount, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(spinFrom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(spinTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(109, 109, 109))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboxOptionText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboxOptionDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jdcFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(8, 8, 8)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jdcTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cboxOptionAmount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(10, 10, 10)
-                                .addComponent(spinFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11)
-                                .addComponent(spinTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(2, 2, 2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(9, 9, 9)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(57, 57, 57))))
-        );
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel12.setText("Filter Category");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, -1, -1));
 
-        jTabbedPane1.addTab("General", jPanel1);
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel16.setText("Option:");
+        jLabel16.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, 48, -1));
+
+        cboxOptionAccount.setEditable(true);
+        cboxOptionAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cboxOptionAccount.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Inactive", "Include", "Exclude" }));
+        cboxOptionAccount.setMaximumSize(new java.awt.Dimension(115, 28));
+        cboxOptionAccount.setMinimumSize(new java.awt.Dimension(115, 28));
+        cboxOptionAccount.setPreferredSize(new java.awt.Dimension(115, 28));
+        cboxOptionAccount.setRenderer(new Control.ComboxRender("src/image/main/option/",0));
+        cboxOptionAccount.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxOptionAccountItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(cboxOptionAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 200, -1));
+        if(cboxOptionAccount.getSelectedIndex()==0){
+            listAccount.setEnabled(false);
+        }
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel17.setText("Account:");
+        jLabel17.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, 62, -1));
+
+        cboxType.setEditable(true);
+        cboxType.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cboxType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Income", "Expense" }));
+        cboxType.setMaximumSize(new java.awt.Dimension(150, 25));
+        cboxType.setMinimumSize(new java.awt.Dimension(150, 25));
+        cboxType.setPreferredSize(new java.awt.Dimension(150, 25));
+        cboxType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxTypeItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(cboxType, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 240, 200, -1));
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel18.setText("Category:");
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 360, -1, 30));
+
+        listCategory.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        listCategory.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane4.setViewportView(listCategory);
+
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 280, 200, 190));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel13.setText("Option:");
+        jLabel13.setPreferredSize(new java.awt.Dimension(34, 28));
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 200, 70, -1));
+
+        cboxOptionCategory.setEditable(true);
+        cboxOptionCategory.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cboxOptionCategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Inactive", "Include", "Exclude" }));
+        cboxOptionCategory.setMaximumSize(new java.awt.Dimension(115, 28));
+        cboxOptionCategory.setMinimumSize(new java.awt.Dimension(115, 28));
+        cboxOptionCategory.setPreferredSize(new java.awt.Dimension(115, 28));
+        cboxOptionCategory.setRenderer(new Control.ComboxRender("src/image/main/option/",0));
+        cboxOptionCategory.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxOptionCategoryItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(cboxOptionCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 200, 200, -1));
+        if(cboxOptionCategory.getSelectedIndex()==0){
+            cboxType.setEnabled(false);
+            listCategory.setEnabled(false);
+        }
+
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel19.setText("Type:");
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 240, -1, 30));
+
+        listAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        listAccount.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(listAccount);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 250, 200, 170));
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel14.setText("Filter Account");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
+
+        btnClose.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnClose.setText("Close");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 480, 80, -1));
+
+        btnClear.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnClear.setText("Clear");
+        jPanel1.add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 480, 80, -1));
+
+        jTabbedPane1.addTab("Genalral", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(38, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jdcFromInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jdcFromInputMethodTextChanged
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jdcFromInputMethodTextChanged
-
-    private void cboxOptionDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxOptionDateItemStateChanged
-        // TODO add your handling code here:
-        if(cboxOptionDate.getSelectedIndex()!=0){
-            jdcFrom.setEnabled(true);
-            jdcTo.setEnabled(true);
-        }
-        else{
-            jdcFrom.setEnabled(false);
-            jdcTo.setEnabled(false);
-        }
-    }//GEN-LAST:event_cboxOptionDateItemStateChanged
-
     private void cboxOptionCategoryItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxOptionCategoryItemStateChanged
         // TODO add your handling code here:
         if(cboxOptionCategory.getSelectedIndex()==0){
-            listIncome.setEnabled(false);
-            listExpense.setEnabled(false);
+            cboxType.setEnabled(false);
+            listCategory.setEnabled(false);   
+            statistics.cboxType.setEnabled(true);
+            statistics.cboxCategory.setEnabled(true);
         }
         else{
-            listIncome.setEnabled(true);
-            listExpense.setEnabled(true);
+            cboxType.setEnabled(true);
+            listCategory.setEnabled(true);    
+            statistics.cboxType.setEnabled(false);
+            statistics.cboxCategory.setEnabled(false);
         }
     }//GEN-LAST:event_cboxOptionCategoryItemStateChanged
+
+    private void cboxOptionAccountItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxOptionAccountItemStateChanged
+        // TODO add your handling code here:
+        if(cboxOptionAccount.getSelectedIndex()==0){
+            listAccount.setEnabled(false);
+            statistics.cboxAccount.setEnabled(true);
+        }
+        else{
+            listAccount.setEnabled(true);
+            statistics.cboxAccount.setEnabled(false);
+        }
+    }//GEN-LAST:event_cboxOptionAccountItemStateChanged
+
+    private void cboxOptionTextItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxOptionTextItemStateChanged
+        // TODO add your handling code here:
+        if(cboxOptionText.getSelectedIndex()==0){
+            txtDescription.setEnabled(false);
+            txtInfo.setEnabled(false);
+        }
+        else{
+            txtDescription.setEnabled(true);
+            txtInfo.setEnabled(true);
+        }
+    }//GEN-LAST:event_cboxOptionTextItemStateChanged
+
+    private void txtDescriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescriptionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDescriptionActionPerformed
 
     private void cboxOptionAmountItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxOptionAmountItemStateChanged
         // TODO add your handling code here:
@@ -575,17 +620,87 @@ public class Filter extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cboxOptionAmountItemStateChanged
 
-    private void cboxOptionTextItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxOptionTextItemStateChanged
+    private void jdcFromInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jdcFromInputMethodTextChanged
         // TODO add your handling code here:
-        if(cboxOptionText.getSelectedIndex()==0){
-            txtDescription.setEnabled(false);
-            txtInfo.setEnabled(false);
+
+
+    }//GEN-LAST:event_jdcFromInputMethodTextChanged
+
+    private void cboxOptionDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxOptionDateItemStateChanged
+        // TODO add your handling code here:
+        if(cboxOptionDate.getSelectedIndex()==0){
+            statistics.jdcFrom.setEnabled(true);
+            statistics.jdcTo.setEnabled(true);       
         }
         else{
-            txtDescription.setEnabled(true);
-            txtInfo.setEnabled(true);
+            statistics.jdcFrom.setEnabled(false);
+            statistics.jdcTo.setEnabled(false);
         }
-    }//GEN-LAST:event_cboxOptionTextItemStateChanged
+    }//GEN-LAST:event_cboxOptionDateItemStateChanged
+
+    private void cboxTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxTypeItemStateChanged
+        // TODO add your handling code here:
+        statistics.cboxType.setSelectedIndex(cboxType.getSelectedIndex());
+        
+        DefaultListModel model = new DefaultListModel();
+        listCategory.removeAll();
+        if (cboxType.getSelectedIndex() == 0) {
+
+            for (String s : importList) {
+                model.addElement(s);
+            }
+            listCategory.setModel(model);
+            listCategory.setCellRenderer(new ComboxRender("src/image/import_type/", 1));
+        } else {
+            for (String s : exportList) {
+                model.addElement(s);
+            }
+            listCategory.setModel(model);
+            listCategory.setCellRenderer(new ComboxRender("src/image/export_type/", 1));
+        }
+    }//GEN-LAST:event_cboxTypeItemStateChanged
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        // TODO add your handling code here:
+        if(statistics.jtabpanelView.getSelectedIndex()==0){
+            statistics.getListResult();
+        }
+        else if(statistics.jtabpanelView.getSelectedIndex()==1){
+            statistics.setChart(statistics.isChartBar);
+        }
+        this.setVisible(false);
+    }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void jdcToInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jdcToInputMethodTextChanged
+        // TODO add your handling code here:
+        statistics.jdcTo.setDate(jdcTo.getDate());
+    }//GEN-LAST:event_jdcToInputMethodTextChanged
+
+    private void jdcFromPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcFromPropertyChange
+        try {
+            // TODO add your handling code here:
+            
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            statistics.jdcFrom.setDate(df.parse(df.format(jdcFrom.getDate())));
+            //statistics.jdcFrom.setDate(new Date(2013, 11, 11));
+        } catch (Exception ex) {
+            //Logger.getLogger(Filter.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("loi");
+        }
+        
+
+    }//GEN-LAST:event_jdcFromPropertyChange
+
+    private void jdcToPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcToPropertyChange
+        try {
+            // TODO add your handling code here:
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            statistics.jdcTo.setDate(df.parse(df.format(jdcTo.getDate())));
+
+        } catch (Exception ex) {
+            //Logger.getLogger(Filter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jdcToPropertyChange
 
     /**
      * @param args the command line arguments
@@ -623,15 +738,23 @@ public class Filter extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox cboxOptionAmount;
-    private javax.swing.JComboBox cboxOptionCategory;
-    private javax.swing.JComboBox cboxOptionDate;
-    private javax.swing.JComboBox cboxOptionText;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnClose;
+    public javax.swing.JComboBox cboxOptionAccount;
+    public javax.swing.JComboBox cboxOptionAmount;
+    public javax.swing.JComboBox cboxOptionCategory;
+    public javax.swing.JComboBox cboxOptionDate;
+    public javax.swing.JComboBox cboxOptionText;
+    public javax.swing.JComboBox cboxType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -643,17 +766,16 @@ public class Filter extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private com.toedter.calendar.JDateChooser jdcFrom;
-    private com.toedter.calendar.JDateChooser jdcTo;
-    private javax.swing.JList listExpense;
-    private javax.swing.JList listIncome;
-    private javax.swing.JSpinner spinFrom;
-    private javax.swing.JSpinner spinTo;
-    private javax.swing.JTextField txtDescription;
-    private javax.swing.JTextField txtInfo;
+    public com.toedter.calendar.JDateChooser jdcFrom;
+    public com.toedter.calendar.JDateChooser jdcTo;
+    public javax.swing.JList listAccount;
+    public javax.swing.JList listCategory;
+    public javax.swing.JSpinner spinFrom;
+    public javax.swing.JSpinner spinTo;
+    public javax.swing.JTextField txtDescription;
+    public javax.swing.JTextField txtInfo;
     // End of variables declaration//GEN-END:variables
 }

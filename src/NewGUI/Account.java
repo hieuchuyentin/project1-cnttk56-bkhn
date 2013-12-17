@@ -5,19 +5,91 @@
  */
 
 package NewGUI;
+import java.util.*;
+import java.text.*;
+import Control.*;
+import Model.*;
+import java.awt.Dimension;
+import java.awt.FileDialog;
+import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import net.coobird.thumbnailator.Thumbnails;
 
 /**
  *
  * @author dodan_000
  */
 public class Account extends javax.swing.JFrame {
-
+    User user = new User();
+    String imageURL ="";
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * Creates new form Account
      */
-    public Account() {
+    private void showListUser()
+    {
+        listUser.removeAll();
+             
+        DefaultListModel listUserModel = new DefaultListModel();
+        listUser.setModel(listUserModel);
+        ArrayList<String> list = user.getUserList();
+            for (String s : list)
+                listUserModel.addElement(s);
+        
+    }
+    public Account(){
         initComponents();
         
+        this.user=user;
+        showListUser();
+        if (user.id==1)
+        {
+            btnAdd.setVisible(true);
+            btnRemove.setVisible(true);
+        }
+        else
+        {
+            btnAdd.setVisible(false);
+            btnRemove.setVisible(false);
+        }
+    }
+    public Account(User user) {
+        initComponents();
+        
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        int w = this.getWidth();
+        int h = this.getHeight();
+        int x = (dim.width-w)/2;
+        int y = (dim.height-h)/2;
+        this.setLocation(x, y);
+        
+        this.user=user;
+        showListUser();
+        if (user.id==1)
+        {
+            btnAdd.setVisible(true);
+            btnRemove.setVisible(true);
+        }
+        else
+        {
+            btnAdd.setVisible(false);
+            btnRemove.setVisible(false);
+        }
     }
 
     /**
@@ -37,18 +109,24 @@ public class Account extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jpImage = new javax.swing.JPanel();
         txtUserName = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
         cboxGender = new javax.swing.JComboBox();
-        jdcBirthDay = new com.toedter.calendar.JDateChooser();
+        dateUser = new com.toedter.calendar.JDateChooser();
         btnRemove = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         txtPhone = new javax.swing.JTextField();
+        btnUpdate = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        passUser = new javax.swing.JPasswordField();
+        btnImage = new javax.swing.JButton();
+        txtStatusUser = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Account Settings");
+        setIconImage(new ImageIcon("src/image/main/account 24.png").getImage());
 
         jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -57,6 +135,17 @@ public class Account extends javax.swing.JFrame {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
+        });
+        listUser.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listUserMouseClicked(evt);
+            }
+        });
+        listUser.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listUserValueChanged(evt);
+            }
         });
         jScrollPane1.setViewportView(listUser);
 
@@ -93,33 +182,25 @@ public class Account extends javax.swing.JFrame {
         jLabel6.setMinimumSize(new java.awt.Dimension(40, 25));
         jLabel6.setPreferredSize(new java.awt.Dimension(40, 25));
 
-        jpImage.setBackground(new java.awt.Color(255, 255, 255));
-        jpImage.setMaximumSize(new java.awt.Dimension(200, 150));
-        jpImage.setMinimumSize(new java.awt.Dimension(200, 150));
-        jpImage.setPreferredSize(new java.awt.Dimension(200, 150));
-
-        javax.swing.GroupLayout jpImageLayout = new javax.swing.GroupLayout(jpImage);
-        jpImage.setLayout(jpImageLayout);
-        jpImageLayout.setHorizontalGroup(
-            jpImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jpImageLayout.setVerticalGroup(
-            jpImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
-        );
-
         txtUserName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtUserName.setText("jTextField1");
         txtUserName.setMaximumSize(new java.awt.Dimension(200, 25));
         txtUserName.setMinimumSize(new java.awt.Dimension(200, 25));
         txtUserName.setPreferredSize(new java.awt.Dimension(200, 25));
+        txtUserName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUserNameActionPerformed(evt);
+            }
+        });
 
         txtEmail.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtEmail.setText("jTextField1");
         txtEmail.setMaximumSize(new java.awt.Dimension(200, 25));
         txtEmail.setMinimumSize(new java.awt.Dimension(200, 25));
         txtEmail.setPreferredSize(new java.awt.Dimension(200, 25));
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEmailActionPerformed(evt);
+            }
+        });
 
         cboxGender.setEditable(true);
         cboxGender.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -128,17 +209,27 @@ public class Account extends javax.swing.JFrame {
         cboxGender.setMinimumSize(new java.awt.Dimension(200, 25));
         cboxGender.setPreferredSize(new java.awt.Dimension(200, 25));
 
-        jdcBirthDay.setDateFormatString("yyyy/MM/dd");
-        jdcBirthDay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jdcBirthDay.setMaximumSize(new java.awt.Dimension(200, 25));
-        jdcBirthDay.setMinimumSize(new java.awt.Dimension(200, 25));
-        jdcBirthDay.setPreferredSize(new java.awt.Dimension(200, 25));
+        dateUser.setDateFormatString("yyyy-MM-dd");
+        dateUser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        dateUser.setMaximumSize(new java.awt.Dimension(200, 25));
+        dateUser.setMinimumSize(new java.awt.Dimension(200, 25));
+        dateUser.setPreferredSize(new java.awt.Dimension(200, 25));
 
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRemove.setText("Remove");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
 
         btnAdd.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("Accounts");
@@ -150,10 +241,38 @@ public class Account extends javax.swing.JFrame {
         jLabel8.setPreferredSize(new java.awt.Dimension(40, 25));
 
         txtPhone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtPhone.setText("jTextField1");
         txtPhone.setMaximumSize(new java.awt.Dimension(200, 25));
         txtPhone.setMinimumSize(new java.awt.Dimension(200, 25));
         txtPhone.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        btnUpdate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setText("Pass word:");
+
+        passUser.setMaximumSize(new java.awt.Dimension(200, 25));
+        passUser.setMinimumSize(new java.awt.Dimension(200, 25));
+        passUser.setPreferredSize(new java.awt.Dimension(200, 25));
+
+        btnImage.setMaximumSize(new java.awt.Dimension(200, 150));
+        btnImage.setMinimumSize(new java.awt.Dimension(200, 150));
+        btnImage.setPreferredSize(new java.awt.Dimension(200, 150));
+        btnImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImageActionPerformed(evt);
+            }
+        });
+
+        txtStatusUser.setEditable(false);
+        txtStatusUser.setMaximumSize(new java.awt.Dimension(269, 25));
+        txtStatusUser.setMinimumSize(new java.awt.Dimension(269, 25));
+        txtStatusUser.setPreferredSize(new java.awt.Dimension(269, 25));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -163,81 +282,285 @@ public class Account extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnRemove)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAdd))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cboxGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jdcBirthDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtPhone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(60, Short.MAX_VALUE))
+                        .addComponent(txtStatusUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(212, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cboxGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(dateUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtPhone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(passUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnRemove)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel7))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnRemove)
-                            .addComponent(btnAdd))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jdcBirthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel9)
+                            .addComponent(passUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dateUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cboxGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jpImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(68, 68, 68)))))
-                .addContainerGap())
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(78, 78, 78)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtStatusUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
+
+        cboxGender.setRenderer(new ComboxRender("src/image/gender/",0));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUserNameActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        if (user.getUserId((String)listUser.getSelectedValue())==1)
+        {
+            txtStatusUser.setText("Can't remove admin!");
+            return;
+        }
+        if (user.deleteUser(user.getUserId((String)listUser.getSelectedValue())))
+        {
+            txtStatusUser.setText("Remove successfully.");
+        }
+        else
+        {
+            txtStatusUser.setText("Remove failed!");
+        }
+        showListUser();
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            InfoUser infoUser = new InfoUser
+                (txtUserName.getText(), passUser.getText().toString(),
+                cboxGender.getSelectedIndex()==0,
+                (String)dateFormat.format(dateUser.getDate()),  
+                0, 
+                txtEmail.getText(), txtPhone.getText() );
+            
+            if (user.addUser(infoUser))
+                txtStatusUser.setText("Add successfully.");
+            else{               
+                txtStatusUser.setText("Add failed!");
+            }
+        }
+        catch(Exception e)
+        {
+            txtStatusUser.setText("Add failed!");
+        }
+                   
+    
+        showListUser();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            InfoUser infoUser = new InfoUser
+                (txtUserName.getText(), passUser.getText().toString(),
+                cboxGender.getSelectedIndex()==0,
+                (String)dateFormat.format(dateUser.getDate()),  
+                0, 
+                txtEmail.getText(), txtPhone.getText() );
+            infoUser.id = user.getUserId((String)listUser.getSelectedValue());
+            if (user.updateUser(infoUser))
+            {
+                txtStatusUser.setText("Update successfully.");
+                user.setInfoFromId(); //cap nhat gia tri cho user
+            }
+            else{
+                if(copyImage()) txtStatusUser.setText("Update successfully.");
+                else txtStatusUser.setText("Update failed!");
+            }
+        }
+        catch(Exception e)
+        {
+            txtStatusUser.setText("Update failed!");
+        }
+
+        showListUser();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    public boolean copyImage(){
+        if(imageURL.equals("")) return false;
+        else {
+
+            BufferedImage bufferImg;
+            try {
+                ResultSet rs = Database.stm.executeQuery("select id from user where userName ='" + txtUserName.getText() + "'");
+                rs.next();
+                int id = rs.getInt(1);
+                System.out.println(imageURL);
+                File image = new File(imageURL);
+                bufferImg = Thumbnails.of(ImageIO.read(image)).size(640, 480).asBufferedImage();
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                ImageIO.write(bufferImg, "jpg", os);
+                InputStream ip = new ByteArrayInputStream(os.toByteArray());
+                String outputFile = "data/account/" + id + ".jpg";
+                FileOutputStream fos = new FileOutputStream(outputFile);
+                int c;
+                while ((c = ip.read()) != -1) {
+                    fos.write(c);
+                }
+                ip.close();
+                fos.close();
+            } catch (Exception ex) {
+                Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return true;
+        }
+    }
+    private void showSelectedUserInfo(){
+        Date date;
+        String selectedUserName = (String)listUser.getSelectedValue();
+        User selectedUser = new User();
+        selectedUser.id = selectedUser.getUserId(selectedUserName);
+        selectedUser.setInfoFromId();
+        txtUserName.setText(selectedUser.userName);
+        passUser.setText(selectedUser.passWord);
+        
+        File image = new File("data/account/"+selectedUser.id+".jpg");
+        BufferedImage bufferImg;
+        try {
+            bufferImg = Thumbnails.of(ImageIO.read(image)).size(200, 150).asBufferedImage();
+            btnImage.setIcon(new ImageIcon(bufferImg)); 
+        } catch (IOException ex) {
+            //Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+          
+        try
+        {
+            dateUser.setDate(dateFormat.parse(selectedUser.birthDay));
+        }
+        catch(Exception e)
+        {
+            System.out.println("Loi date");
+        }
+        if (!selectedUser.gender)
+            cboxGender.setSelectedIndex(1);
+        else
+        cboxGender.setSelectedIndex(0);
+        txtPhone.setText(selectedUser.phone);
+        txtEmail.setText(selectedUser.email);
+    }
+    private void listUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listUserMouseClicked
+        // TODO add your handling code here:
+        showSelectedUserInfo();
+    }//GEN-LAST:event_listUserMouseClicked
+
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEmailActionPerformed
+    
+
+    private void btnImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImageActionPerformed
+        // TODO add your handling code here:
+            String directory = "C:\\";
+            FileDialog f = new FileDialog(this, "Open File", FileDialog.LOAD);
+            f.setDirectory(directory);       // Set the default directory
+
+            // Display the dialog and wait for the user's response
+            f.show();
+            directory = f.getDirectory();    // Remember new default directory
+            String filepath = directory+f.getFile();
+            File image = new File(filepath);
+            //txtIEImageURL.setText(f.getFile());
+            imageURL = filepath;
+        try {
+            BufferedImage bufferImg = Thumbnails.of(ImageIO.read(image)).size(200, 150).asBufferedImage();
+            btnImage.setIcon(new ImageIcon(bufferImg));        
+        } catch (IOException ex) {
+            System.out.println("error");
+        }
+            
+    }//GEN-LAST:event_btnImageActionPerformed
+
+    private void listUserValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listUserValueChanged
+        // TODO add your handling code here:
+        txtStatusUser.setText("");
+        try {
+            if (listUser.getSelectedValue().equals(user.userName)) {
+                btnUpdate.setEnabled(true);
+            } else {
+                btnUpdate.setEnabled(false);
+            }
+        } catch (Exception ex) {
+
+        }
+    }//GEN-LAST:event_listUserValueChanged
 
     /**
      * @param args the command line arguments
@@ -276,8 +599,11 @@ public class Account extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnImage;
     private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox cboxGender;
+    private com.toedter.calendar.JDateChooser dateUser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -286,12 +612,13 @@ public class Account extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.toedter.calendar.JDateChooser jdcBirthDay;
-    private javax.swing.JPanel jpImage;
     private javax.swing.JList listUser;
+    private javax.swing.JPasswordField passUser;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtPhone;
+    private javax.swing.JTextField txtStatusUser;
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
 }

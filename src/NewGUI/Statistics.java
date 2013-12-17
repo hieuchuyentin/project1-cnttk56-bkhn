@@ -10,8 +10,42 @@ import Control.ComboxRender;
 import Control.Database;
 import Control.ImportExport;
 import Control.User;
+import Control.rsTableModel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.image.SampleModel;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.util.TableOrder;
 
 /**
  *
@@ -24,20 +58,55 @@ public class Statistics extends javax.swing.JFrame {
      */
     
     ImportExport importExport = new ImportExport();
-    User user = new User();
+    User user;
     ArrayList<String> userList;
     ArrayList<String> incomeList;
     ArrayList<String> expenseList ;
     
-    Filter filter = new Filter();
+    public boolean isChartBar; 
+    JFreeChart chart;
+    ChartPanel chartPanel = new ChartPanel(chart);
+    Filter filter;
     
-    public Statistics() {
+    public Statistics(){
+        filter = new Filter(this,user);
         Database.setState();
         initComponents();
+        jpChart.setLayout(new BorderLayout());
+        jpChart.add(chartPanel);
         initStatistics();
+        
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        int w = this.getWidth();
+        int h = this.getHeight();
+        int x = (dim.width-w)/2;
+        int y = (dim.height-h)/2;
+        this.setLocation(x, y);  
+    }
+    
+    public Statistics(User user) {  
+        filter = new Filter(this,user);
+        this.user = user;
+        Database.setState();
+        initComponents();
+        jpChart.setLayout(new BorderLayout());
+        jpChart.add(chartPanel);
+        initStatistics();
+        
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        int w = this.getWidth();
+        int h = this.getHeight();
+        int x = (dim.width-w)/2;
+        int y = (dim.height-h)/2;
+        this.setLocation(x, y);        
     }
     public void initStatistics(){
         
+        
+        user.id=1;
+        user.userName="hien";
         userList = user.getUserList();
         incomeList = importExport.getImportTypeList();
         expenseList = importExport.getExportTypeList();
@@ -58,6 +127,30 @@ public class Statistics extends javax.swing.JFrame {
         
         
     }
+    
+    public Date getDateFrom(){
+        return jdcFrom.getDate();
+    }
+    
+    public void setDateFrom(Date date){
+        jdcFrom.setDate(date);
+    }
+    
+    public Date getDateTo(){
+        return jdcTo.getDate();
+    }
+    
+    public void setDateTo(Date date){
+        jdcTo.setDate(date);
+    }
+    
+    public int getTypeTransaction(){
+        return cboxType.getSelectedIndex();
+    }
+    public void setTypeTransaction(int i){
+        cboxType.setSelectedIndex(i);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,6 +160,10 @@ public class Statistics extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        popupTable = new javax.swing.JPopupMenu();
+        menuItemSort = new javax.swing.JMenuItem();
+        menuItemEdit = new javax.swing.JMenuItem();
+        menuItemDelete = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         btnList = new javax.swing.JButton();
         btnBar = new javax.swing.JButton();
@@ -78,7 +175,7 @@ public class Statistics extends javax.swing.JFrame {
         cboxCategory = new javax.swing.JComboBox();
         jdcFrom = new com.toedter.calendar.JDateChooser();
         jdcTo = new com.toedter.calendar.JDateChooser();
-        jycYear = new com.toedter.calendar.JYearChooser();
+        jycFrom = new com.toedter.calendar.JYearChooser();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(170, 0), new java.awt.Dimension(170, 0), new java.awt.Dimension(170, 32767));
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -88,15 +185,61 @@ public class Statistics extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jpView = new javax.swing.JPanel();
+        jpInfomation = new javax.swing.JPanel();
+        jtabpanelView = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbList = new javax.swing.JTable();
+        jpChart = new javax.swing.JPanel();
         cboxMonth = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         cboxAccount = new javax.swing.JComboBox();
+        jLabel10 = new javax.swing.JLabel();
+        checkBoxYear = new javax.swing.JCheckBox();
+        checkBoxMonth = new javax.swing.JCheckBox();
+        checkBoxCategory = new javax.swing.JCheckBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        popupTable.setBackground(new java.awt.Color(255, 0, 51));
+
+        menuItemSort.setText("Sort with this column");
+        menuItemSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSortActionPerformed(evt);
+            }
+        });
+        popupTable.add(menuItemSort);
+
+        menuItemEdit.setBackground(new java.awt.Color(255, 0, 0));
+        menuItemEdit.setText("Edit");
+        menuItemEdit.setFocusPainted(true);
+        menuItemEdit.setFocusable(true);
+        menuItemEdit.setRolloverEnabled(true);
+        menuItemEdit.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                menuItemEditMouseMoved(evt);
+            }
+        });
+        menuItemEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemEditActionPerformed(evt);
+            }
+        });
+        menuItemEdit.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                menuItemEditFocusGained(evt);
+            }
+        });
+        popupTable.add(menuItemEdit);
+
+        menuItemDelete.setText("Delete");
+        popupTable.add(menuItemDelete);
+
+        popupTable.getAccessibleContext().setAccessibleParent(tbList);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Statistics");
         setBackground(new java.awt.Color(0, 0, 255));
+        setIconImage(new ImageIcon("src/image/main/statistics.png").getImage());
         setMinimumSize(new java.awt.Dimension(890, 560));
-        setPreferredSize(new java.awt.Dimension(890, 560));
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
                 formWindowGainedFocus(evt);
@@ -115,6 +258,7 @@ public class Statistics extends javax.swing.JFrame {
         btnList.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/list 24.png"))); // NOI18N
         btnList.setText("List");
+        btnList.setToolTipText("List Data");
         btnList.setAlignmentY(0.0F);
         btnList.setHideActionText(true);
         btnList.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -124,6 +268,11 @@ public class Statistics extends javax.swing.JFrame {
         btnList.setName(""); // NOI18N
         btnList.setPreferredSize(new java.awt.Dimension(60, 60));
         btnList.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnList);
         btnList.setBounds(0, 0, 60, 60);
 
@@ -131,6 +280,7 @@ public class Statistics extends javax.swing.JFrame {
         btnBar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/barchart.png"))); // NOI18N
         btnBar.setText("Bar");
+        btnBar.setToolTipText("Bar Chart");
         btnBar.setAlignmentY(0.0F);
         btnBar.setHideActionText(true);
         btnBar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -140,6 +290,11 @@ public class Statistics extends javax.swing.JFrame {
         btnBar.setName(""); // NOI18N
         btnBar.setPreferredSize(new java.awt.Dimension(60, 60));
         btnBar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnBar);
         btnBar.setBounds(60, 0, 60, 60);
 
@@ -147,6 +302,7 @@ public class Statistics extends javax.swing.JFrame {
         btnPie.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnPie.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/piechart 24.png"))); // NOI18N
         btnPie.setText("Pie");
+        btnPie.setToolTipText("Pie Chart");
         btnPie.setAlignmentY(0.0F);
         btnPie.setHideActionText(true);
         btnPie.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -156,6 +312,11 @@ public class Statistics extends javax.swing.JFrame {
         btnPie.setName(""); // NOI18N
         btnPie.setPreferredSize(new java.awt.Dimension(60, 60));
         btnPie.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPieActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnPie);
         btnPie.setBounds(120, 0, 60, 60);
 
@@ -173,6 +334,11 @@ public class Statistics extends javax.swing.JFrame {
         jButton3.setName(""); // NOI18N
         jButton3.setPreferredSize(new java.awt.Dimension(60, 60));
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton3);
         jButton3.setBounds(180, 0, 80, 60);
 
@@ -180,6 +346,7 @@ public class Statistics extends javax.swing.JFrame {
         btnFilter.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnFilter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/filter 24.png"))); // NOI18N
         btnFilter.setText("Filter");
+        btnFilter.setToolTipText("Filter Data");
         btnFilter.setAlignmentX(3.0F);
         btnFilter.setAlignmentY(2.0F);
         btnFilter.setHideActionText(true);
@@ -202,6 +369,7 @@ public class Statistics extends javax.swing.JFrame {
         btnExport.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/export 24.png"))); // NOI18N
         btnExport.setText("Export");
+        btnExport.setToolTipText("Export Report");
         btnExport.setAlignmentX(3.0F);
         btnExport.setAlignmentY(2.0F);
         btnExport.setHideActionText(true);
@@ -230,27 +398,98 @@ public class Statistics extends javax.swing.JFrame {
         cboxCategory.setEditable(true);
         cboxCategory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cboxCategory.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Categorys" }));
+        cboxCategory.setToolTipText("Choose Category");
         cboxCategory.setMaximumSize(new java.awt.Dimension(125, 25));
         cboxCategory.setMinimumSize(new java.awt.Dimension(125, 25));
         cboxCategory.setPreferredSize(new java.awt.Dimension(125, 25));
+        cboxCategory.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxCategoryItemStateChanged(evt);
+            }
+        });
 
-        jdcFrom.setDateFormatString("yyyy/MM/dd");
+        jdcFrom.setDateFormatString("yyyy-MM-dd");
         jdcFrom.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jdcFrom.setMaximumSize(new java.awt.Dimension(125, 25));
         jdcFrom.setMinimumSize(new java.awt.Dimension(125, 25));
         jdcFrom.setPreferredSize(new java.awt.Dimension(125, 25));
+        jdcFrom.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jdcFromPropertyChange(evt);
+            }
+        });
+        jdcFrom.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jdcFromInputMethodTextChanged(evt);
+            }
+        });
 
-        jdcTo.setDateFormatString("yyyy/MM/dd");
+        jdcTo.setDateFormatString("yyyy-MM-dd");
         jdcTo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jdcTo.setMaximumSize(new java.awt.Dimension(125, 25));
         jdcTo.setMinimumSize(new java.awt.Dimension(125, 25));
         jdcTo.setPreferredSize(new java.awt.Dimension(125, 25));
+        jdcTo.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jdcToPropertyChange(evt);
+            }
+        });
+        jdcTo.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jdcToInputMethodTextChanged(evt);
+            }
+        });
 
-        jycYear.setToolTipText("");
-        jycYear.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jycYear.setMaximumSize(new java.awt.Dimension(125, 25));
-        jycYear.setMinimumSize(new java.awt.Dimension(125, 25));
-        jycYear.setPreferredSize(new java.awt.Dimension(125, 25));
+        jycFrom.setToolTipText("");
+        jycFrom.setMaximumSize(new java.awt.Dimension(125, 25));
+        jycFrom.setMinimumSize(new java.awt.Dimension(125, 25));
+        jycFrom.setPreferredSize(new java.awt.Dimension(125, 25));
+        jycFrom.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jycFromMouseClicked(evt);
+            }
+        });
+        jycFrom.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jycFromFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jycFromFocusLost(evt);
+            }
+        });
+        jycFrom.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jycFromInputMethodTextChanged(evt);
+            }
+        });
+        jycFrom.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jycFromPropertyChange(evt);
+            }
+        });
+        jycFrom.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jycFromAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jycFrom.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
+            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
+                jycFromVetoableChange(evt);
+            }
+        });
+
+        filler1.setBackground(new java.awt.Color(0, 0, 0));
+        filler1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("For:");
@@ -272,41 +511,118 @@ public class Statistics extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Year:");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setText("Filter Date");
 
-        jpView.setBackground(new java.awt.Color(255, 255, 255));
-        jpView.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
-        jpView.setMinimumSize(new java.awt.Dimension(700, 450));
-        jpView.setPreferredSize(new java.awt.Dimension(700, 450));
+        jpInfomation.setBackground(new java.awt.Color(255, 255, 255));
+        jpInfomation.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
+        jpInfomation.setMinimumSize(new java.awt.Dimension(700, 450));
+        jpInfomation.setPreferredSize(new java.awt.Dimension(700, 450));
 
-        javax.swing.GroupLayout jpViewLayout = new javax.swing.GroupLayout(jpView);
-        jpView.setLayout(jpViewLayout);
-        jpViewLayout.setHorizontalGroup(
-            jpViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jtabpanelView.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        jtabpanelView.setFont(new java.awt.Font("Tahoma", 0, 1)); // NOI18N
+
+        tbList.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbListMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbList);
+
+        jtabpanelView.addTab("", jScrollPane1);
+
+        javax.swing.GroupLayout jpChartLayout = new javax.swing.GroupLayout(jpChart);
+        jpChart.setLayout(jpChartLayout);
+        jpChartLayout.setHorizontalGroup(
+            jpChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 691, Short.MAX_VALUE)
         );
-        jpViewLayout.setVerticalGroup(
-            jpViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jpChartLayout.setVerticalGroup(
+            jpChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 414, Short.MAX_VALUE)
         );
+
+        jtabpanelView.addTab("", jpChart);
+
+        javax.swing.GroupLayout jpInfomationLayout = new javax.swing.GroupLayout(jpInfomation);
+        jpInfomation.setLayout(jpInfomationLayout);
+        jpInfomationLayout.setHorizontalGroup(
+            jpInfomationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jtabpanelView)
+        );
+        jpInfomationLayout.setVerticalGroup(
+            jpInfomationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpInfomationLayout.createSequentialGroup()
+                .addComponent(jtabpanelView, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+
+        jtabpanelView.getAccessibleContext().setAccessibleName("");
 
         cboxMonth.setEditable(true);
         cboxMonth.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cboxMonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Month", "January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
+        cboxMonth.setToolTipText("Choose Month");
         cboxMonth.setMaximumSize(new java.awt.Dimension(125, 25));
         cboxMonth.setMinimumSize(new java.awt.Dimension(125, 25));
         cboxMonth.setPreferredSize(new java.awt.Dimension(125, 25));
+        cboxMonth.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboxMonthItemStateChanged(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel9.setText("Filter Account");
+        jLabel9.setText("Option Chart");
 
         cboxAccount.setEditable(true);
         cboxAccount.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cboxAccount.setToolTipText("Choose  Account");
         cboxAccount.setMaximumSize(new java.awt.Dimension(125, 25));
         cboxAccount.setMinimumSize(new java.awt.Dimension(125, 25));
         cboxAccount.setPreferredSize(new java.awt.Dimension(125, 25));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel10.setText("Filter Account");
+
+        checkBoxYear.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        checkBoxYear.setText("According to Year");
+        checkBoxYear.setToolTipText("View Chart in a Year");
+        checkBoxYear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBoxYearActionPerformed(evt);
+            }
+        });
+
+        checkBoxMonth.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        checkBoxMonth.setText("According to Month");
+        checkBoxMonth.setToolTipText("View Chart in Month");
+        checkBoxMonth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBoxMonthActionPerformed(evt);
+            }
+        });
+
+        checkBoxCategory.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        checkBoxCategory.setText("According to Category");
+        checkBoxCategory.setToolTipText("View Chart in a Category");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -315,29 +631,25 @@ public class Statistics extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel9))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(filler1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createSequentialGroup()
+                                    .addContainerGap()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel2)
-                                                .addComponent(jLabel1)
-                                                .addComponent(jLabel3))
-                                            .addGap(13, 13, 13)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(cboxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addComponent(jLabel8))
-                                    .addGap(0, 0, Short.MAX_VALUE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel2)
+                                                        .addComponent(jLabel1)
+                                                        .addComponent(jLabel3))
+                                                    .addGap(13, 13, 13)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(cboxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(jLabel8))
+                                            .addGap(0, 0, Short.MAX_VALUE))
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(jLabel4)
                                             .addGap(22, 22, 22)
@@ -346,19 +658,34 @@ public class Statistics extends javax.swing.JFrame {
                                             .addComponent(jLabel5)
                                             .addGap(37, 37, 37)
                                             .addComponent(jdcTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(cboxAccount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(jLabel6)
                                             .addGap(18, 18, 18)
                                             .addComponent(cboxMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addComponent(jLabel7)
-                                            .addGap(26, 26, 26)
-                                            .addComponent(jycYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(cboxAccount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addGap(18, 18, 18)
+                                        .addComponent(checkBoxMonth, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(checkBoxYear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel9)
+                                            .addComponent(jLabel10))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addGap(35, 35, 35))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(27, 27, 27)
+                                .addComponent(jycFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(checkBoxCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jpInfomation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(16, 16, 16))
         );
         layout.setVerticalGroup(
@@ -375,8 +702,8 @@ public class Statistics extends javax.swing.JFrame {
                     .addComponent(cboxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(20, 20, 20)
-                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,25 +713,33 @@ public class Statistics extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jdcTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGap(23, 23, 23)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboxAccount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(cboxMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkBoxMonth)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jycYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(28, 28, 28)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cboxAccount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jycFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkBoxYear)
+                .addGap(18, 18, 18)
+                .addComponent(checkBoxCategory)
+                .addContainerGap(40, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
-                .addComponent(jpView, javax.swing.GroupLayout.PREFERRED_SIZE, 440, Short.MAX_VALUE)
+                .addComponent(jpInfomation, javax.swing.GroupLayout.PREFERRED_SIZE, 434, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -414,7 +749,7 @@ public class Statistics extends javax.swing.JFrame {
     
     private void cboxTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxTypeItemStateChanged
         // TODO add your handling code here:
-      
+        filter.cboxOptionCategory.setSelectedIndex(0);
         if(cboxType.getSelectedIndex()==0){
             cboxCategory.removeAllItems();
             cboxCategory.addItem("All Categorys");
@@ -440,16 +775,389 @@ public class Statistics extends javax.swing.JFrame {
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
         // TODO add your handling code here:
-        if(!filter.isVisible()){
-            jdcFrom.setDate(filter.getDateFrom());
-            jdcTo.setDate(filter.getDateTo());
+        
+    }//GEN-LAST:event_formWindowGainedFocus
+
+    private void cboxMonthItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxMonthItemStateChanged
+        // TODO add your handling code here:
+        if(cboxMonth.getSelectedIndex()==0){
+            jdcFrom.setEnabled(true);
+            jdcTo.setEnabled(true);
+            checkBoxMonth.setSelected(false);
+            checkBoxMonth.setText("According to Month");
+        }
+        else{
+            jdcFrom.setEnabled(false);
+            jdcTo.setEnabled(false);
+            checkBoxMonth.setText("According to "+cboxMonth.getSelectedItem());
+        }
+
+    }//GEN-LAST:event_cboxMonthItemStateChanged
+
+    private void cboxCategoryItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxCategoryItemStateChanged
+        // TODO add your handling code here:   
+        filter.setOptionCategory(0);
+        if (cboxCategory.getSelectedIndex() == 0) {
+            checkBoxCategory.setSelected(false);
+            checkBoxCategory.setText("According to Category");
+            
+        } else {
+            checkBoxCategory.setText("According to " + cboxCategory.getSelectedItem());
+        }
+        
+    }//GEN-LAST:event_cboxCategoryItemStateChanged
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jdcFromInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jdcFromInputMethodTextChanged
+        // TODO add your handling code here:
+      
+    }//GEN-LAST:event_jdcFromInputMethodTextChanged
+
+    private void jdcToInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jdcToInputMethodTextChanged
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jdcToInputMethodTextChanged
+
+    public String getAccountList(){
+        if(cboxAccount.isEnabled()){
+            return String.valueOf(user.getUserId((String)cboxAccount.getSelectedItem()));
+        }
+        else{
+            ArrayList<Integer> list = filter.getListAcount();
+            String s = list.get(0).toString();
+            for(int i=1;i<list.size();i++){
+                s += ","+list.get(i);
+            }
+            return s;
+        }
+    }
+    
+    public String getStringAmount(){
+        if(filter.cboxOptionAmount.getSelectedIndex()==0){
+            return "";
+        }
+        else if(filter.cboxOptionAmount.getSelectedIndex()==1){
+            return "and value between "+filter.spinFrom.getValue()+" and "+filter.spinTo.getValue();
+        }
+        else{
+            return "and value not between "+filter.spinFrom.getValue()+" and "+filter.spinTo.getValue();
+        }
+    }
+    
+    public String getStringText(){
+        if(filter.cboxOptionText.getSelectedIndex()==0){
+            return "";
+        }
+        else if(filter.cboxOptionText.getSelectedIndex()==1){
+            String s="";
+            if(filter.txtDescription.getText().trim().compareTo("")!=0) s+= " and description like '%"+ filter.txtDescription.getText()+"%'";
+            if(filter.txtInfo.getText().trim().compareTo("")!=0) s+= " and info like '%"+filter.txtInfo.getText()+"%'";
+            return s;
+        }
+        else{
+            String s="";
+            if(filter.txtDescription.getText().trim().compareTo("")!=0) s+= " and description not like '%"+ filter.txtDescription.getText()+"%'";
+            if(filter.txtInfo.getText().trim().compareTo("")!=0) s+= " and info not like '%"+filter.txtInfo.getText()+"%'";
+            return s;
+        }
+    }
+    
+    public String getStringCategory(){
+        if (cboxCategory.isEnabled()) {
+            if (cboxCategory.getSelectedIndex() == 0) {
+                return "";
+            } else {
+                return " and category_id in( "
+                        + (cboxType.getSelectedIndex() == 0 ?importExport.getImportId((String) cboxCategory.getSelectedItem()): importExport.getExportId((String) cboxCategory.getSelectedItem()))
+                        + ") ";
+            }
+        } else {
+            String s = "";
+            ArrayList<Integer> list = filter.getListCategory();
+            s += list.get(0);
+            for (int i = 1; i < list.size(); i++) {
+                s += "," + list.get(i);
+            }
+            if (filter.cboxOptionCategory.getSelectedIndex() == 1) {
+                return " and category_id in(" + s + ")";
+            } else {
+                return " and category_id not in(" + s + ")";
+            }
+        }
+    }
+    
+    public void getListResult(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String sql="select x.id,user.userName,y.name,x.value,x.date,x.description,x.info,x.share from "
+                + "(select a.id,a.user_id,a.value,a.date,a.description,a.info,a.share,a.category_id from "
+                        + "(select * from "+(cboxType.getSelectedIndex()==0?"importing":"exporting")+" where date between '"+df.format(jdcFrom.getDate()).toString()+"' and '"+df.format(jdcTo.getDate()).toString()
+                        +"' and user_id in("+getAccountList()+") "+getStringAmount()+" "+getStringText()+" "+getStringCategory()+") as a,"
+                        + "(select * from share where user_id = 1 and type_id="+(cboxType.getSelectedIndex()==0?1:2)+")as b where b.transaction_id=a.id)as x,"
+                + "user,import_type as y where x.user_id = user.id and x.category_id=y.id";
+       
+        
+        try {
+            System.out.println(sql);
+         ResultSet rs = Database.stm.executeQuery(sql);
+         
+         tbList.setModel(new rsTableModel(rs));
+        }
+        catch(Exception ex){
             
         }
-    }//GEN-LAST:event_formWindowGainedFocus
+        
+        if(cboxType.getSelectedIndex()==0){
+            
+        }
+        
+        jtabpanelView.setSelectedIndex(0);        
+    }
+    private void btnListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListActionPerformed
+        // TODO add your handling code here:
+        getListResult();
+    }//GEN-LAST:event_btnListActionPerformed
+
+    private void jycFromInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jycFromInputMethodTextChanged
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jycFromInputMethodTextChanged
+
+    private void jycFromVetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_jycFromVetoableChange
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jycFromVetoableChange
+
+    private void jycFromFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jycFromFocusGained
+
+    }//GEN-LAST:event_jycFromFocusGained
+
+    private void jycFromMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jycFromMouseClicked
+
+    }//GEN-LAST:event_jycFromMouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void jycFromAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jycFromAncestorAdded
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jycFromAncestorAdded
+
+    private void jycFromFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jycFromFocusLost
+        // TODO add your handling code here:
+      
+    }//GEN-LAST:event_jycFromFocusLost
+
+    private void jycFromPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jycFromPropertyChange
+        // TODO add your handling code here:
+        checkBoxYear.setText("According to "+jycFrom.getValue());
+    }//GEN-LAST:event_jycFromPropertyChange
+
+    private void jdcFromPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcFromPropertyChange
+        try {
+            // TODO add your handling code here:
+            filter.cboxOptionDate.setSelectedIndex(0);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            filter.jdcFrom.setDate(df.parse(df.format(jdcFrom.getDate())));
+        } catch (Exception ex) {
+            //
+        }
+    }//GEN-LAST:event_jdcFromPropertyChange
+
+    private void jdcToPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcToPropertyChange
+        try {
+            // TODO add your handling code here:
+            filter.cboxOptionDate.setSelectedIndex(0);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            filter.jdcTo.setDate(df.parse(df.format(jdcTo.getDate())));
+        } catch (Exception ex) {
+            //Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jdcToPropertyChange
+
+    public void setChart(Boolean isChartBar){
+ 
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        String sql="";
+        String title1="", title2="", title3="";
+        String s1,s2,s3,s4;
+        if (cboxType.getSelectedIndex()==0) {
+            s1 = "importing";
+            s2 = "import_type_id";
+            s3 = "thu nhập";
+            s4 = "import_type";
+
+        } else {
+            s1 = "exporting";
+            s2 = "export_type_id";
+            s3 = "chi tiêu";
+            s4 = "export_type";
+        }
+        int caseSQL = 4*(checkBoxCategory.isSelected()?1:0) + 2*(checkBoxMonth.isSelected()?1:0) + (checkBoxYear.isSelected()?1:0);
+        
+        int year = jycFrom.getValue();
+        int month = cboxMonth.getSelectedIndex();
+        DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
+        DefaultPieDataset pieDataset = new DefaultPieDataset();
+        ArrayList<Integer> listAccount = filter.getListAcount();
+        
+        for (int i = 0; i < listAccount.size(); i++) {
+            String sql1 = "select x.user_id,user.userName,y.name,x.value,x.date from "
+                    + "(select a.id,a.user_id,a.value,a.date,a.category_id from "
+                    + "(select * from " + (cboxType.getSelectedIndex() == 0 ? "importing" : "exporting") + " where date between '" + df.format(jdcFrom.getDate()).toString() + "' and '" + df.format(jdcTo.getDate()).toString()
+                    + "' and user_id in(" + getAccountList() + ") " + getStringAmount() + " " + getStringText() + " " + getStringCategory() + ") as a,"
+                    + "(select * from share where user_id = 1 and type_id=" + (cboxType.getSelectedIndex() == 0 ? 1 : 2) + ")as b where b.transaction_id=a.id)as x,"
+                    + "user,import_type as y where x.user_id = user.id and x.category_id=y.id";
+
+            sql1 = "(" + sql1 + ")as x";
+
+            switch (caseSQL) {
+                case 0:
+                    sql = "select sum(value),year(date),userName from " + sql1 + " where user_id="+listAccount.get(i)+" group by(year(date))";
+                    title1 = "";
+                    title2 = "Bảng thống kê " + s3 + " các năm";
+                    title3 = "";
+                    break;
+                case 1:
+                    sql = "select sum(value),month(date),userName from " + sql1 + " where user_id="+listAccount.get(i)+" and year(date)=" + year + " group by (month(date))";
+                    title1 = "T.";
+                    title2 = "Bảng thống kê " + s3 + " trong năm " + year;
+                    title3 = "";
+                    break;
+                case 2:
+                    sql = "select sum(value),year(date),userName from " + sql1 + " where user_id="+listAccount.get(i)+" and month(date)=" + month + " group by (year(date))";
+                    title1 = "";
+                    title2 = "Bảng thống kê " + s3 + " tháng " + month + " trong các năm";
+                    title3 = "";
+                    break;
+                case 3:
+                    sql = "select sum(value),name,userName from " + sql1 + " where user_id="+listAccount.get(i)+" and month(date)=" + month + " and year(date)=" + year + " group by name";
+                    title1 = "";
+                    title2 = "Bảng thống kê " + s3 + " tháng " + month + " trong năm " + year;
+                    title3 = "";
+                    break;
+                case 4:
+                    sql = "select sum(value),year(date),userName from " + sql1 + " where user_id="+listAccount.get(i)+" group by (year(date))";
+                    title1 = "";
+                    title2 = "Bảng thống kê " + s3 + " '" + "' trong các năm";
+                    title3 = "";
+                    break;
+                case 5:
+                    sql = "select sum(value),month(date),userName from " + sql1 + "where user_id="+listAccount.get(i)+" and year(date)=" + year + " group by (month(date))";
+                    title1 = "T.";
+                    title2 = "Bảng thống kê " + s3 + " '" + "' trong năm " + year;
+                    title3 = "";
+                    break;
+                case 6:
+                    sql = "select sum(value),year(date),userName from " + sql1 + " where user_id="+listAccount.get(i)+" and month(date)=" + month + " group by (year(date))";
+                    title1 = "";
+                    title2 = "Bảng thống kê " + s3 + " '" + "' tháng " + month + " trong các năm";
+                    title3 = "";
+                    break;
+                case 7:
+                    sql = "select sum(value),year(date),userName from " + sql1 + " where user_id="+listAccount.get(i)+" and month(date)=" + month + " and year(date)=" + year;
+                    title1 = "";
+                    title2 = "Bảng thống kê " + s3 + " '" + "' tháng " + month + " trong năm " + year;
+                    title3 = "";
+                    break;
+            }
+            System.out.println(sql);
+            try {
+                ResultSet rs = Database.stm.executeQuery(sql);
+
+                    while (rs.next()) {
+                        categoryDataset.setValue(rs.getInt(1), rs.getString(3), title1 + rs.getString(2));
+                    }
+                                          
+            } catch (Exception ex) {
+                System.out.println("Loi...");
+            }
+    
+        }
+    
+        if (isChartBar) {
+            chart = ChartFactory.createBarChart3D("", title2, title3, categoryDataset, PlotOrientation.VERTICAL, true, true, false);
+        } else {
+            chart = ChartFactory.createMultiplePieChart3D(title2, categoryDataset, TableOrder.BY_COLUMN, true, true, true);
+        }
+        chartPanel.setChart(chart);
+        jtabpanelView.setSelectedIndex(1);
+    }
+    private void btnBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarActionPerformed
+        // TODO add your handling code here:
+        isChartBar = true;
+        setChart(isChartBar);   
+    }//GEN-LAST:event_btnBarActionPerformed
+
+    private void btnPieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPieActionPerformed
+        // TODO add your handling code here:
+        isChartBar=false;
+        setChart(isChartBar);
+    }//GEN-LAST:event_btnPieActionPerformed
+
+    private void checkBoxMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBoxMonthActionPerformed
+        // TODO add your handling code here:
+        if(cboxMonth.getSelectedIndex()==0){
+            checkBoxMonth.setSelected(false);
+        }
+    }//GEN-LAST:event_checkBoxMonthActionPerformed
+
+    private void checkBoxYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBoxYearActionPerformed
+        // TODO add your handling code here:
+        if(cboxCategory.getSelectedIndex()==0){
+            checkBoxCategory.setSelected(false);
+        }
+    }//GEN-LAST:event_checkBoxYearActionPerformed
+
+    private void tbListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbListMouseClicked
+        // TODO add your handling code here:
+        
+
+        if(evt.getButton() == MouseEvent.BUTTON3){
+            Point point = evt.getLocationOnScreen();
+            popupTable.setLocation(point);
+            popupTable.setVisible(true);
+        }
+    }//GEN-LAST:event_tbListMouseClicked
+
+    private void menuItemEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemEditActionPerformed
+        // TODO add your handling code here:
+        popupTable.setVisible(false);
+        //popupTable.setOpaque(false);
+    }//GEN-LAST:event_menuItemEditActionPerformed
+
+    private void menuItemEditFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_menuItemEditFocusGained
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_menuItemEditFocusGained
+
+    private void menuItemEditMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuItemEditMouseMoved
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_menuItemEditMouseMoved
+
+    private void menuItemSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSortActionPerformed
+        // TODO add your handling code here:
+        popupTable.setVisible(false);
+  
+        int column = tbList.getSelectedColumn();
+        //tbList.sorterChanged(new RowSorterEvent(sorter));
+        RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tbList.getModel());
+        tbList.setRowSorter(sorter);
+        tbList.getRowSorter().toggleSortOrder(column);
+        
+    }//GEN-LAST:event_menuItemSortActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -484,18 +1192,22 @@ public class Statistics extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBar;
-    private javax.swing.JButton btnExport;
-    private javax.swing.JButton btnFilter;
-    private javax.swing.JButton btnList;
-    private javax.swing.JButton btnPie;
-    private javax.swing.JComboBox cboxAccount;
-    private javax.swing.JComboBox cboxCategory;
-    private javax.swing.JComboBox cboxMonth;
-    private javax.swing.JComboBox cboxType;
+    public javax.swing.JButton btnBar;
+    public javax.swing.JButton btnExport;
+    public javax.swing.JButton btnFilter;
+    public javax.swing.JButton btnList;
+    public javax.swing.JButton btnPie;
+    public javax.swing.JComboBox cboxAccount;
+    public javax.swing.JComboBox cboxCategory;
+    public javax.swing.JComboBox cboxMonth;
+    public javax.swing.JComboBox cboxType;
+    private javax.swing.JCheckBox checkBoxCategory;
+    private javax.swing.JCheckBox checkBoxMonth;
+    private javax.swing.JCheckBox checkBoxYear;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JButton jButton3;
+    public javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -504,10 +1216,18 @@ public class Statistics extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private com.toedter.calendar.JDateChooser jdcFrom;
-    private com.toedter.calendar.JDateChooser jdcTo;
-    private javax.swing.JPanel jpView;
-    private com.toedter.calendar.JYearChooser jycYear;
+    public javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    public com.toedter.calendar.JDateChooser jdcFrom;
+    public com.toedter.calendar.JDateChooser jdcTo;
+    public javax.swing.JPanel jpChart;
+    public javax.swing.JPanel jpInfomation;
+    public javax.swing.JTabbedPane jtabpanelView;
+    public com.toedter.calendar.JYearChooser jycFrom;
+    private javax.swing.JMenuItem menuItemDelete;
+    private javax.swing.JMenuItem menuItemEdit;
+    private javax.swing.JMenuItem menuItemSort;
+    private javax.swing.JPopupMenu popupTable;
+    public javax.swing.JTable tbList;
     // End of variables declaration//GEN-END:variables
 }
