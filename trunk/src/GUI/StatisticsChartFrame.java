@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
@@ -286,6 +287,7 @@ public class StatisticsChartFrame extends javax.swing.JFrame {
        
         chart = importExport.getChart(userId, rootPaneCheckingEnabled, subTypeId, month, year, caseSQL, jCheckBox1.isSelected()?1:2);
         chartPanel.setChart(chart);
+        
     }//GEN-LAST:event_btnChartViewActionPerformed
 
     private void cboxChartTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboxChartTypeItemStateChanged

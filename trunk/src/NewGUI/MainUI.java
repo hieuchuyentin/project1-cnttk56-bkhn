@@ -6,6 +6,11 @@
 
 package NewGUI;
 
+import Control.Database;
+import Control.User;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 /**
  *
  * @author dodan_000
@@ -15,15 +20,36 @@ public class MainUI extends javax.swing.JFrame {
     /**
      * Creates new form MainUI
      */
+    Login login;
+    User user ;
     Account account;
-    AddTransaction addTransaction;
+    AddTransaction addTransaction ;
     Category category;
-    Project project;
+    Project project = new Project();
     Statistics statistics;
+    
     public MainUI() {
         initComponents();
+        Database.setState(); //test
+        User user = new User();
+        user.userName="hien";
+        user.id=1;
+        account = new Account(user);
     }
 
+    public MainUI(User user,Login login){
+        this.login = login;
+        this.user = user;
+        initComponents();
+        
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        int w = this.getWidth();
+        int h = this.getHeight();
+        int x = (dim.width-w)/2;
+        int y = (dim.height-h)/2;
+        this.setLocation(x, y);        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,20 +60,28 @@ public class MainUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        btunStatistics = new javax.swing.JButton();
+        btnStatistics = new javax.swing.JButton();
         btnCategory = new javax.swing.JButton();
         btnProject = new javax.swing.JButton();
         btnAccount = new javax.swing.JButton();
-        btuAddTransaction = new javax.swing.JButton();
+        btnAddTransaction = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbAccountsSummary = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        menuItemQuit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(890, 560));
         setMinimumSize(new java.awt.Dimension(890, 560));
         setPreferredSize(new java.awt.Dimension(890, 560));
@@ -69,22 +103,22 @@ public class MainUI extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(890, 60));
         jPanel1.setLayout(null);
 
-        btunStatistics.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btunStatistics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/barChart 24.png"))); // NOI18N
-        btunStatistics.setText("Statistics");
-        btunStatistics.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btunStatistics.setMaximumSize(new java.awt.Dimension(60, 60));
-        btunStatistics.setMinimumSize(new java.awt.Dimension(60, 60));
-        btunStatistics.setPreferredSize(new java.awt.Dimension(60, 60));
-        btunStatistics.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btunStatistics.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btunStatistics.addActionListener(new java.awt.event.ActionListener() {
+        btnStatistics.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnStatistics.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/barChart 24.png"))); // NOI18N
+        btnStatistics.setText("Statistics");
+        btnStatistics.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnStatistics.setMaximumSize(new java.awt.Dimension(60, 60));
+        btnStatistics.setMinimumSize(new java.awt.Dimension(60, 60));
+        btnStatistics.setPreferredSize(new java.awt.Dimension(60, 60));
+        btnStatistics.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnStatistics.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnStatistics.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btunStatisticsActionPerformed(evt);
+                btnStatisticsActionPerformed(evt);
             }
         });
-        jPanel1.add(btunStatistics);
-        btunStatistics.setBounds(80, 0, 80, 60);
+        jPanel1.add(btnStatistics);
+        btnStatistics.setBounds(80, 0, 80, 60);
 
         btnCategory.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/category 24.png"))); // NOI18N
@@ -124,25 +158,30 @@ public class MainUI extends javax.swing.JFrame {
         btnAccount.setPreferredSize(new java.awt.Dimension(60, 60));
         btnAccount.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnAccount.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAccount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAccountActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAccount);
         btnAccount.setBounds(160, 0, 78, 60);
 
-        btuAddTransaction.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btuAddTransaction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/add-24.png"))); // NOI18N
-        btuAddTransaction.setText("Add");
-        btuAddTransaction.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btuAddTransaction.setMaximumSize(new java.awt.Dimension(60, 60));
-        btuAddTransaction.setMinimumSize(new java.awt.Dimension(60, 60));
-        btuAddTransaction.setPreferredSize(new java.awt.Dimension(60, 60));
-        btuAddTransaction.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btuAddTransaction.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btuAddTransaction.addActionListener(new java.awt.event.ActionListener() {
+        btnAddTransaction.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnAddTransaction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/add-24.png"))); // NOI18N
+        btnAddTransaction.setText("Add");
+        btnAddTransaction.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAddTransaction.setMaximumSize(new java.awt.Dimension(60, 60));
+        btnAddTransaction.setMinimumSize(new java.awt.Dimension(60, 60));
+        btnAddTransaction.setPreferredSize(new java.awt.Dimension(60, 60));
+        btnAddTransaction.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnAddTransaction.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddTransaction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btuAddTransactionActionPerformed(evt);
+                btnAddTransactionActionPerformed(evt);
             }
         });
-        jPanel1.add(btuAddTransaction);
-        btuAddTransaction.setBounds(0, 0, 78, 60);
+        jPanel1.add(btnAddTransaction);
+        btnAddTransaction.setBounds(0, 0, 78, 60);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Accounts summary");
@@ -171,10 +210,68 @@ public class MainUI extends javax.swing.JFrame {
         jLabel2.setText("Message");
 
         jMenu1.setText("File");
+
+        jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/logout.png"))); // NOI18N
+        jMenuItem5.setText("Logout");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
+
+        menuItemQuit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/quit.png"))); // NOI18N
+        menuItemQuit.setText("Quit");
+        menuItemQuit.setToolTipText("Exit Program");
+        menuItemQuit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemQuitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuItemQuit);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        jMenuItem1.setText("Preferences");
+        jMenu2.add(jMenuItem1);
+
         jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Manage");
+
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/account 24.png"))); // NOI18N
+        jMenuItem3.setText("Accounts");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu3);
+
+        jMenu4.setText("Report");
+
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/barChart 24.png"))); // NOI18N
+        jMenuItem2.setText("Statistics");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu4);
+
+        jMenu5.setText("Help");
+
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/main/about.png"))); // NOI18N
+        jMenuItem4.setText("About");
+        jMenu5.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
 
@@ -189,7 +286,7 @@ public class MainUI extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,7 +298,7 @@ public class MainUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 268, Short.MAX_VALUE))
+                .addGap(0, 271, Short.MAX_VALUE))
         );
 
         pack();
@@ -211,12 +308,12 @@ public class MainUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnProjectActionPerformed
 
-    private void btuAddTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btuAddTransactionActionPerformed
+    private void btnAddTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransactionActionPerformed
         // TODO add your handling code here:
         
-        addTransaction = new AddTransaction();
+        addTransaction = new AddTransaction(user);
         addTransaction.setVisible(true);   
-    }//GEN-LAST:event_btuAddTransactionActionPerformed
+    }//GEN-LAST:event_btnAddTransactionActionPerformed
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
         // TODO add your handling code here:
@@ -236,11 +333,38 @@ public class MainUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowGainedFocus
 
-    private void btunStatisticsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btunStatisticsActionPerformed
+    private void btnStatisticsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatisticsActionPerformed
         // TODO add your handling code here:
-        statistics = new Statistics();
+        statistics = new Statistics(user);
         statistics.setVisible(true);
-    }//GEN-LAST:event_btunStatisticsActionPerformed
+    }//GEN-LAST:event_btnStatisticsActionPerformed
+
+    private void btnAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountActionPerformed
+        // TODO add your handling code here:
+        account = new Account(user);
+        account.setVisible(true);
+    }//GEN-LAST:event_btnAccountActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        btnStatisticsActionPerformed(evt);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        btnAccountActionPerformed(evt);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void menuItemQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemQuitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_menuItemQuitActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -279,17 +403,26 @@ public class MainUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccount;
+    private javax.swing.JButton btnAddTransaction;
     private javax.swing.JButton btnCategory;
     private javax.swing.JButton btnProject;
-    private javax.swing.JButton btuAddTransaction;
-    private javax.swing.JButton btunStatistics;
+    private javax.swing.JButton btnStatistics;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem menuItemQuit;
     private javax.swing.JTable tbAccountsSummary;
     // End of variables declaration//GEN-END:variables
 }

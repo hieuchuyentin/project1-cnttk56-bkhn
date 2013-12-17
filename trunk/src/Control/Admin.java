@@ -29,8 +29,7 @@ public class Admin extends User{
                 rs.moveToInsertRow();
                 rs.updateString(2, infoUser.userName);
                 rs.updateString(3, infoUser.passWord);
-                rs.updateBoolean(4, infoUser.gender);
-                rs.updateString(5, infoUser.name);
+                rs.updateBoolean(4, infoUser.gender);               
                 rs.updateString(6, infoUser.birthDay);
                 rs.updateInt(7, infoUser.age);
                 rs.insertRow();
